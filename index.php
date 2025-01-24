@@ -8,7 +8,6 @@ session_start();
 
 ?>
 
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=urf-8" data-charset="utf8">
@@ -23,13 +22,6 @@ session_start();
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
-
-
-
 <body >
-    
-
 </body>
-
-
 </html>
