@@ -1,9 +1,13 @@
-import express from "express";
-import { loginUser, registerUser } from "../controllers/userController.js";
+// /MyFYP_HD/backend/routes/userRoute.js
+import express from 'express';
+import { registerUser, loginUser } from '../controllers/userController.js';
 
-const userRouter = express.Router();
+const router = express.Router();
 
-userRouter.post("/register", registerUser);
-userRouter.post("/login", loginUser);
+// Register a new user
+router.post('/register', registerUser);
 
-export default userRouter; // 添加这行代码
+// Login a user
+router.post('/login', loginUser);
+
+export default router;

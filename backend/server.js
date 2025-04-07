@@ -1,42 +1,41 @@
-import express from 'express';
-import mysql from 'mysql2/promise';
-import bodyParser from 'body-parser';
-import crypto from 'crypto';
+// /MyFYP_HD/backend/server.js
+import express from "express";
+import cors from "cors";
+import { connectDB } from "./config/db.js";
+import sequelize from './config/db.js';
+import foodRouter from "./routes/foodRoute.js";
+import userRouter from "./routes/userRoute.js";
+import "dotenv/config";
+import cartRouter from "./routes/cartRoute.js";
+import orderRouter from "./routes/orderRoute.js";
 
+// app config
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 4000;
 
-// 解析 JSON 请求体
-app.use(bodyParser.json());
+//middlewares
+app.use(express.json());
+app.use(cors());
 
-// 创建数据库连接池
-const pool = mysql.createPool({
-    host: '192.168.0.177',
-    user: 'root',
-    password: 'P@ssw0rd',
-    database: 'food_order_system',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+// DB connection
+connectDB();
+
+// 同步数据库模型
+sequelize.sync({ force: false }).then(() => {
+  console.log('Database synchronized');
 });
 
-// 登录接口
-app.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        console.log('Received email:', email, 'password:', password);
-        const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
-        console.log('Hashed password:', hashedPassword);
-        const [rows] = await pool.execute('SELECT * FROM User WHERE email =? AND password =?', [email, hashedPassword]);
-        console.log('Query result:', rows);
-        // 后续代码...
-    } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).json({ message: '登录失败' });
-    }
+// api endpoints
+app.use("/api/food", foodRouter);
+app.use("/images", express.static("uploads"));
+app.use("/api/user", userRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/order", orderRouter);
+
+app.get("/", (req, res) => {
+  res.send("API Working");
 });
 
-// 启动服务器
 app.listen(port, () => {
-    console.log(`服务器运行在端口 ${port}`);
+  console.log(`Server Started on port: ${port}`);
 });

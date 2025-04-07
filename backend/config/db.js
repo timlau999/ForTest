@@ -1,3 +1,4 @@
+// /MyFYP_HD/backend/config/db.js
 import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize('food_order_system', 'root', 'P@ssw0rd', {
