@@ -21,7 +21,7 @@ app.use(cors());
 connectDB();
 
 // 同步数据库模型
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: false, alter: false }).then(() => {
   console.log('Database synchronized');
 });
 

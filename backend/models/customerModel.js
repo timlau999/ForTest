@@ -3,10 +3,9 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 import User from './userModel.js';
 
-const Customer = sequelize.define('Customer', {
+const Customer = sequelize.define('customer', {
   customerId: {
     type: DataTypes.INTEGER,
-    autoIncrement: true,
     primaryKey: true
   },
   userId: {
@@ -15,9 +14,11 @@ const Customer = sequelize.define('Customer', {
     unique: true,
     references: {
       model: User,
-      key: 'userId'
+      key: 'userid'
     }
   }
+}, {
+  timestamps: false 
 });
 
 Customer.belongsTo(User, { foreignKey: 'userId' });

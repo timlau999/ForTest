@@ -1,37 +1,36 @@
-// ForTest/backend/models/userModel.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 import Permission from './permissionModel.js';
 
-const User = sequelize.define('user', {
-  userId: {
+const User = sequelize.define('User', {
+  userid: {
     type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   username: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(45),
     allowNull: false,
     unique: true
   },
   password: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.STRING(45),
     allowNull: false
   },
   email: {
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING(45),
     allowNull: false,
     unique: true
+  },
+  name: {
+    type: DataTypes.STRING(45),
+    allowNull: false
   },
   address: {
     type: DataTypes.STRING(255)
   },
   phoneNumber: {
     type: DataTypes.STRING(20)
-  },
-  name: {
-    type: DataTypes.STRING(100),
-    allowNull: false
   },
   permissionId: {
     type: DataTypes.INTEGER,
@@ -41,6 +40,9 @@ const User = sequelize.define('user', {
       key: 'permissionId'
     }
   }
+}, {
+  tableName: 'user',
+  timestamps: false // 移除 createdAt 和 updatedAt 字段
 });
 
 User.belongsTo(Permission, { foreignKey: 'permissionId' });

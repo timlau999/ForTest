@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
-const Order = sequelize.define('order', {
+const Order = sequelize.define('Order', {
   userId: {
     type: DataTypes.STRING,
     allowNull: false
@@ -30,6 +30,8 @@ const Order = sequelize.define('order', {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   }
+}, {
+  tableName: 'order' // 指定表名
 });
 
 export default Order;

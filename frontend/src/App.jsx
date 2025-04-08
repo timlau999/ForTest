@@ -11,7 +11,7 @@ import Chatbot from './components/Chatbot/Chatbot'; // 引入 Chatbot 组件
 const App = () => {
     //display popup for login
     const [showLogin, setShowLogin] = useState(false);
-    const backendUrl = 'http://localhost:4000'; 
+    const backendUrl = 'http://192.168.0.174:4000'; 
     return (
         <>
             {showLogin ? <LoginPopup setShowLogin={setShowLogin} backendUrl={backendUrl} /> : <></>}
