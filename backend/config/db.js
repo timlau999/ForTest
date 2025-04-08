@@ -1,8 +1,8 @@
 // /MyFYP_HD/backend/config/db.js
 import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize('food_order_system', 'root', 'P@ssw0rd', {
-  host: '192.168.0.177',
+const sequelize = new Sequelize('fyp-db', 'systemgp24', 'Active@caseRA1', {
+  host: 'itp4915m22gp24.mysql.database.azure.com',
   dialect: 'mysql'
 });
 
