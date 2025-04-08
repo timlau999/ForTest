@@ -1,9 +1,9 @@
-// /MyFYP_HD/backend/models/userModel.js
+// ForTest/backend/models/userModel.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 import Permission from './permissionModel.js';
 
-const User = sequelize.define('User', {
+const User = sequelize.define('user', {
   userId: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
