@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom';
 import { StoreContext } from '../context/StoreContext';
 import { assets } from './../assets/assets';
 import './Navbar/Navbar.css';
-import UserAvatar from './UserAvatar';
 
-const Navbar = ({ setShowLogin, isLoggedIn }) => {
+const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn, UserAvatar }) => {
     const [menu, setMenu] = useState("home");
     const { getTotalCartAmount } = useContext(StoreContext);
 
@@ -25,7 +24,11 @@ const Navbar = ({ setShowLogin, isLoggedIn }) => {
                     <Link to='/cart'><img src={assets.basket_icon} alt="" /></Link>
                     <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
                 </div>
-                {isLoggedIn ? <UserAvatar /> : <button onClick={() => setShowLogin(true)}>sign in</button>}
+                {isLoggedIn ? (
+                    <UserAvatar onLogout={() => setIsLoggedIn(false)} />
+                ) : (
+                    <button onClick={() => setShowLogin(true)}>sign in</button>
+                )}
             </div>
         </div>
     );

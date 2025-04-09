@@ -5,7 +5,7 @@ import './LoginPopup.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export const LoginPopup = ({ setShowLogin, backendUrl }) => {
+export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
     const navigate = useNavigate();
     const [currState, setCurrState] = useState("Sign Up");
     const [email, setEmail] = useState("");
@@ -27,13 +27,15 @@ export const LoginPopup = ({ setShowLogin, backendUrl }) => {
                 password: password
             });
             if (response.data.success) {
-                // Login successful, store token and user information
+                // 登录成功，存储 token 和用户信息
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('name', response.data.name);
                 console.log('Login successful');
                 setShowLogin(false);
-                // Redirect to the corresponding page based on the role
+                // 更新登录状态
+                setIsLoggedIn(true);
+                // 根据角色重定向到相应的页面
                 if (response.data.role === 'customer') {
                     navigate('/customer-dashboard');
                 }
