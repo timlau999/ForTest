@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer/Footer';
 import { LoginPopup } from './components/LoginPopup/LoginPopup';
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import Cart from './pages/Cart/Cart';
 import Home from './pages/Home/Home';
 import Order from './pages/PlaceOrder/Order';
 import Chatbot from './components/Chatbot/Chatbot';
-import UserAvatar from './components/UserAvatar'; // 导入 UserAvatar 组件
+import UserAvatar from './components/UserAvatar/UserAvatar'; // 导入 UserAvatar 组件
 
 const App = () => {
     // display popup for login

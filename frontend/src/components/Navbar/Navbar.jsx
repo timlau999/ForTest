@@ -1,9 +1,9 @@
 // ForTest/frontend/src/components/Navbar.jsx
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { StoreContext } from '../context/StoreContext';
-import { assets } from './../assets/assets';
-import './Navbar/Navbar.css';
+import { StoreContext } from '../../context/StoreContext';
+import { assets } from '../../assets/assets';
+import './Navbar.css';
 
 const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn, UserAvatar }) => {
     const [menu, setMenu] = useState("home");
