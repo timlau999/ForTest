@@ -18,6 +18,9 @@ const Staff = sequelize.define('Staff', {
       key: 'userId'
     }
   }
+}, {
+  tableName: 'staff', // 指定表名
+  timestamps: false // 移除 createdAt 和 updatedAt 字段
 });
 
 Staff.belongsTo(User, { foreignKey: 'userId' });

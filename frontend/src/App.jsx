@@ -6,17 +6,24 @@ import Navbar from './components/Navbar';
 import Cart from './pages/Cart/Cart';
 import Home from './pages/Home/Home';
 import Order from './pages/PlaceOrder/Order';
-import Chatbot from './components/Chatbot/Chatbot'; // 引入 Chatbot 组件
+import Chatbot from './components/Chatbot/Chatbot';
+import UserAvatar from './components/UserAvatar'; // 导入 UserAvatar 组件
 
 const App = () => {
-    //display popup for login
+    // display popup for login
     const [showLogin, setShowLogin] = useState(false);
-    const backendUrl = 'http://192.168.0.174:4000'; 
+    const backendUrl = 'http://192.168.0.174:4000';
+    const isLoggedIn = localStorage.getItem('token'); // 检查用户是否登录
+
     return (
         <>
             {showLogin ? <LoginPopup setShowLogin={setShowLogin} backendUrl={backendUrl} /> : <></>}
             <div className='app'>
-                <Navbar setShowLogin={setShowLogin} />
+                <Navbar
+                    setShowLogin={setShowLogin}
+                    isLoggedIn={isLoggedIn}
+                    UserAvatar={UserAvatar} // 将 UserAvatar 组件传递给 Navbar
+                />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/cart" element={<Cart />} />
@@ -24,7 +31,7 @@ const App = () => {
                 </Routes>
             </div>
             <Footer />
-            <Chatbot /> {/* 添加 Chatbot 组件 */}
+            <Chatbot />
         </>
     );
 };

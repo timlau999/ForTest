@@ -31,7 +31,8 @@ const Order = sequelize.define('Order', {
     defaultValue: false
   }
 }, {
-  tableName: 'order' // 指定表名
+  tableName: 'order', // 指定表名
+  timestamps: false // 移除 createdAt 和 updatedAt 字段
 });
 
 export default Order;

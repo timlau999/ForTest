@@ -14,11 +14,12 @@ const Customer = sequelize.define('customer', {
     unique: true,
     references: {
       model: User,
-      key: 'userid'
+      key: 'userId'
     }
   }
 }, {
-  timestamps: false 
+  tableName: 'customer', // 指定表名
+  timestamps: false // 移除 createdAt 和 updatedAt 字段
 });
 
 Customer.belongsTo(User, { foreignKey: 'userId' });

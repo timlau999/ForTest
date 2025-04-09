@@ -3,7 +3,7 @@ import sequelize from '../config/db.js';
 import Permission from './permissionModel.js';
 
 const User = sequelize.define('User', {
-  userid: {
+  userId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
