@@ -19,6 +19,12 @@ const UserAvatar = ({ onLogout }) => {
         }
     };
 
+    const handleProfileClick = () => {
+        // 这里可以添加跳转到用户个人资料页面的逻辑
+        console.log('Navigate to profile page');
+        setIsPopupOpen(false);
+    };
+
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
@@ -29,6 +35,7 @@ const UserAvatar = ({ onLogout }) => {
             <div className={`dropdown ${isDropdownOpen ? 'open' : ''}`}>
                 <p>{name}</p>
                 <hr />
+                <button onClick={handleProfileClick}>Profile</button>
                 <button onClick={handleLogout}>Sign Out</button>
             </div>
         </div>
