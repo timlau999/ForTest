@@ -1,10 +1,11 @@
+// ForTest/frontend/src/components/LoginPopup/LoginPopup.jsx
 import React, { useState } from 'react';
 import { assets } from '../../assets/assets';
 import './LoginPopup.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export const LoginPopup = ({ setShowLogin, backendUrl, onLogin }) => {
+export const LoginPopup = ({ setShowLogin, backendUrl }) => {
     const navigate = useNavigate();
     const [currState, setCurrState] = useState("Sign Up");
     const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, onLogin }) => {
         setPassword(e.target.value);
     };
 
-    const onLoginSubmit = async (e) => {
+    const onLogin = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post(`${backendUrl}/api/user/login`, {
@@ -26,13 +27,13 @@ export const LoginPopup = ({ setShowLogin, backendUrl, onLogin }) => {
                 password: password
             });
             if (response.data.success) {
-                // 登录成功，存储 token 和用户信息
+                // Login successful, store token and user information
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('name', response.data.name);
                 console.log('Login successful');
-                onLogin();
-                // 根据角色重定向到相应的页面
+                setShowLogin(false);
+                // Redirect to the corresponding page based on the role
                 if (response.data.role === 'customer') {
                     navigate('/customer-dashboard');
                 }
@@ -46,7 +47,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, onLogin }) => {
 
     return (
         <div className="login-popup">
-            <form onSubmit={onLoginSubmit} className="login-popup-container">
+            <form onSubmit={onLogin} className="login-popup-container">
                 <div className="login-popup-title">
                     <h2>{currState}</h2>
                     <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="" />

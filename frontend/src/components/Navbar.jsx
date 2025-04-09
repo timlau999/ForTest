@@ -1,3 +1,4 @@
+// ForTest/frontend/src/components/Navbar.jsx
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StoreContext } from '../context/StoreContext';
@@ -5,7 +6,7 @@ import { assets } from './../assets/assets';
 import './Navbar/Navbar.css';
 import UserAvatar from './UserAvatar';
 
-const Navbar = ({ setShowLogin, isLoggedIn, onLogout }) => {
+const Navbar = ({ setShowLogin, isLoggedIn }) => {
     const [menu, setMenu] = useState("home");
     const { getTotalCartAmount } = useContext(StoreContext);
 
@@ -24,10 +25,10 @@ const Navbar = ({ setShowLogin, isLoggedIn, onLogout }) => {
                     <Link to='/cart'><img src={assets.basket_icon} alt="" /></Link>
                     <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
                 </div>
-                {isLoggedIn ? <UserAvatar onLogout={onLogout} /> : <button onClick={() => setShowLogin(true)}>sign in</button>}
+                {isLoggedIn ? <UserAvatar /> : <button onClick={() => setShowLogin(true)}>sign in</button>}
             </div>
         </div>
     );
 };
 
-export default Navbar;    
+export default Navbar;

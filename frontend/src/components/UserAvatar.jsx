@@ -1,36 +1,34 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { assets } from '../assets/assets';
-import './UserAvatar.css';
+import './UserAvatar.css'; // 后续会创建这个 CSS 文件
 
-const UserAvatar = ({ onLogout }) => {
+const UserAvatar = () => {
     const navigate = useNavigate();
     const name = localStorage.getItem('name');
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const role = localStorage.getItem('role');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const handleLogout = () => {
-        onLogout();
-        setIsMenuOpen(false);
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('name');
         navigate('/');
     };
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
     };
 
     return (
-        <div className="user-avatar" onClick={toggleMenu}>
-            <span className="avatar">
-                <img src={assets.user_icon} alt="User Avatar" />
-            </span>
-            {isMenuOpen && (
-                <div className="avatar-menu">
-                    <p>{name}</p>
-                    <button onClick={handleLogout}>Sign Out</button>
-                </div>
-            )}
+        <div className="user-avatar" onClick={toggleDropdown}>
+            <span>{name}</span>
+            <div className={`dropdown ${isDropdownOpen ? 'open' : ''}`}>
+                <p>{name}</p>
+                <hr />
+                <button onClick={handleLogout}>Sign Out</button>
+            </div>
         </div>
     );
 };
 
-export default UserAvatar;    
+export default UserAvatar;

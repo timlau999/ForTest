@@ -1,35 +1,44 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './UserAvatar.css';
+.user-avatar {
+    position: relative;
+    cursor: pointer;
+}
 
-const UserAvatar = ({ onLogout }) => {
-    const navigate = useNavigate();
-    const name = localStorage.getItem('name');
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1;
+    min-width: 150px; /* 增加最小宽度 */
+}
 
-    const handleLogout = () => {
-        onLogout();
-        setIsMenuOpen(false);
-        navigate('/');
-    };
+.dropdown.open {
+    display: block;
+}
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
+.dropdown p {
+    margin: 0;
+    padding-bottom: 5px;
+}
 
-    return (
-        <div className="user-avatar" onClick={toggleMenu}>
-            <span className="avatar">
-                <img src="https://picsum.photos/30/30" alt="User Avatar" />
-            </span>
-            {isMenuOpen && (
-                <div className="avatar-menu">
-                    <p>{name}</p>
-                    <button onClick={handleLogout}>Sign Out</button>
-                </div>
-            )}
-        </div>
-    );
-};
+.dropdown hr {
+    margin: 5px 0;
+}
 
-export default UserAvatar;    
+.dropdown button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    text-align: left;
+    width: 100%;
+}
+
+.dropdown button:hover {
+    color: #000;
+}
