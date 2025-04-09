@@ -4,7 +4,7 @@ import './LoginPopup.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export const LoginPopup = ({ setShowLogin, backendUrl }) => {
+export const LoginPopup = ({ setShowLogin, backendUrl, onLogin }) => {
     const navigate = useNavigate();
     const [currState, setCurrState] = useState("Sign Up");
     const [email, setEmail] = useState("");
@@ -18,7 +18,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl }) => {
         setPassword(e.target.value);
     };
 
-    const onLogin = async (e) => {
+    const onLoginSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post(`${backendUrl}/api/user/login`, {
@@ -31,7 +31,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl }) => {
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('name', response.data.name);
                 console.log('Login successful');
-                setShowLogin(false);
+                onLogin();
                 // 根据角色重定向到相应的页面
                 if (response.data.role === 'customer') {
                     navigate('/customer-dashboard');
@@ -46,7 +46,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl }) => {
 
     return (
         <div className="login-popup">
-            <form onSubmit={onLogin} className="login-popup-container">
+            <form onSubmit={onLoginSubmit} className="login-popup-container">
                 <div className="login-popup-title">
                     <h2>{currState}</h2>
                     <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="" />

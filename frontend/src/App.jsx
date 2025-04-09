@@ -7,22 +7,33 @@ import Cart from './pages/Cart/Cart';
 import Home from './pages/Home/Home';
 import Order from './pages/PlaceOrder/Order';
 import Chatbot from './components/Chatbot/Chatbot';
-import UserAvatar from './components/UserAvatar'; // 导入 UserAvatar 组件
 
 const App = () => {
     // display popup for login
     const [showLogin, setShowLogin] = useState(false);
     const backendUrl = 'http://192.168.0.174:4000';
-    const isLoggedIn = localStorage.getItem('token'); // 检查用户是否登录
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token')!== null);
+
+    const handleLogin = () => {
+        setIsLoggedIn(true);
+        setShowLogin(false);
+    };
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('name');
+    };
 
     return (
         <>
-            {showLogin ? <LoginPopup setShowLogin={setShowLogin} backendUrl={backendUrl} /> : <></>}
+            {showLogin && <LoginPopup setShowLogin={setShowLogin} backendUrl={backendUrl} onLogin={handleLogin} />}
             <div className='app'>
                 <Navbar
                     setShowLogin={setShowLogin}
                     isLoggedIn={isLoggedIn}
-                    UserAvatar={UserAvatar} // 将 UserAvatar 组件传递给 Navbar
+                    onLogout={handleLogout}
                 />
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -36,4 +47,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default App;    

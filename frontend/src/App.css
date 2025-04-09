@@ -10,3 +10,37 @@ a{
   text-decoration: none;
   color:inherit;
 }
+.user-avatar {
+    position: relative;
+    cursor: pointer;
+}
+
+.avatar {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+.avatar-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.avatar-menu p {
+    margin-bottom: 10px;
+}
+
+.avatar-menu button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #333;
+}
