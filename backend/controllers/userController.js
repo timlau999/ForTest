@@ -72,7 +72,21 @@ const loginUser = async (req, res) => {
         // Generate a JWT token
         const token = jwt.sign({ id: user.userId, role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.json({ success: true, message: 'Login successful', token, role, name: user.name });
+        // 查询 customerId 和 customerprofileId
+        let customerId = null;
+        let customerprofileId = null;
+        if (role === 'customer') {
+            const customer = await Customer.findOne({ where: { userId: user.userId } });
+            if (customer) {
+                customerId = customer.customerId;
+                const customerProfile = await CustomerProfile.findOne({ where: { customerId } });
+                if (customerProfile) {
+                    customerprofileId = customerProfile.profileId;
+                }
+            }
+        }
+
+        res.json({ success: true, message: 'Login successful', token, role, name: user.name, customerId, customerprofileId });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: 'Error logging in' });
