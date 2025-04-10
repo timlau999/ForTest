@@ -1,4 +1,4 @@
-// ForTest/frontend/src/components/UserAvatar.jsx
+// ForTest/frontend/src/components/UserAvatar/UserAvatar.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserAvatar.css'; 
@@ -8,7 +8,7 @@ const UserAvatar = ({ onLogout }) => {
     const navigate = useNavigate();
     const name = localStorage.getItem('name');
     const role = localStorage.getItem('role');
-    const userId = localStorage.getItem('userId');
+    const customerId = localStorage.getItem('customerId');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
 
@@ -17,6 +17,7 @@ const UserAvatar = ({ onLogout }) => {
         localStorage.removeItem('role');
         localStorage.removeItem('name');
         localStorage.removeItem('userId');
+        localStorage.removeItem('customerId');
         navigate('/');
         if (onLogout) {
             onLogout();
@@ -48,7 +49,7 @@ const UserAvatar = ({ onLogout }) => {
             <ProfilePopup
                 isOpen={isProfilePopupOpen}
                 onClose={closeProfilePopup}
-                userId={userId}
+                customerId={customerId}
             />
         </div>
     );

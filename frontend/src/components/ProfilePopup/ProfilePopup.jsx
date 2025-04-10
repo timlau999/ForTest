@@ -11,8 +11,14 @@ const ProfilePopup = ({ isOpen, onClose, customerId }) => {
         if (isOpen) {
             const fetchProfileData = async () => {
                 try {
-                    // 这里使用 customerId 来请求数据
-                    const response = await axios.get(`/api/user/profile/${customerId}`);
+                    // 修改请求 URL 的端口为 4000
+                    const response = await axios.get(`http://localhost:4000/api/user/profile/${customerId}`, {
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
+                        }
+                    });
                     if (response.data.success) {
                         setProfileData(response.data.data);
                     } else {

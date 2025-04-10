@@ -1,4 +1,4 @@
-// /MyFYP_HD/backend/controllers/userController.js
+// ForTest/backend/controllers/userController.js
 import User from '../models/userModel.js';
 import Permission from '../models/permissionModel.js';
 import Admin from '../models/adminModel.js';
@@ -72,21 +72,7 @@ const loginUser = async (req, res) => {
         // Generate a JWT token
         const token = jwt.sign({ id: user.userId, role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        // 查询 customerId 和 customerprofileId
-        let customerId = null;
-        let customerprofileId = null;
-        if (role === 'customer') {
-            const customer = await Customer.findOne({ where: { userId: user.userId } });
-            if (customer) {
-                customerId = customer.customerId;
-                const customerProfile = await CustomerProfile.findOne({ where: { customerId } });
-                if (customerProfile) {
-                    customerprofileId = customerProfile.profileId;
-                }
-            }
-        }
-
-        res.json({ success: true, message: 'Login successful', token, role, name: user.name, customerId, customerprofileId });
+        res.json({ success: true, message: 'Login successful', token, role, name: user.name, id: user.userId });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: 'Error logging in' });
@@ -97,8 +83,8 @@ const loginUser = async (req, res) => {
 const getProfileData = async (req, res) => {
     try {
         const customerId = req.params.customerId;
-
-        // 查找用户的 profile 资料
+        console.log('Received customerId:', customerId); 
+        // 查找用戶的 profile 資料
         const profileData = await CustomerProfile.findOne({ where: { customerId } });
         if (!profileData) {
             return res.json({ success: false, message: 'Profile data not found' });
@@ -111,4 +97,19 @@ const getProfileData = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser, getProfileData };
+// 新增：获取 customerId
+const getCustomerId = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const customer = await Customer.findOne({ where: { userId } });
+        if (!customer) {
+            return res.json({ success: false, message: 'Customer not found' });
+        }
+        res.json({ success: true, customerId: customer.customerId });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error fetching customerId' });
+    }
+};
+
+export { registerUser, loginUser, getProfileData, getCustomerId };

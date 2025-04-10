@@ -31,14 +31,20 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('name', response.data.name);
+                localStorage.setItem('userId', response.data.id);
+
+                // 获取 customerId 并存储
+                const userId = response.data.id;
+                const customerResponse = await axios.get(`${backendUrl}/api/user/customer/${userId}`);
+                if (customerResponse.data.success) {
+                    localStorage.setItem('customerId', customerResponse.data.customerId);
+                }
+
                 console.log('Login successful');
                 setShowLogin(false);
                 // 更新登录状态
                 setIsLoggedIn(true);
-                // 根据角色重定向到相应的页面
-                if (response.data.role === 'customer') {
-                    navigate('/customer-dashboard');
-                }
+ 
             } else {
                 console.log('Login failed:', response.data.message);
             }
