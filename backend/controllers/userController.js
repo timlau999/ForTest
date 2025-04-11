@@ -112,4 +112,30 @@ const getCustomerId = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser, getProfileData, getCustomerId };
+// 修改用户的 profile 资料
+const updateProfileData = async (req, res) => {
+    try {
+        const customerId = req.params.customerId;
+        const { height, weight, allergy, medicalConditions, dietaryPreference } = req.body;
+
+        const profileData = await CustomerProfile.findOne({ where: { customerId } });
+        if (!profileData) {
+            return res.json({ success: false, message: 'Profile data not found' });
+        }
+
+        await profileData.update({
+            height,
+            weight,
+            allergy,
+            medicalConditions,
+            dietaryPreference
+        });
+
+        res.json({ success: true, message: 'Profile data updated successfully' });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error updating profile data' });
+    }
+};
+
+export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData };
