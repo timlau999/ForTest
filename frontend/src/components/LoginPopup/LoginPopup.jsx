@@ -30,7 +30,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                 // 登录成功，存储 token 和用户信息
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('role', response.data.role);
-                localStorage.setItem('name', response.data.name);
+                localStorage.setItem('username', response.data.username);
                 localStorage.setItem('userId', response.data.id);
 
                 // 获取 customerId 并存储

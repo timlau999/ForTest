@@ -6,7 +6,7 @@ import ProfilePopup from '../ProfilePopup/ProfilePopup';
 
 const UserAvatar = ({ onLogout }) => {
     const navigate = useNavigate();
-    const name = localStorage.getItem('name');
+    const username = localStorage.getItem('username');
     const role = localStorage.getItem('role');
     const customerId = localStorage.getItem('customerId');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -15,7 +15,7 @@ const UserAvatar = ({ onLogout }) => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
-        localStorage.removeItem('name');
+        localStorage.removeItem('username');
         localStorage.removeItem('userId');
         localStorage.removeItem('customerId');
         navigate('/');
@@ -39,9 +39,9 @@ const UserAvatar = ({ onLogout }) => {
 
     return (
         <div className="user-avatar" onClick={toggleDropdown}>
-            <span>{name}</span>
+            <span>{username}</span>
             <div className={`dropdown ${isDropdownOpen ? 'open' : ''}`}>
-                <p>{name}</p>
+                <p>{username}</p>
                 <hr />
                 <button onClick={handleProfileClick}>Profile</button>
                 <button onClick={handleLogout}>Sign Out</button>

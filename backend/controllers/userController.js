@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 // Register a new user
 const registerUser = async (req, res) => {
     try {
-        const { username, password, email, address, phoneNumber, name, permissionId } = req.body;
+        const { username, password, email, address, phoneNumber, permissionId } = req.body;
 
         // Check if the user already exists
         const existingUser = await User.findOne({ where: { username } });
@@ -25,7 +25,6 @@ const registerUser = async (req, res) => {
             email,
             address,
             phoneNumber,
-            name,
             permissionId
         });
 
@@ -72,7 +71,7 @@ const loginUser = async (req, res) => {
         // Generate a JWT token
         const token = jwt.sign({ id: user.userId, role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.json({ success: true, message: 'Login successful', token, role, name: user.name, id: user.userId });
+        res.json({ success: true, message: 'Login successful', token, role, username: user.username, id: user.userId });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: 'Error logging in' });
