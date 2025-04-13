@@ -1,23 +1,23 @@
 // ForTest/frontend/src/components/Header/Header.jsx
 import React, { useState } from 'react';
 import './Header.css';
-import AIPopup from '../AIRecommendationPopup/AIRecommendationPopup'; 
+import AIRecommendationPopup from '../AIRecommendationPopup/AIRecommendationPopup'; 
 
 const Header = () => {
-  const [isAIPopupOpen, setIsAIPopupOpen] = useState(false);
+  const [isAIRecommendationPopupOpen, setIsAIRecommendationPopupOpen] = useState(false);
 
   const handleAIButtonClick = () => {
-    setIsAIPopupOpen(!isAIPopupOpen);
+    setIsAIRecommendationPopupOpen(!isAIRecommendationPopupOpen);
   };
 
   return (
     <div className="header">
       <div className="header-contents">
-        <h2>Order AI - Recommended Dishes Just for You</h2>
-        <p>Experience the convenience of an AI - generated menu. Based on your profile, we offer a selection of delicious dishes made with high - quality ingredients.</p>
+        <h2>AI Recommended Dishes Just for You</h2>
+        <p>Experience the convenience of an AI - generated menu. Based on your profile.</p>
         <button onClick={handleAIButtonClick}>AI recommendation</button>
       </div>
-      {isAIPopupOpen && <AIPopup onClose={() => setIsAIPopupOpen(false)} />}
+      {isAIRecommendationPopupOpen && <AIRecommendationPopup onClose={() => setIsAIRecommendationPopupOpen(false)} />}
     </div>
   );
 };

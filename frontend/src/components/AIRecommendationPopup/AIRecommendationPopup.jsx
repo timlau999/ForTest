@@ -1,8 +1,9 @@
 // ForTest/frontend/src/components/AIRecommendationPopup/AIRecommendationPopup.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import './AIRecommendationPopup.css';
 
-const AIPopup = ({ onClose }) => {
+const AIRecommendationPopup = ({ onClose }) => {
   return (
     <div className="ai-popup">
       <div className="ai-popup-container">
@@ -18,4 +19,4 @@ const AIPopup = ({ onClose }) => {
   );
 };
 
-export default AIPopup;
+export default AIRecommendationPopup;
