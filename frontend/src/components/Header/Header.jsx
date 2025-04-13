@@ -5,9 +5,9 @@ const Header = () => {
   return (
     <div className="header">
         <div className="header-contents">
-            <h2>Order your favorite food here</h2>
-            <p>Choose from a deverse menu featuring a delectable array of dishes crafted with the food</p>
-            <button>View Menu</button>
+            <h2>Order AI - Recommended Dishes Just for You</h2>
+            <p>Experience the convenience of an AI - generated menu. Based on your profile, we offer a selection of delicious dishes made with high - quality ingredients.</p>
+            <button>AI recommendation</button>
         </div>
     </div>
   )
