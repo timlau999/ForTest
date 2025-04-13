@@ -28,6 +28,22 @@ const registerUser = async (req, res) => {
             permissionId
         });
 
+        // 创建 customer 记录
+        const newCustomer = await Customer.create({
+            customerId: newUser.userId, // 假设 customerId 和 userId 相同
+            userId: newUser.userId
+        });
+
+        // 创建 customerprofile 记录
+        const newCustomerProfile = await CustomerProfile.create({
+            customerId: newCustomer.customerId,
+            height: null,
+            weight: null,
+            allergy: null,
+            medicalConditions: null,
+            dietaryPreference: null
+        });
+
         res.json({ success: true, message: 'User registered successfully' });
     } catch (error) {
         console.log(error);
