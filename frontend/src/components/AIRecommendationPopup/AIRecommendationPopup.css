@@ -1,0 +1,56 @@
+/* ForTest/frontend/src/components/AIRecommendationPopup/AIRecommendationPopup.css */
+
+.ai-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .ai-popup-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    width: 800px;
+    max-width: 95%;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  }
+  
+  .ai-popup-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  
+  .ai-popup-title h2 {
+    margin: 0;
+    font-size: 28px;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .ai-popup-title button {
+    background-color: transparent;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+  }
+  
+  .ai-popup-title button:hover {
+    color: #333;
+  }
+  
+  .ai-popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
