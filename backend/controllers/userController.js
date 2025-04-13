@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 // Register a new user
 const registerUser = async (req, res) => {
     try {
-        const { username, password, email, address, phoneNumber, permissionId } = req.body;
+        const { username, password, email, address, phoneNumber, permissionId, height, weight, allergy, medicalConditions, dietaryPreference } = req.body;
 
         // Check if the user already exists
         const existingUser = await User.findOne({ where: { username } });
@@ -28,20 +28,20 @@ const registerUser = async (req, res) => {
             permissionId
         });
 
-        // 创建 customer 记录
+        // Create a new customer record
         const newCustomer = await Customer.create({
             customerId: newUser.userId, // 假设 customerId 和 userId 相同
             userId: newUser.userId
         });
 
-        // 创建 customerprofile 记录
-        const newCustomerProfile = await CustomerProfile.create({
+        // Create a new customer profile record
+        await CustomerProfile.create({
             customerId: newCustomer.customerId,
-            height: null,
-            weight: null,
-            allergy: null,
-            medicalConditions: null,
-            dietaryPreference: null
+            height,
+            weight,
+            allergy,
+            medicalConditions,
+            dietaryPreference
         });
 
         res.json({ success: true, message: 'User registered successfully' });
