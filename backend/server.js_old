@@ -1,3 +1,4 @@
+// /MyFYP_HD/backend/server.js
 import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
@@ -20,7 +21,7 @@ app.use(cors());
 connectDB();
 
 // 同步数据库模型
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: false, alter: false }).then(() => {
   console.log('Database synchronized');
 });
 

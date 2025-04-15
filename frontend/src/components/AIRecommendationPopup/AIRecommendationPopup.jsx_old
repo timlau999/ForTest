@@ -1,0 +1,56 @@
+// ForTest/frontend/src/components/AIRecommendationPopup/AIRecommendationPopup.jsx
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import './AIRecommendationPopup.css';
+
+const AIRecommendationPopup = ({ onClose, customerId }) => {
+  const [recommendedItems, setRecommendedItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecommendedItems = async () => {
+      try {
+        // 假设 AI 服务器的 API 地址为 /api/ai-recommendations
+        const response = await axios.get(`/api/ai-recommendations/${customerId}`);
+        setRecommendedItems(response.data.data);
+      } catch (error) {
+        console.error('Error fetching recommended items:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRecommendedItems();
+  }, [customerId]);
+
+  return (
+    <div className="ai-popup">
+      <div className="ai-popup-container">
+        <div className="ai-popup-title">
+          <h2>AI Recommended Dishes</h2>
+          <button onClick={onClose}>Close</button>
+        </div>
+        <div className="ai-popup-content">
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : recommendedItems.length === 0 ? (
+            <p>No recommended items found.</p>
+          ) : (
+            <ul>
+              {recommendedItems.map((item) => (
+                <li key={item.menuItemId}>
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                  <p>Price: ${item.price}</p>
+                  <p>Calories: {item.calories}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AIRecommendationPopup;
