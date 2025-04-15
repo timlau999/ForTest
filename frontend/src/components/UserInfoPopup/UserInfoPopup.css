@@ -1,0 +1,102 @@
+/* ForTest/frontend/src/components/UserInfoPopup/UserInfoPopup.css */
+
+/* 弹窗背景 */
+.user-info-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* 弹窗容器 */
+.user-info-popup-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    width: 800px;
+    max-width: 95%;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* 弹窗标题 */
+.user-info-popup-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.user-info-popup-title h2 {
+    margin: 0;
+    font-size: 28px;
+    color: #333;
+    font-weight: 600;
+}
+
+.user-info-popup-title button {
+    background-color: transparent;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.user-info-popup-title button:hover {
+    color: #333;
+}
+
+/* 弹窗内容 */
+.user-info-popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* 每个字段的容器 */
+.user-info-field {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info-field label {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    width: 150px;
+}
+
+/* 保存状态下的文本样式 */
+.user-info-field span {
+    font-size: 18px;
+    color: #666;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+/* 编辑状态下的输入框样式 */
+.user-info-field input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    font-size: 18px; 
+    color: #666;
+    background-color: white; 
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.user-info-field input:focus {
+    border-color: #007BFF;
+}

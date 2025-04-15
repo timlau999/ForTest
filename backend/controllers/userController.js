@@ -153,4 +153,58 @@ const updateProfileData = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData };
+// 获取用户的详细资料
+const getUserInfoData = async (req, res) => {
+    try {
+        const customerId = req.params.customerId;
+        const customer = await Customer.findOne({ where: { customerId } });
+        if (!customer) {
+            return res.json({ success: false, message: 'Customer not found' });
+        }
+        const user = await User.findOne({ where: { userId: customer.userId } });
+        if (!user) {
+            return res.json({ success: false, message: 'User not found' });
+        }
+        const userInfoData = {
+            customerId,
+            username: user.username,
+            password: user.password,
+            email: user.email,
+            address: user.address,
+            phoneNumber: user.phoneNumber
+        };
+        res.json({ success: true, data: userInfoData });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error fetching user info data' });
+    }
+};
+
+// 修改用户的详细资料
+const updateUserInfoData = async (req, res) => {
+    try {
+        const customerId = req.params.customerId;
+        const { username, password, email, address, phoneNumber } = req.body;
+        const customer = await Customer.findOne({ where: { customerId } });
+        if (!customer) {
+            return res.json({ success: false, message: 'Customer not found' });
+        }
+        const user = await User.findOne({ where: { userId: customer.userId } });
+        if (!user) {
+            return res.json({ success: false, message: 'User not found' });
+        }
+        await user.update({
+            username,
+            password,
+            email,
+            address,
+            phoneNumber
+        });
+        res.json({ success: true, message: 'User info data updated successfully' });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error updating user info data' });
+    }
+};
+
+export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData };

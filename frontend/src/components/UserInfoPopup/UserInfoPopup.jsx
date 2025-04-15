@@ -1,19 +1,19 @@
-// ForTest/frontend/src/components/ProfilePopup.jsx
+// ForTest/frontend/src/components/UserInfoPopup/UserInfoPopup.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './ProfilePopup.css';
+import './UserInfoPopup.css';
 
-const ProfilePopup = ({ isOpen, onClose, customerId }) => {
-    const [profileData, setProfileData] = useState(null);
+const UserInfoPopup = ({ isOpen, onClose, customerId }) => {
+    const [userInfoData, setUserInfoData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [editedData, setEditedData] = useState({});
 
     useEffect(() => {
         if (isOpen) {
-            const fetchProfileData = async () => {
+            const fetchUserInfoData = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:4000/api/user/profile/${customerId}`, {
+                    const response = await axios.get(`http://localhost:4000/api/user/userinfo/${customerId}`, {
                         headers: {
                             'Cache-Control': 'no-cache, no-store, must-revalidate',
                             'Pragma': 'no-cache',
@@ -21,19 +21,19 @@ const ProfilePopup = ({ isOpen, onClose, customerId }) => {
                         }
                     });
                     if (response.data.success) {
-                        setProfileData(response.data.data);
+                        setUserInfoData(response.data.data);
                         setEditedData(response.data.data);
                     } else {
-                        console.error('Failed to get profile data:', response.data.message);
+                        console.error('Failed to get user info data:', response.data.message);
                     }
                     setIsLoading(false);
                 } catch (error) {
-                    console.error('Error fetching profile data:', error);
+                    console.error('Error fetching user info data:', error);
                     setIsLoading(false);
                 }
             };
 
-            fetchProfileData();
+            fetchUserInfoData();
         }
     }, [isOpen, customerId]);
 
@@ -43,15 +43,15 @@ const ProfilePopup = ({ isOpen, onClose, customerId }) => {
 
     const handleSaveClick = async () => {
         try {
-            const response = await axios.put(`http://localhost:4000/api/user/profile/${customerId}`, editedData);
+            const response = await axios.put(`http://localhost:4000/api/user/userinfo/${customerId}`, editedData);
             if (response.data.success) {
-                setProfileData(editedData);
+                setUserInfoData(editedData);
                 setIsEditing(false);
             } else {
-                console.error('Failed to save profile data:', response.data.message);
+                console.error('Failed to save user info data:', response.data.message);
             }
         } catch (error) {
-            console.error('Error saving profile data:', error);
+            console.error('Error saving user info data:', error);
         }
     };
 
@@ -66,10 +66,10 @@ const ProfilePopup = ({ isOpen, onClose, customerId }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="profile-popup">
-            <div className="profile-popup-container">
-                <div className="profile-popup-title">
-                    <h2>User Profile</h2>
+        <div className="user-info-popup">
+            <div className="user-info-popup-container">
+                <div className="user-info-popup-title">
+                    <h2>User Information</h2>
                     {isEditing ? (
                         <button onClick={handleSaveClick}>Save</button>
                     ) : (
@@ -79,80 +79,84 @@ const ProfilePopup = ({ isOpen, onClose, customerId }) => {
                 </div>
                 {isLoading ? (
                     <p>Loading...</p>
-                ) : profileData ? (
-                    <div className="profile-popup-content">
-                        <div className="profile-field">
-                            <label>Height:</label>
+                ) : userInfoData ? (
+                    <div className="user-info-popup-content">
+                        <div className="user-info-field">
+                            <label>Customer ID:</label>
+                            <span>{userInfoData.customerId}</span>
+                        </div>
+                        <div className="user-info-field">
+                            <label>Username:</label>
                             {isEditing ? (
                                 <input
                                     type="text"
-                                    name="height"
-                                    value={editedData.height || ''}
+                                    name="username"
+                                    value={editedData.username || ''}
                                     onChange={handleInputChange}
                                 />
                             ) : (
-                                <span>{profileData.height}</span>
+                                <span>{userInfoData.username}</span>
                             )}
                         </div>
-                        <div className="profile-field">
-                            <label>Weight:</label>
+                        <div className="user-info-field">
+                            <label>Password:</label>
                             {isEditing ? (
                                 <input
-                                    type="text"
-                                    name="weight"
-                                    value={editedData.weight || ''}
+                                    type="password"
+                                    name="password"
+                                    value={editedData.password || ''}
                                     onChange={handleInputChange}
                                 />
                             ) : (
-                                <span>{profileData.weight}</span>
+                                <span>{userInfoData.password}</span>
                             )}
                         </div>
-                        <div className="profile-field">
-                            <label>Allergy:</label>
+                        <div className="user-info-field">
+                            <label>Email:</label>
                             {isEditing ? (
                                 <input
-                                    type="text"
-                                    name="allergy"
-                                    value={editedData.allergy || ''}
+                                    type="email"
+                                    name="email"
+                                    value={editedData.email || ''}
                                     onChange={handleInputChange}
                                 />
                             ) : (
-                                <span>{profileData.allergy}</span>
+                                <span>{userInfoData.email}</span>
                             )}
                         </div>
-                        <div className="profile-field">
-                            <label>Medical Conditions:</label>
+                        <div className="user-info-field">
+                            <label>Address:</label>
                             {isEditing ? (
                                 <input
                                     type="text"
-                                    name="medicalConditions"
-                                    value={editedData.medicalConditions || ''}
+                                    name="address"
+                                    value={editedData.address || ''}
                                     onChange={handleInputChange}
                                 />
                             ) : (
-                                <span>{profileData.medicalConditions}</span>
+                                <span>{userInfoData.address}</span>
                             )}
                         </div>
-                        <div className="profile-field">
-                            <label>Dietary Preference:</label>
+                        <div className="user-info-field">
+                            <label>Phone Number:</label>
                             {isEditing ? (
                                 <input
                                     type="text"
-                                    name="dietaryPreference"
-                                    value={editedData.dietaryPreference || ''}
+                                    name="phoneNumber"
+                                    value={editedData.phoneNumber || ''}
                                     onChange={handleInputChange}
                                 />
                             ) : (
-                                <span>{profileData.dietaryPreference}</span>
+                                <span>{userInfoData.phoneNumber}</span>
                             )}
                         </div>
                     </div>
                 ) : (
-                    <p>No profile data found.</p>
+                    <p>No user info data found.</p>
                 )}
             </div>
         </div>
     );
 };
 
-export default ProfilePopup;
+export default UserInfoPopup;
