@@ -9,6 +9,7 @@ import "dotenv/config";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import recommendationRouter from "./routes/recommendationRoute.js";
+import menuRouter from "./routes/menuRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -21,6 +22,8 @@ connectDB();
 sequelize.sync({ force: false, alter: false }).then(() => {
     console.log('Database synchronized');
 });
+
+app.use("/api/menus", menuRouter);
 
 app.use("/api/food", foodRouter);
 app.use("/images", express.static("uploads"));
