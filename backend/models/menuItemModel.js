@@ -7,12 +7,12 @@ const MenuItem = sequelize.define('MenuItem', {
         type: DataTypes.INTEGER,
         primaryKey: true
     },
-    restaurantId: {
+    menuID: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'restaurant',
-            key: 'restaurantID'
+            model: 'menu',
+            key: 'menuId'
         }
     },
     name: {

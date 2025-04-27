@@ -10,6 +10,7 @@ import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import recommendationRouter from "./routes/recommendationRoute.js";
 import menuRouter from "./routes/menuRoutes.js";
+import menuItemRouter from "./routes/menuItemRoute.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -24,13 +25,14 @@ sequelize.sync({ force: false, alter: false }).then(() => {
 });
 
 app.use("/api/menus", menuRouter);
-
+app.use("/api/menuItem", menuItemRouter);
 app.use("/api/food", foodRouter);
 app.use("/images", express.static("uploads"));
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/recommend", recommendationRouter);
+
 
 app.get("/", (req, res) => {
     res.send("API Working");
