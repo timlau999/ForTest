@@ -10,7 +10,7 @@ const AIRecommendationPopup = ({ onClose, customerId }) => {
     useEffect(() => {
         const fetchRecommendation = async () => {
             try {
-                const response = await axios.post('http://192.168.0.174:4000/api/recommend', { customerId });
+                const response = await axios.post('http://localhost:4000/api/recommend', { customerId });
                 setRecommendationData(response.data);
             } catch (error) {
                 console.error('Error fetching recommendation:', error);

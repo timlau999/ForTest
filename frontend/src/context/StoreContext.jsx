@@ -10,7 +10,7 @@ const StoreContextProvider = (props) => {
     useEffect(() => {
         const fetchMenuItems = async () => {
             try {
-                const response = await axios.get('http://192.168.0.174:4000/api/menuItem');
+                const response = await axios.get('http://localhost:4000/api/menuItem');
                 console.log('API response:', response.data); // 查看 API 响应数据
                 if (response.data.success) {
                     const formattedMenuItems = response.data.data.map(item => ({
