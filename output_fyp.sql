@@ -153,13 +153,13 @@ INSERT INTO `customerprofile` VALUES (1001,1001,185,75,'Shellfish, Dairy','Diabe
 UNLOCK TABLES;
 
 --
--- Table structure for table `food`
+-- Table structure for table `menuItem`
 --
 
-DROP TABLE IF EXISTS `food`;
+DROP TABLE IF EXISTS `menuItem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `food` (
+CREATE TABLE `menuItem` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -173,12 +173,12 @@ CREATE TABLE `food` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `food`
+-- Dumping data for table `menuItem`
 --
 
-LOCK TABLES `food` WRITE;
-/*!40000 ALTER TABLE `food` DISABLE KEYS */;
-/*!40000 ALTER TABLE `food` ENABLE KEYS */;
+LOCK TABLES `menuItem` WRITE;
+/*!40000 ALTER TABLE `menuItem` DISABLE KEYS */;
+/*!40000 ALTER TABLE `menuItem` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -205,7 +205,7 @@ CREATE TABLE `ingredient` (
 
 LOCK TABLES `ingredient` WRITE;
 /*!40000 ALTER TABLE `ingredient` DISABLE KEYS */;
-INSERT INTO `ingredient` VALUES (1,'Salmon','grams','Seafood','Fish'),(2,'Wagyu Beef','grams','Meat','Dairy (if marinated)'),(3,'Rice','grams','Staple','None'),(4,'Soy Sauce','ml','Condiment','Gluten'),(5,'Chili Paste','grams','Spice','Soy'),(6,'Kimchi','grams','Fermented','None'),(7,'Coconut Milk','ml','Liquid','Tree Nut'),(8,'Shrimp','pieces','Seafood','Shellfish'),(9,'Garlic','cloves','Vegetable','None'),(10,'Lemongrass','stalks','Herb','None'),(11,'Butter','grams','Dairy','Milk'),(12,'Flour','grams','Staple','Gluten'),(13,'Red Wine','ml','Liquid','Alcohol'),(14,'Fish Sauce','ml','Condiment','Fish'),(15,'Gochujang','grams','Fermented','Soy'),(16,'Egg Yolk','pieces','Dairy','Egg'),(17,'Carrot','grams','Vegetable','None'),(18,'Green Chili','grams','Spice','Capsaicin'),(19,'Beef Ribs','grams','Meat','None'),(20,'Spinach','grams','Vegetable','None'),(21,'Wasabi','grams','Condiment','Horseradish'),(22,'Hoisin Sauce','ml','Condiment','Soy'),(23,'Tamarind Paste','grams','Spice','None');
+INSERT INTO `ingredient` VALUES (1,'Salmon','grams','SeamenuItem','Fish'),(2,'Wagyu Beef','grams','Meat','Dairy (if marinated)'),(3,'Rice','grams','Staple','None'),(4,'Soy Sauce','ml','Condiment','Gluten'),(5,'Chili Paste','grams','Spice','Soy'),(6,'Kimchi','grams','Fermented','None'),(7,'Coconut Milk','ml','Liquid','Tree Nut'),(8,'Shrimp','pieces','SeamenuItem','Shellfish'),(9,'Garlic','cloves','Vegetable','None'),(10,'Lemongrass','stalks','Herb','None'),(11,'Butter','grams','Dairy','Milk'),(12,'Flour','grams','Staple','Gluten'),(13,'Red Wine','ml','Liquid','Alcohol'),(14,'Fish Sauce','ml','Condiment','Fish'),(15,'Gochujang','grams','Fermented','Soy'),(16,'Egg Yolk','pieces','Dairy','Egg'),(17,'Carrot','grams','Vegetable','None'),(18,'Green Chili','grams','Spice','Capsaicin'),(19,'Beef Ribs','grams','Meat','None'),(20,'Spinach','grams','Vegetable','None'),(21,'Wasabi','grams','Condiment','Horseradish'),(22,'Hoisin Sauce','ml','Condiment','Soy'),(23,'Tamarind Paste','grams','Spice','None');
 /*!40000 ALTER TABLE `ingredient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -288,7 +288,7 @@ CREATE TABLE `menu` (
 
 LOCK TABLES `menu` WRITE;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
-INSERT INTO `menu` VALUES (1001,1,'Premium Sushi & Sashimi Collection'),(2001,2,'Imperial Chinese Cuisine'),(3001,3,'French Gourmet Experience'),(4001,4,'Authentic Thai Street Food'),(5001,5,'Korean BBQ Signature Set');
+INSERT INTO `menu` VALUES (1001,1,'Premium Sushi & Sashimi Collection'),(2001,2,'Imperial Chinese Cuisine'),(3001,3,'French Gourmet Experience'),(4001,4,'Authentic Thai Street MenuItem'),(5001,5,'Korean BBQ Signature Set');
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 

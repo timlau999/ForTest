@@ -1,20 +1,20 @@
 import React, { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
-import FoodItem from '../FoodItem/FoodItem';
-import './FoodDisplay.css';
+import MenuItem from '../MenuItem/MenuItem';
+import './MenuItemDisplay.css';
 
-export const FoodDisplay = ({ category }) => {
-    const { food_list } = useContext(StoreContext);
-    console.log('Received food list in FoodDisplay:', food_list); // 添加调试日志
+export const MenuItemDisplay = ({ category }) => {
+    const { menuItem_list } = useContext(StoreContext);
+    console.log('Received menuItem list in MenuItemDisplay:', menuItem_list); // 添加调试日志
 
     return (
-        <div className='food-display' id='food-display'>
+        <div className='menuItem-display' id='menuItem-display'>
             <h2>Top dishes near to you</h2>
-            <div className="food-display-list">
-                {food_list.map((item) => {
+            <div className="menuItem-display-list">
+                {menuItem_list.map((item) => {
                     if (category === "All" || category === item.category) {
                         return (
-                            <FoodItem
+                            <MenuItem
                                 key={item._id}
                                 id={item._id}
                                 name={item.name}

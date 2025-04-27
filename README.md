@@ -1,11 +1,11 @@
-# TOMATO - Food Ordering Website
+# TOMATO - MenuItem Ordering Website
 
-This repository hosts the source code for TOMATO, a dynamic food ordering website built with the MERN Stack. It offers a user-friendly platform for seamless online food ordering.
+This repository hosts the source code for TOMATO, a dynamic menuItem ordering website built with the MERN Stack. It offers a user-friendly platform for seamless online menuItem ordering.
 
 ## Demo
 
-- User Panel: [https://food-delivery-frontend-s2l9.onrender.com/](https://food-delivery-frontend-s2l9.onrender.com/)
-- Admin Panel: [https://food-delivery-admin-wrme.onrender.com/](https://food-delivery-admin-wrme.onrender.com/)
+- User Panel: [https://menuItem-delivery-frontend-s2l9.onrender.com/](https://menuItem-delivery-frontend-s2l9.onrender.com/)
+- Admin Panel: [https://menuItem-delivery-admin-wrme.onrender.com/](https://menuItem-delivery-admin-wrme.onrender.com/)
 
 ## Features
 
@@ -20,7 +20,7 @@ This repository hosts the source code for TOMATO, a dynamic food ordering websit
 - Place Order
 - Order Management
 - Products Management
-- Filter Food Products
+- Filter MenuItem Products
 - Login/Signup
 - Authenticated APIs
 - REST APIs
@@ -29,16 +29,16 @@ This repository hosts the source code for TOMATO, a dynamic food ordering websit
 
 ## Screenshots
 
-![Hero](https://i.ibb.co/59cwY75/food-hero.png)
+![Hero](https://i.ibb.co/59cwY75/menuItem-hero.png)
 - Hero Section
 
-![Products](https://i.ibb.co/JnNQPyQ/food-products.png)
+![Products](https://i.ibb.co/JnNQPyQ/menuItem-products.png)
 - Products Section
 
-![Cart](https://i.ibb.co/t2LrQ8p/food-cart.png)
+![Cart](https://i.ibb.co/t2LrQ8p/menuItem-cart.png)
 - Cart Page
 
-![Login](https://i.ibb.co/s6PgwkZ/food-login.png)
+![Login](https://i.ibb.co/s6PgwkZ/menuItem-login.png)
 - Login Popup
 
 ## Run Locally
@@ -46,12 +46,12 @@ This repository hosts the source code for TOMATO, a dynamic food ordering websit
 Clone the project
 
 ```bash
-    git clone https://github.com/Mshandev/Food-Delivery
+    git clone https://github.com/Mshandev/MenuItem-Delivery
 ```
 Go to the project directory
 
 ```bash
-    cd Food-Delivery
+    cd MenuItem-Delivery
 ```
 Install dependencies (frontend)
 

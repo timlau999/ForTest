@@ -3,14 +3,13 @@ import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
 import sequelize from './config/db.js';
-import foodRouter from "./routes/foodRoute.js";
+import menuItemRouter from "./routes/menuItemRoute.js";
 import userRouter from "./routes/userRoute.js";
 import "dotenv/config";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import recommendationRouter from "./routes/recommendationRoute.js";
 import menuRouter from "./routes/menuRoutes.js";
-import menuItemRouter from "./routes/menuItemRoute.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -26,7 +25,6 @@ sequelize.sync({ force: false, alter: false }).then(() => {
 
 app.use("/api/menus", menuRouter);
 app.use("/api/menuItem", menuItemRouter);
-app.use("/api/food", foodRouter);
 app.use("/images", express.static("uploads"));
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);

@@ -13,7 +13,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId }) => {
         if (isOpen) {
             const fetchProfileData = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:4000/api/user/profile/${customerId}`, {
+                    const response = await axios.get(`http://192.168.0.174:4000/api/user/profile/${customerId}`, {
                         headers: {
                             'Cache-Control': 'no-cache, no-store, must-revalidate',
                             'Pragma': 'no-cache',

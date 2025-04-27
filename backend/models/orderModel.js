@@ -20,7 +20,7 @@ const Order = sequelize.define('Order', {
   },
   status: {
     type: DataTypes.STRING,
-    defaultValue: 'Food Processing'
+    defaultValue: 'MenuItem Processing'
   },
   date: {
     type: DataTypes.DATE,

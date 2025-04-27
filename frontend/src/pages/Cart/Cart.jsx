@@ -4,7 +4,7 @@ import { StoreContext } from '../../context/StoreContext';
 import './Cart.css';
 
 const Cart = () => {
-  const { cartItems, removeFromCart, food_list,getTotalCartAmount} = useContext(StoreContext);
+  const { cartItems, removeFromCart, menuItem_list,getTotalCartAmount} = useContext(StoreContext);
 const navigate=useNavigate();
   return (
     <div className="cart">
@@ -19,7 +19,7 @@ const navigate=useNavigate();
         </div>
         <hr />
         <br />
-        {food_list.map((item, index) => {
+        {menuItem_list.map((item, index) => {
           if (cartItems[item._id] > 0) {
             return (
               <div className="cart-items-item" key={item._id}>
