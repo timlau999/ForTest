@@ -1,0 +1,27 @@
+/* frontend/src/components/Order/Order.css */
+.order {
+    margin-top: 50px; 
+    padding: 20px; 
+    border-top: 2px solid #e2e2e2; 
+}
+
+.order h2 {
+    color: #262626;
+    font-weight: 500;
+}
+
+.order-item {
+    border: 1px solid #e2e2e2;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.order-item p {
+    margin: 5px 0;
+}
+
+.order-item h3 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}

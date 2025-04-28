@@ -14,7 +14,7 @@ const Header = () => {
     return (
         <div className="header">
             <div className="header-contents">
-                <h2>AI Recommended Dishes Just for You</h2>
+                <h3>AI Recommended Dishes Just for You</h3>
                 <p>Experience the convenience of an AI - generated menu. Based on your profile.</p>
                 <button onClick={handleAIButtonClick}>AI recommendation</button>
             </div>
