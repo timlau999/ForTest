@@ -8,7 +8,7 @@ const Menu = ({ category, setCategory }) => {
   useEffect(() => {
     const fetchMenus = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/menus');
+        const response = await axios.get('http://192.168.0.174:4000/api/menus');
         console.log('Menu data response:', response.data); 
 
         if (Array.isArray(response.data.data)) {

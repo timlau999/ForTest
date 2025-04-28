@@ -4,6 +4,7 @@ import './Header.css';
 import AIRecommendationPopup from '../AIRecommendationPopup/AIRecommendationPopup'; 
 
 const Header = ({ customerId }) => {
+    console.log('Received customerId in Header:', customerId);
     const [isAIRecommendationPopupOpen, setIsAIRecommendationPopupOpen] = useState(false);
 
     const handleAIButtonClick = () => {

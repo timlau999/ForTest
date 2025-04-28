@@ -13,9 +13,9 @@ import UserAvatar from './components/UserAvatar/UserAvatar'; // 导入 UserAvata
 const App = () => {
     // display popup for login
     const [showLogin, setShowLogin] = useState(false);
-    const backendUrl = 'http://localhost:4000';
+    const backendUrl = 'http://192.168.0.174:4000';
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); // 检查用户是否登录
-
+    const customerId = localStorage.getItem('customerId'); 
     return (
         <>
             {showLogin ? (

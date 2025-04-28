@@ -13,7 +13,7 @@ const UserInfoPopup = ({ isOpen, onClose, customerId }) => {
         if (isOpen) {
             const fetchUserInfoData = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:4000/api/user/userinfo/${customerId}`, {
+                    const response = await axios.get(`http://192.168.0.174:4000/api/user/userinfo/${customerId}`, {
                         headers: {
                             'Cache-Control': 'no-cache, no-store, must-revalidate',
                             'Pragma': 'no-cache',
@@ -43,7 +43,7 @@ const UserInfoPopup = ({ isOpen, onClose, customerId }) => {
 
     const handleSaveClick = async () => {
         try {
-            const response = await axios.put(`http://localhost:4000/api/user/userinfo/${customerId}`, editedData);
+            const response = await axios.put(`http://192.168.0.174:4000/api/user/userinfo/${customerId}`, editedData);
             if (response.data.success) {
                 setUserInfoData(editedData);
                 setIsEditing(false);
