@@ -4,6 +4,6 @@ import { getRecommendation } from '../controllers/recommendationController.js';
 
 const router = express.Router();
 
-router.post('/recommend', getRecommendation);
+router.post('/', getRecommendation);
 
 export default router;
