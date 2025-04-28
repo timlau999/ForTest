@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import './Header.css';
 import AIRecommendationPopup from '../AIRecommendationPopup/AIRecommendationPopup'; 
 
-const Header = ({ customerId }) => {
-    console.log('Received customerId in Header:', customerId);
+const Header = () => {
     const [isAIRecommendationPopupOpen, setIsAIRecommendationPopupOpen] = useState(false);
+    const customerId = localStorage.getItem('customerId');
 
     const handleAIButtonClick = () => {
         setIsAIRecommendationPopupOpen(!isAIRecommendationPopupOpen);

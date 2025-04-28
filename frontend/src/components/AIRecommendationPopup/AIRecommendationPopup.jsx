@@ -1,28 +1,32 @@
 // ForTest/frontend/src/components/AIRecommendationPopup/AIRecommendationPopup.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import './AIRecommendationPopup.css';
 
 const AIRecommendationPopup = ({ onClose, customerId }) => {
     const [recommendationData, setRecommendationData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchRecommendation = async () => {
-            try {
-                const response = await axios.post('http://192.168.0.174:4000/api/recommend', { customerId });
-                setRecommendationData(response.data);
-            } catch (error) {
-                console.error('Error fetching recommendation:', error);
-            } finally {
-                setIsLoading(false);
+    const fetchRecommendation = useCallback(async () => {
+        try {
+            if (!customerId) {
+                setError('Customer ID is missing. Please log in or try again.');
+                return;
             }
-        };
-
-        if (customerId) {
-            fetchRecommendation();
+            const response = await axios.post('http://192.168.0.174:4000/api/recommend', { customerId });
+            setRecommendationData(response.data);
+        } catch (error) {
+            console.error('Error fetching recommendation:', error);
+            setError('Failed to fetch recommendation. Please try again later.');
+        } finally {
+            setIsLoading(false);
         }
     }, [customerId]);
+
+    useEffect(() => {
+        fetchRecommendation();
+    }, [fetchRecommendation]);
 
     return (
         <div className="ai-popup">
@@ -34,6 +38,8 @@ const AIRecommendationPopup = ({ onClose, customerId }) => {
                 <div className="ai-popup-content">
                     {isLoading ? (
                         <p>Loading...</p>
+                    ) : error ? (
+                        <p>{error}</p>
                     ) : recommendationData ? (
                         <div>
                             <h3>Customer: {recommendationData.client}</h3>

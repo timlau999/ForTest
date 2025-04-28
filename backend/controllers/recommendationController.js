@@ -1,4 +1,3 @@
-// backend/controllers/recommendationController.js
 import CustomerProfile from '../models/customerProfileModel.js';
 import MenuItem from '../models/menuItemModel.js';
 import MenuItemIngredient from '../models/menuItemIngredientModel.js';
