@@ -4,7 +4,7 @@ import { StoreContext } from '../../context/StoreContext';
 import axios from 'axios';
 import './Order.css';
 
-const Order = () => {
+const Order = ({ backendUrl }) => {
     const { token, userId } = useContext(StoreContext);
     const [orders, setOrders] = useState([]);
 
@@ -12,12 +12,12 @@ const Order = () => {
         const fetchOrders = async () => {
             if (token && userId) {
                 try {
-                    const customerResponse = await axios.get(`http://192.168.0.174:4000/api/customer/${userId}`, {
+                    const customerResponse = await axios.get(`${backendUrl}/api/customer/${userId}`, {
                         headers: { token }
                     });
                     const customerId = customerResponse.data.customerId;
 
-                    const orderResponse = await axios.get(`http://192.168.0.174:4000/api/orders/${customerId}`, {
+                    const orderResponse = await axios.get(`${backendUrl}/api/orders/${customerId}`, {
                         headers: { token }
                     });
                     setOrders(orderResponse.data);
@@ -28,11 +28,10 @@ const Order = () => {
         };
 
         fetchOrders();
-    }, [token, userId]);
+    }, [token, userId, backendUrl]);
 
     return (
         <div className="order" id="order">
-            {/* 添加标题 */}
             <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '20px' }}>Order Details</h2> 
             {orders.length > 0 ? (
                 <div>

@@ -39,7 +39,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/cart" element={<Cart />} />
-                    <Route path="/order" element={<Order />} />
+                    <Route path="/order" element={<Order backendUrl={backendUrl} />} />
                 </Routes>
             </div>
             <Footer />

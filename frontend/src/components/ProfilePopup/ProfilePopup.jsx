@@ -1,9 +1,9 @@
-// ForTest/frontend/src/components/ProfilePopup.jsx
+// ForTest/frontend/src/components/ProfilePopup/ProfilePopup.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ProfilePopup.css';
 
-const ProfilePopup = ({ isOpen, onClose, customerId }) => {
+const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
     const [profileData, setProfileData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
@@ -13,7 +13,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId }) => {
         if (isOpen) {
             const fetchProfileData = async () => {
                 try {
-                    const response = await axios.get(`http://192.168.0.174:4000/api/user/profile/${customerId}`, {
+                    const response = await axios.get(`${backendUrl}/api/user/profile/${customerId}`, {
                         headers: {
                             'Cache-Control': 'no-cache, no-store, must-revalidate',
                             'Pragma': 'no-cache',
@@ -35,7 +35,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId }) => {
 
             fetchProfileData();
         }
-    }, [isOpen, customerId]);
+    }, [isOpen, customerId, backendUrl]);
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -43,7 +43,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId }) => {
 
     const handleSaveClick = async () => {
         try {
-            const response = await axios.put(`http://192.168.0.174:4000/api/user/profile/${customerId}`, editedData);
+            const response = await axios.put(`${backendUrl}/api/user/profile/${customerId}`, editedData);
             if (response.data.success) {
                 setProfileData(editedData);
                 setIsEditing(false);

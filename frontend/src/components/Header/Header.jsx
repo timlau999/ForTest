@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './Header.css';
 import AIRecommendationPopup from '../AIRecommendationPopup/AIRecommendationPopup'; 
 
-const Header = () => {
+const Header = ({ backendUrl }) => {
     const [isAIRecommendationPopupOpen, setIsAIRecommendationPopupOpen] = useState(false);
     const customerId = localStorage.getItem('customerId');
 
@@ -18,7 +18,7 @@ const Header = () => {
                 <p>Experience the convenience of an AI - generated menu. Based on your profile.</p>
                 <button onClick={handleAIButtonClick}>AI recommendation</button>
             </div>
-            {isAIRecommendationPopupOpen && <AIRecommendationPopup onClose={() => setIsAIRecommendationPopupOpen(false)} customerId={customerId} />}
+            {isAIRecommendationPopupOpen && <AIRecommendationPopup onClose={() => setIsAIRecommendationPopupOpen(false)} customerId={customerId} backendUrl={backendUrl} />}
         </div>
     );
 };
