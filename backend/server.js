@@ -10,6 +10,9 @@ import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import recommendationRouter from "./routes/recommendationRoute.js";
 import menuRouter from "./routes/menuRoutes.js";
+import MenuItem from "./models/menuItemModel.js";
+import MenuItemIngredient from "./models/menuItemIngredientModel.js";
+import Ingredient from "./models/ingredientModel.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -18,6 +21,10 @@ app.use(express.json());
 app.use(cors());
 
 connectDB();
+
+MenuItem.hasMany(MenuItemIngredient, { foreignKey: 'menuItemId' });
+MenuItemIngredient.belongsTo(MenuItem, { foreignKey: 'menuItemId' });
+MenuItemIngredient.belongsTo(Ingredient, { foreignKey: 'ingredientId' });
 
 sequelize.sync({ force: false, alter: false }).then(() => {
     console.log('Database synchronized');

@@ -34,4 +34,7 @@ const MenuItemIngredient = sequelize.define('MenuItemIngredient', {
     timestamps: false
 });
 
+// 定义关联关系
+MenuItemIngredient.belongsTo(Ingredient, { foreignKey: 'ingredientId' });
+
 export default MenuItemIngredient;

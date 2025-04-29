@@ -47,4 +47,6 @@ const MenuItem = sequelize.define('MenuItem', {
     timestamps: false
 });
 
+// MenuItem.hasMany(MenuItemIngredient, { foreignKey: 'menuItemId' });
+
 export default MenuItem;
