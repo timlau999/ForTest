@@ -3,16 +3,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserAvatar.css'; 
 import ProfilePopup from '../ProfilePopup/ProfilePopup';
-import UserInfoPopup from '../UserInfoPopup/UserInfoPopup'; // 新增导入
+import UserInfoPopup from '../UserInfoPopup/UserInfoPopup'; 
 
-const UserAvatar = ({ onLogout }) => {
+const UserAvatar = ({ onLogout, backendUrl }) => {
     const navigate = useNavigate();
     const username = localStorage.getItem('username');
     const role = localStorage.getItem('role');
     const customerId = localStorage.getItem('customerId');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
-    const [isUserInfoPopupOpen, setIsUserInfoPopupOpen] = useState(false); // 新增状态
+    const [isUserInfoPopupOpen, setIsUserInfoPopupOpen] = useState(false); 
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -33,7 +33,7 @@ const UserAvatar = ({ onLogout }) => {
 
     const handleUserInfoClick = () => {
         setIsDropdownOpen(false);
-        setIsUserInfoPopupOpen(true); // 点击用户名时打开用户资料弹窗
+        setIsUserInfoPopupOpen(true); 
     };
 
     const toggleDropdown = () => {
@@ -45,14 +45,14 @@ const UserAvatar = ({ onLogout }) => {
     };
 
     const closeUserInfoPopup = () => {
-        setIsUserInfoPopupOpen(false); // 关闭用户资料弹窗
+        setIsUserInfoPopupOpen(false); 
     };
 
     return (
         <div className="user-avatar" onClick={toggleDropdown}>
             <span>{username}</span>
             <div className={`dropdown ${isDropdownOpen ? 'open' : ''}`}>
-                <button onClick={handleUserInfoClick}>{username}</button> {/* 下拉列表中的用户名按钮 */}
+                <button onClick={handleUserInfoClick}>{username}</button> 
                 <hr />
                 <button onClick={handleProfileClick}>Profile</button>
                 <button onClick={handleLogout}>Sign Out</button>
@@ -61,11 +61,13 @@ const UserAvatar = ({ onLogout }) => {
                 isOpen={isProfilePopupOpen}
                 onClose={closeProfilePopup}
                 customerId={customerId}
+                backendUrl={backendUrl} 
             />
             <UserInfoPopup
                 isOpen={isUserInfoPopupOpen}
                 onClose={closeUserInfoPopup}
                 customerId={customerId}
+                backendUrl={backendUrl} 
             /> 
         </div>
     );

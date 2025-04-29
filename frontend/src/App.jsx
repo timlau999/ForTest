@@ -33,6 +33,7 @@ const App = () => {
                     isLoggedIn={isLoggedIn}
                     setIsLoggedIn={setIsLoggedIn}
                     UserAvatar={UserAvatar} // 将 UserAvatar 组件传递给 Navbar
+                    backendUrl={backendUrl} // 传递 backendUrl
                 />
                 <Routes>
                     <Route path="/" element={<Home />} />

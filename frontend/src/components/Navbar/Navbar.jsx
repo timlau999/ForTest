@@ -5,7 +5,7 @@ import { StoreContext } from '../../context/StoreContext';
 import { assets } from '../../assets/assets';
 import './Navbar.css';
 
-const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn, UserAvatar }) => {
+const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn, UserAvatar, backendUrl }) => {
     const [menu, setMenu] = useState("home");
     const { getTotalCartAmount } = useContext(StoreContext);
 
@@ -25,7 +25,10 @@ const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn, UserAvatar }) => {
                     <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
                 </div>
                 {isLoggedIn ? (
-                    <UserAvatar onLogout={() => setIsLoggedIn(false)} />
+                    <UserAvatar 
+                        onLogout={() => setIsLoggedIn(false)} 
+                        backendUrl={backendUrl} 
+                    />
                 ) : (
                     <button onClick={() => setShowLogin(true)}>sign in</button>
                 )}
