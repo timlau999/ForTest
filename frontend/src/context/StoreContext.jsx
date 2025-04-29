@@ -1,17 +1,19 @@
+// ForTest/frontend/src/context/StoreContext.jsx
 import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
 
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
+    const { backendUrl } = props;
     const [cartItems, setCartItems] = useState({});
     const [menuItem_list, setMenuItemList] = useState([]);
 
     useEffect(() => {
         const fetchMenuItems = async () => {
             try {
-                const response = await axios.get('http://192.168.0.174:4000/api/menuItem');
-                console.log('API response:', response.data); // 查看 API 响应数据
+                const response = await axios.get(`${backendUrl}/api/menuItem`);
+                console.log('API response:', response.data); 
                 if (response.data.success) {
                     const formattedMenuItems = response.data.data.map(item => ({
                         _id: item._id.toString(),
@@ -22,7 +24,7 @@ const StoreContextProvider = (props) => {
                         category: item.category
                     }));
                     setMenuItemList(formattedMenuItems);
-                    console.log('Stored menuItem list in context:', formattedMenuItems); // 查看存储的数据
+                    console.log('Stored menuItem list in context:', formattedMenuItems); 
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -30,8 +32,7 @@ const StoreContextProvider = (props) => {
         };
 
         fetchMenuItems();
-    }, []);
-
+    }, [backendUrl]);
 
     const addToCart = (itemId) => {
         if (!cartItems[itemId]) {

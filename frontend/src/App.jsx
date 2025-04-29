@@ -9,6 +9,7 @@ import Home from './pages/Home/Home';
 import Order from './components/Order/Order';
 import Chatbot from './components/Chatbot/Chatbot';
 import UserAvatar from './components/UserAvatar/UserAvatar'; // 导入 UserAvatar 组件
+import StoreContextProvider from './context/StoreContext.jsx';
 
 const App = () => {
     // display popup for login
@@ -17,7 +18,7 @@ const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); // 检查用户是否登录
     const customerId = localStorage.getItem('customerId'); 
     return (
-        <>
+        <StoreContextProvider backendUrl={backendUrl}>
             {showLogin ? (
                 <LoginPopup
                     setShowLogin={setShowLogin}
@@ -43,7 +44,7 @@ const App = () => {
             </div>
             <Footer />
             <Chatbot />
-        </>
+        </StoreContextProvider>
     );
 };
 
