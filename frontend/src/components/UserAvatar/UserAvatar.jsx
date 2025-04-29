@@ -36,6 +36,14 @@ const UserAvatar = ({ onLogout, backendUrl }) => {
         setIsUserInfoPopupOpen(true); 
     };
 
+    const handlePointsClick = () => {
+    
+    };
+
+    const handleOrderHistoryClick = () => {
+    
+    };
+
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
@@ -55,6 +63,8 @@ const UserAvatar = ({ onLogout, backendUrl }) => {
                 <button onClick={handleUserInfoClick}>{username}</button> 
                 <hr />
                 <button onClick={handleProfileClick}>Profile</button>
+                <button onClick={handlePointsClick}>Points</button>
+                <button onClick={handleOrderHistoryClick}>Order History</button>
                 <button onClick={handleLogout}>Sign Out</button>
             </div>
             <ProfilePopup
