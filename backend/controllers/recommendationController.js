@@ -3,7 +3,8 @@ import MenuItem from '../models/menuItemModel.js';
 import MenuItemIngredient from '../models/menuItemIngredientModel.js';
 import Ingredient from '../models/ingredientModel.js';
 import axios from 'axios';
-import Recommendation from '../models/recommendationModel.js'; // 假设存在该模型
+import Recommendation from '../models/recommendationModel.js';
+import sequelize from '../config/db.js';
 
 // Filter menu items based on customer profile
 function filterMenuForClient(client, menuItems) {
@@ -72,14 +73,17 @@ async function getAIRecommendation(prompt) {
     }
 }
 
-
 export const getRecommendation = async (req, res) => {
     try {
         const { customerId } = req.body;
-        if (!customerId) return res.status(400).json({ error: 'Missing customerId parameter' });
+        if (!customerId) {
+            return res.status(400).json({ error: 'Missing customerId parameter' });
+        }
 
         const customerProfile = await CustomerProfile.findOne({ where: { customerId } });
-        if (!customerProfile) return res.status(404).json({ error: 'Customer profile not found' });
+        if (!customerProfile) {
+            return res.status(404).json({ error: 'Customer profile not found' });
+        }
 
         const menuItems = await MenuItem.findAll({
             include: [
@@ -121,32 +125,13 @@ export const getRecommendation = async (req, res) => {
             return value === undefined ? null : value;
         }, 2) + '\n');
 
-        // 插入推荐记录
-        const Recommendation = sequelize.define('recommendation', {
-            customerId: {
-                type: DataTypes.INTEGER,
-                allowNull: false
-            },
-            menuItemId: {
-                type: DataTypes.INTEGER,
-                allowNull: false
-            }
-        }, {
-            tableName: 'recommendation',
-            timestamps: false
-        });
-
-        const recommendedMenuItemId = 1; // 假设推荐的菜品 ID 为 1
-        await Recommendation.create({
-            customerId: customerId,
-            menuItemId: recommendedMenuItemId
-        });
-
     } catch (error) {
         console.error('Server error:', error);
-        res.status(500).json({
-            error: 'Internal server error',
-            details: error.message
-        });
+        if (!res.headersSent) {
+            res.status(500).json({
+                error: 'Internal server error',
+                details: error.message
+            });
+        }
     }
 };
