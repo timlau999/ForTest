@@ -43,9 +43,9 @@ Please recommend the most suitable dishes based on the customer's dietary restri
 // Get AI recommendation
 async function getAIRecommendation(prompt) {
     try {
-        const apiKey = 'ragflow-Y0ODcwZDU0MGRkNjExZjBiYmFjMDI0Mm';
-        const chatID = 'b759201e095b11f0b2b50242ac120006';
-        const address = '192.168.0.172';
+        const apiKey = 'ragflow-E5YWRkNGE2MjVhNzExZjBiYTJhMDI0Mm';
+        const chatID = '9fe6964c25a711f099c20242ac120006';
+        const address = '192.168.0.179';
 
         const requestUrl = `http://${address}/api/v1/chats_openai/${chatID}/chat/completions`;
         const requestBody = {
