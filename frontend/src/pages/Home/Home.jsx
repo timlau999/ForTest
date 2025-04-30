@@ -13,7 +13,7 @@ const Home = ({ backendUrl }) => {
             <Header backendUrl={backendUrl} />
             <Menu category={category} setCategory={setCategory} backendUrl={backendUrl} />
             <MenuItemDisplay category={category} />
-            <Order />
+            <Order backendUrl={backendUrl} />
         </div>
     );
 };

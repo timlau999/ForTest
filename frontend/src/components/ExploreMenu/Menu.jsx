@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Menu.css';
 
-const Menu = ({ category, setCategory }) => {
+const Menu = ({ category, setCategory, backendUrl }) => {
   const [menuList, setMenuList] = useState([]);
 
   useEffect(() => {
     const fetchMenus = async () => {
       try {
-        const response = await axios.get('http://192.168.0.174:4000/api/menus');
+        const response = await axios.get(`${backendUrl}/api/menus`);
         console.log('Menu data response:', response.data); 
 
         if (Array.isArray(response.data.data)) {
@@ -24,7 +24,7 @@ const Menu = ({ category, setCategory }) => {
     };
 
     fetchMenus();
-  }, []);
+  }, [backendUrl]);
 
   return (
     <div className="explore-menu" id="explore-menu">

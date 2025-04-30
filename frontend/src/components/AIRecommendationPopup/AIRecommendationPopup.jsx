@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import './AIRecommendationPopup.css';
 
-const AIRecommendationPopup = ({ onClose, customerId }) => {
+const AIRecommendationPopup = ({ onClose, customerId, backendUrl }) => {
     const [recommendationData, setRecommendationData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ const AIRecommendationPopup = ({ onClose, customerId }) => {
                 setError('Customer ID is missing. Please log in or try again.');
                 return;
             }
-            const response = await axios.post('http://192.168.0.174:4000/api/recommend', { customerId });
+            const response = await axios.post(`${backendUrl}/api/recommend`, { customerId });
             setRecommendationData(response.data);
         } catch (error) {
             console.error('Error fetching recommendation:', error);
@@ -22,7 +22,7 @@ const AIRecommendationPopup = ({ onClose, customerId }) => {
         } finally {
             setIsLoading(false);
         }
-    }, [customerId]);
+    }, [customerId, backendUrl]);
 
     useEffect(() => {
         fetchRecommendation();

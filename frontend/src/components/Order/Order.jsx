@@ -32,7 +32,7 @@ const Order = ({ backendUrl }) => {
 
     return (
         <div className="order" id="order">
-            <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '20px' }}>Order Details</h2> 
+            <h1 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '20px' }}>Order Details</h1> 
             {orders.length > 0 ? (
                 <div>
                     {orders.map((order) => (

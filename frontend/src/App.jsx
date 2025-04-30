@@ -37,7 +37,7 @@ const App = () => {
                     backendUrl={backendUrl} // 传递 backendUrl
                 />
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Home backendUrl={backendUrl} />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/order" element={<Order backendUrl={backendUrl} />} />
                 </Routes>
