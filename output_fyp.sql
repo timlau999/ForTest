@@ -65,6 +65,7 @@ CREATE TABLE `admin` (
 
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+INSERT INTO `admin` VALUES (1001,1007);
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,7 +109,7 @@ CREATE TABLE `customer` (
   PRIMARY KEY (`customerId`),
   KEY `coustomerUserID_idx` (`userId`),
   CONSTRAINT `coustomer_UserID` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=1007 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1011 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -117,8 +118,64 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1001,1001),(1002,1002),(1003,1003),(1004,1004),(1005,1005),(1006,1006);
+INSERT INTO `customer` VALUES (1001,1001),(1002,1002),(1003,1003),(1004,1004),(1005,1005),(1006,1006),(1007,1007),(1008,1008),(1009,1009),(1010,1010);
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer_points`
+--
+
+DROP TABLE IF EXISTS `customer_points`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `customer_points` (
+  `loyaltyId` int NOT NULL,
+  `customerId` int NOT NULL,
+  `points` int NOT NULL,
+  `redemptionDate` date NOT NULL,
+  PRIMARY KEY (`loyaltyId`),
+  KEY `Loyalty_CustomerId_idx` (`customerId`),
+  CONSTRAINT `CustomerPoints_CustomerId` FOREIGN KEY (`customerId`) REFERENCES `customer` (`customerId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer_points`
+--
+
+LOCK TABLES `customer_points` WRITE;
+/*!40000 ALTER TABLE `customer_points` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_points` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer_points_usage`
+--
+
+DROP TABLE IF EXISTS `customer_points_usage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `customer_points_usage` (
+  `usageId` int NOT NULL,
+  `orderId` int NOT NULL,
+  `loyaltyId` int NOT NULL,
+  `usageDate` date NOT NULL,
+  PRIMARY KEY (`usageId`),
+  KEY `LoyaltyUsage_OrderId_idx` (`orderId`),
+  KEY `LoyaltyUsage_LoyaltyId_idx` (`loyaltyId`),
+  CONSTRAINT `CustomerPointsUsage_LoyaltyId` FOREIGN KEY (`loyaltyId`) REFERENCES `customer_points` (`loyaltyId`),
+  CONSTRAINT `CustomerPointsUsage_OrderId` FOREIGN KEY (`orderId`) REFERENCES `order` (`orderId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer_points_usage`
+--
+
+LOCK TABLES `customer_points_usage` WRITE;
+/*!40000 ALTER TABLE `customer_points_usage` DISABLE KEYS */;
+/*!40000 ALTER TABLE `customer_points_usage` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -139,7 +196,7 @@ CREATE TABLE `customerprofile` (
   PRIMARY KEY (`profileId`),
   KEY `CustomerProfile_CustomerId_idx` (`customerId`),
   CONSTRAINT `CustomerProfile_CustomerId` FOREIGN KEY (`customerId`) REFERENCES `customer` (`customerId`)
-) ENGINE=InnoDB AUTO_INCREMENT=1007 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1010 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,18 +205,18 @@ CREATE TABLE `customerprofile` (
 
 LOCK TABLES `customerprofile` WRITE;
 /*!40000 ALTER TABLE `customerprofile` DISABLE KEYS */;
-INSERT INTO `customerprofile` VALUES (1001,1001,185,75,'Shellfish, Dairy','Diabetes, High Blood Pressure','Low - Carb, High - Fiber'),(1002,1002,180,70,'no','no','no'),(1003,1003,170,60,'no','no','no'),(1004,1004,170,60,'no','no','no'),(1005,1005,180,80,'no','no','no'),(1006,1006,183,80,'N/A','N/A','burger');
+INSERT INTO `customerprofile` VALUES (1001,1001,185,75,'Shellfish, Dairy','Diabetes, High Blood Pressure','Low - Carb, High - Fiber'),(1002,1002,188,70,'chicken','no','no'),(1003,1003,170,60,'no','no','no'),(1004,1004,170,60,'no','no','no'),(1005,1005,180,80,'no','no','no'),(1006,1006,183,80,'N/A','N/A','burger'),(1007,1008,190,99,'no','no','no'),(1008,1009,190,190,'no','no','no'),(1009,1010,188,89,'no','no','no');
 /*!40000 ALTER TABLE `customerprofile` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `menuItem`
+-- Table structure for table `food`
 --
 
-DROP TABLE IF EXISTS `menuItem`;
+DROP TABLE IF EXISTS `food`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `menuItem` (
+CREATE TABLE `food` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -173,12 +230,12 @@ CREATE TABLE `menuItem` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `menuItem`
+-- Dumping data for table `food`
 --
 
-LOCK TABLES `menuItem` WRITE;
-/*!40000 ALTER TABLE `menuItem` DISABLE KEYS */;
-/*!40000 ALTER TABLE `menuItem` ENABLE KEYS */;
+LOCK TABLES `food` WRITE;
+/*!40000 ALTER TABLE `food` DISABLE KEYS */;
+/*!40000 ALTER TABLE `food` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -205,64 +262,8 @@ CREATE TABLE `ingredient` (
 
 LOCK TABLES `ingredient` WRITE;
 /*!40000 ALTER TABLE `ingredient` DISABLE KEYS */;
-INSERT INTO `ingredient` VALUES (1,'Salmon','grams','SeamenuItem','Fish'),(2,'Wagyu Beef','grams','Meat','Dairy (if marinated)'),(3,'Rice','grams','Staple','None'),(4,'Soy Sauce','ml','Condiment','Gluten'),(5,'Chili Paste','grams','Spice','Soy'),(6,'Kimchi','grams','Fermented','None'),(7,'Coconut Milk','ml','Liquid','Tree Nut'),(8,'Shrimp','pieces','SeamenuItem','Shellfish'),(9,'Garlic','cloves','Vegetable','None'),(10,'Lemongrass','stalks','Herb','None'),(11,'Butter','grams','Dairy','Milk'),(12,'Flour','grams','Staple','Gluten'),(13,'Red Wine','ml','Liquid','Alcohol'),(14,'Fish Sauce','ml','Condiment','Fish'),(15,'Gochujang','grams','Fermented','Soy'),(16,'Egg Yolk','pieces','Dairy','Egg'),(17,'Carrot','grams','Vegetable','None'),(18,'Green Chili','grams','Spice','Capsaicin'),(19,'Beef Ribs','grams','Meat','None'),(20,'Spinach','grams','Vegetable','None'),(21,'Wasabi','grams','Condiment','Horseradish'),(22,'Hoisin Sauce','ml','Condiment','Soy'),(23,'Tamarind Paste','grams','Spice','None');
+INSERT INTO `ingredient` VALUES (1,'Salmon','grams','Seafood','Fish'),(2,'Wagyu Beef','grams','Meat','Dairy (if marinated)'),(3,'Rice','grams','Staple','None'),(4,'Soy Sauce','ml','Condiment','Gluten'),(5,'Chili Paste','grams','Spice','Soy'),(6,'Kimchi','grams','Fermented','None'),(7,'Coconut Milk','ml','Liquid','Tree Nut'),(8,'Shrimp','pieces','Seafood','Shellfish'),(9,'Garlic','cloves','Vegetable','None'),(10,'Lemongrass','stalks','Herb','None'),(11,'Butter','grams','Dairy','Milk'),(12,'Flour','grams','Staple','Gluten'),(13,'Red Wine','ml','Liquid','Alcohol'),(14,'Fish Sauce','ml','Condiment','Fish'),(15,'Gochujang','grams','Fermented','Soy'),(16,'Egg Yolk','pieces','Dairy','Egg'),(17,'Carrot','grams','Vegetable','None'),(18,'Green Chili','grams','Spice','Capsaicin'),(19,'Beef Ribs','grams','Meat','None'),(20,'Spinach','grams','Vegetable','None'),(21,'Wasabi','grams','Condiment','Horseradish'),(22,'Hoisin Sauce','ml','Condiment','Soy'),(23,'Tamarind Paste','grams','Spice','None');
 /*!40000 ALTER TABLE `ingredient` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `loyalty`
---
-
-DROP TABLE IF EXISTS `loyalty`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `loyalty` (
-  `loyaltyId` int NOT NULL,
-  `customerId` int NOT NULL,
-  `points` int NOT NULL,
-  `redemptionDate` date NOT NULL,
-  PRIMARY KEY (`loyaltyId`),
-  KEY `Loyalty_CustomerId_idx` (`customerId`),
-  CONSTRAINT `Loyalty_CustomerId` FOREIGN KEY (`customerId`) REFERENCES `customer` (`customerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `loyalty`
---
-
-LOCK TABLES `loyalty` WRITE;
-/*!40000 ALTER TABLE `loyalty` DISABLE KEYS */;
-/*!40000 ALTER TABLE `loyalty` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `loyaltyusage`
---
-
-DROP TABLE IF EXISTS `loyaltyusage`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `loyaltyusage` (
-  `usageId` int NOT NULL,
-  `orderId` int NOT NULL,
-  `loyaltyId` int NOT NULL,
-  `usageDate` date NOT NULL,
-  PRIMARY KEY (`usageId`),
-  KEY `LoyaltyUsage_OrderId_idx` (`orderId`),
-  KEY `LoyaltyUsage_LoyaltyId_idx` (`loyaltyId`),
-  CONSTRAINT `LoyaltyUsage_LoyaltyId` FOREIGN KEY (`loyaltyId`) REFERENCES `loyalty` (`loyaltyId`),
-  CONSTRAINT `LoyaltyUsage_OrderId` FOREIGN KEY (`orderId`) REFERENCES `order` (`orderId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `loyaltyusage`
---
-
-LOCK TABLES `loyaltyusage` WRITE;
-/*!40000 ALTER TABLE `loyaltyusage` DISABLE KEYS */;
-/*!40000 ALTER TABLE `loyaltyusage` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -288,7 +289,7 @@ CREATE TABLE `menu` (
 
 LOCK TABLES `menu` WRITE;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
-INSERT INTO `menu` VALUES (1001,1,'Premium Sushi & Sashimi Collection'),(2001,2,'Imperial Chinese Cuisine'),(3001,3,'French Gourmet Experience'),(4001,4,'Authentic Thai Street MenuItem'),(5001,5,'Korean BBQ Signature Set');
+INSERT INTO `menu` VALUES (1,1,'Japanese Cuisine'),(2,2,'Chinese Cuisine'),(3,3,'Western Cuisine'),(4,4,'Thai Cuisine'),(5,5,'Korean Cuisine'),(6,6,'Deserts');
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,7 +302,7 @@ DROP TABLE IF EXISTS `menuitem`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `menuitem` (
   `menuItemId` int NOT NULL,
-  `restaurantId` int NOT NULL,
+  `menuID` int NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `price` decimal(10,0) NOT NULL,
@@ -310,8 +311,8 @@ CREATE TABLE `menuitem` (
   `sensitiveSource` varchar(255) DEFAULT NULL,
   `category` varchar(255) NOT NULL,
   PRIMARY KEY (`menuItemId`),
-  KEY `Menu_RestaurantId_idx` (`restaurantId`),
-  CONSTRAINT `MenuItem_RestaurantId` FOREIGN KEY (`restaurantId`) REFERENCES `restaurant` (`restaurantID`)
+  KEY `Menu_MenuID_idx` (`menuID`),
+  CONSTRAINT `MenuItem_MenuID` FOREIGN KEY (`menuID`) REFERENCES `menu` (`menuId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -321,7 +322,7 @@ CREATE TABLE `menuitem` (
 
 LOCK TABLES `menuitem` WRITE;
 /*!40000 ALTER TABLE `menuitem` DISABLE KEYS */;
-INSERT INTO `menuitem` VALUES (101,1,'Salmon Sashimi','Fresh Atlantic salmon slices',28,220,0,'Fish','Appetizer'),(102,1,'Wagyu Sushi Roll','Marbled beef with truffle sauce',45,380,55,'Dairy','Main Course'),(201,2,'Peking Duck','Crispy skin with hoisin sauce',68,650,40,'Gluten','Main Course'),(202,2,'Kung Pao Chicken','Szechuan style with peanuts',24,420,30,'Peanuts','Main Course'),(301,3,'Beef Bourguignon','Red wine braised beef',52,580,25,'Alcohol','Main Course'),(302,3,'Crème Br?lée','Vanilla bean custard',18,320,45,'Dairy','Dessert'),(401,4,'Tom Yum Goong','Spicy shrimp soup',22,280,15,'Shellfish','Soup'),(402,4,'Green Curry Chicken','Coconut milk based curry',26,450,35,'Tree Nut','Main Course'),(501,5,'Galbi Short Ribs','Marinated beef ribs',38,520,20,'Soy','Main Course'),(502,5,'Bibimbap','Mixed rice with vegetables',20,480,60,'Egg','Main Course');
+INSERT INTO `menuitem` VALUES (1,3,'Greek salad','Food provides essential nutrients for overall health and well - being',12,0,0,NULL,'Western Cuisine'),(2,3,'Veg salad','Food provides essential nutrients for overall health and well - being',18,0,0,NULL,'Western Cuisine'),(3,3,'Clover Salad','Food provides essential nutrients for overall health and well - being',16,0,0,NULL,'Western Cuisine'),(4,3,'Chicken Salad','Food provides essential nutrients for overall health and well - being',24,0,0,NULL,'Western Cuisine'),(5,3,'Lasagna Rolls','Food provides essential nutrients for overall health and well - being',14,0,0,NULL,'Western Cuisine'),(6,3,'Peri Peri Rolls','Food provides essential nutrients for overall health and well - being',12,0,0,NULL,'Western Cuisine'),(7,3,'Chicken Rolls','Food provides essential nutrients for overall health and well - being',20,0,0,NULL,'Western Cuisine'),(8,3,'Veg Rolls','Food provides essential nutrients for overall health and well - being',15,0,0,NULL,'Western Cuisine'),(9,6,'Ripple Ice Cream','Food provides essential nutrients for overall health and well - being',14,0,0,NULL,'Deserts'),(10,6,'Fruit Ice Cream','Food provides essential nutrients for overall health and well - being',22,0,0,NULL,'Deserts'),(11,6,'Jar Ice Cream','Food provides essential nutrients for overall health and well - being',10,0,0,NULL,'Deserts'),(12,6,'Vanilla Ice Cream','Food provides essential nutrients for overall health and well - being',12,0,0,NULL,'Deserts'),(13,3,'Chicken Sandwich','Food provides essential nutrients for overall health and well - being',12,0,0,NULL,'Western Cuisine'),(14,3,'Vegan Sandwich','Food provides essential nutrients for overall health and well - being',18,0,0,NULL,'Western Cuisine'),(15,3,'Grilled Sandwich','Food provides essential nutrients for overall health and well - being',16,0,0,NULL,'Western Cuisine'),(16,3,'Bread Sandwich','Food provides essential nutrients for overall health and well - being',24,0,0,NULL,'Western Cuisine'),(17,6,'Cup Cake','Food provides essential nutrients for overall health and well - being',14,0,0,NULL,'Deserts'),(18,6,'Vegan Cake','Food provides essential nutrients for overall health and well - being',12,0,0,NULL,'Deserts'),(19,6,'Butterscotch Cake','Food provides essential nutrients for overall health and well - being',20,0,0,NULL,'Deserts'),(20,6,'Sliced Cake','Food provides essential nutrients for overall health and well - being',15,0,0,NULL,'Deserts'),(21,3,'Garlic Mushroom ','Food provides essential nutrients for overall health and well - being',14,0,0,NULL,'Western Cuisine'),(22,3,'Fried Cauliflower','Food provides essential nutrients for overall health and well - being',22,0,0,NULL,'Western Cuisine'),(23,3,'Mix Veg Pulao','Food provides essential nutrients for overall health and well - being',10,0,0,NULL,'Western Cuisine'),(24,3,'Rice Zucchini','Food provides essential nutrients for overall health and well - being',12,0,0,NULL,'Western Cuisine'),(25,3,'Cheese Pasta','Food provides essential nutrients for overall health and well - being',12,0,0,NULL,'Western Cuisine'),(26,3,'Tomato Pasta','Food provides essential nutrients for overall health and well - being',18,0,0,NULL,'Western Cuisine'),(27,3,'Creamy Pasta','Food provides essential nutrients for overall health and well - being',16,0,0,NULL,'Western Cuisine'),(28,3,'Chicken Pasta','Food provides essential nutrients for overall health and well - being',24,0,0,NULL,'Western Cuisine'),(29,3,'Buttter Noodles','Food provides essential nutrients for overall health and well - being',14,0,0,NULL,'Western Cuisine'),(30,3,'Veg Noodles','Food provides essential nutrients for overall health and well - being',12,0,0,NULL,'Western Cuisine'),(31,3,'Somen Noodles','Food provides essential nutrients for overall health and well - being',20,0,0,NULL,'Western Cuisine'),(32,3,'Cooked Noodles','Food provides essential nutrients for overall health and well - being',15,0,0,NULL,'Western Cuisine'),(33,1,'Salmon Sashimi','Fresh Atlantic salmon slices',28,220,0,'Fish','Japanese Cuisine'),(34,1,'Wagyu Sushi Roll','Marbled beef with truffle sauce',45,380,55,'Dairy','Japanese Cuisine'),(35,2,'Peking Duck','Crispy skin with hoisin sauce',68,650,40,'Gluten','Chinese Cuisine'),(36,2,'Kung Pao Chicken','Szechuan style with peanuts',24,420,30,'Peanuts','Chinese Cuisine'),(37,3,'Beef Bourguignon','Red wine braised beef',52,580,25,'Alcohol','Western Cuisine'),(38,3,'Crème Br?lée','Vanilla bean custard',18,320,45,'Dairy','Dessert'),(39,4,'Tom Yum Goong','Spicy shrimp soup',22,280,15,'Shellfish','Thai Cuisine'),(40,4,'Green Curry Chicken','Coconut milk based curry',26,450,35,'Tree Nut','Thai Cuisine'),(41,5,'Galbi Short Ribs','Marinated beef ribs',38,520,20,'Soy','Korean Cuisine'),(42,5,'Bibimbap','Mixed rice with vegetables',20,480,60,'Egg','Korean Cuisine');
 /*!40000 ALTER TABLE `menuitem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -351,7 +352,7 @@ CREATE TABLE `menuitemingredient` (
 
 LOCK TABLES `menuitemingredient` WRITE;
 /*!40000 ALTER TABLE `menuitemingredient` DISABLE KEYS */;
-INSERT INTO `menuitemingredient` VALUES (20004,301,2,300),(20005,301,11,50),(20006,301,12,100),(20007,302,13,6),(20008,302,14,200),(20009,302,15,80),(20010,402,8,200),(20011,402,7,150),(20012,402,16,20),(20013,501,17,500),(20014,501,4,30),(20015,501,9,5),(20016,502,3,250),(20017,502,18,2),(20018,502,19,100);
+INSERT INTO `menuitemingredient` VALUES (1,33,1,200),(2,33,21,10),(3,34,2,150),(4,34,3,100),(5,34,4,20),(6,35,12,200),(7,35,22,50),(8,36,17,100),(9,36,5,20),(10,36,9,2),(11,37,19,300),(12,37,13,100),(13,37,11,30),(14,38,11,50),(15,38,16,2),(16,39,8,5),(17,39,10,2),(18,39,14,30),(19,40,7,200),(20,40,18,10),(21,40,23,20),(22,41,19,250),(23,41,15,30),(24,42,3,200),(25,42,20,50),(26,42,6,80);
 /*!40000 ALTER TABLE `menuitemingredient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -575,7 +576,7 @@ DROP TABLE IF EXISTS `recommendation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `recommendation` (
-  `recommendationId` int NOT NULL,
+  `recommendationId` int NOT NULL AUTO_INCREMENT,
   `customerId` int NOT NULL,
   `menuItemId` int NOT NULL,
   PRIMARY KEY (`recommendationId`),
@@ -583,7 +584,7 @@ CREATE TABLE `recommendation` (
   KEY `Recommendation_MenuItemId_idx` (`menuItemId`),
   CONSTRAINT `Recommendation_CustomerId` FOREIGN KEY (`customerId`) REFERENCES `customer` (`customerId`),
   CONSTRAINT `Recommendation_MenuItemId` FOREIGN KEY (`menuItemId`) REFERENCES `menuitem` (`menuItemId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -592,6 +593,7 @@ CREATE TABLE `recommendation` (
 
 LOCK TABLES `recommendation` WRITE;
 /*!40000 ALTER TABLE `recommendation` DISABLE KEYS */;
+INSERT INTO `recommendation` VALUES (1,1002,5),(2,1002,6),(3,1002,7);
 /*!40000 ALTER TABLE `recommendation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -617,7 +619,7 @@ CREATE TABLE `restaurant` (
 
 LOCK TABLES `restaurant` WRITE;
 /*!40000 ALTER TABLE `restaurant` DISABLE KEYS */;
-INSERT INTO `restaurant` VALUES (1,'Sakura Sushi','+81-3-1234-0001',4.8),(2,'Dragon Palace','+86-21-8765-0202',4.7),(3,'Champs ?lysées Bistro','+33-1-9876-3303',4.6),(4,'Thai Spice','+66-2-1122-4404',4.9),(5,'Seoul BBQ House','+82-2-5566-5505',4.7);
+INSERT INTO `restaurant` VALUES (1,'Sakura Arashi','+81-3-1234-0001',4.8),(2,'Dragon Phoenix Bistro','+86-21-8765-0202',4.7),(3,'Grand Horizon Grill','+33-1-9876-3303',4.6),(4,'Spice of Siam','+66-2-1122-4404',4.9),(5,'Hana Hearth','+82-2-5566-5505',4.7),(6,'Sugar Haven','+82-2-8866-5505',4.9);
 /*!40000 ALTER TABLE `restaurant` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -755,7 +757,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `email` (`email`),
   KEY `user_permissionId` (`permissionId`),
   CONSTRAINT `user_permissionId` FOREIGN KEY (`permissionId`) REFERENCES `permission` (`permissionId`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=1007 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1011 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -764,7 +766,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1001,'testuser','testpassword','test@example.com','123 Test St','1234567890',1),(1002,'tim','password','tim@tim.com','Hong Kong ','88888887',1),(1003,'test2','password','test2@example.com','Hong Kong','99999999',1),(1004,'test3','password','test3@example.com','Hong Kong','88888888',1),(1005,'test5','password','test5@example.com','Hong Kong','88888888',1),(1006,'hei','12345678','hei@hei.com','Room7A, 6/F, Test House, Test Road, TKO','12345678',1);
+INSERT INTO `user` VALUES (1001,'testuser','testpassword','test@example.com','123 Test St','1234567890',1),(1002,'tim','password','tim@tim.com','Hong Kong ','88888882',1),(1003,'test2','password','test2@example.com','Hong Kong','99999999',1),(1004,'test3','password','test3@example.com','Hong Kong','88888888',1),(1005,'test5','password','test5@example.com','Hong Kong','88888888',1),(1006,'hei','12345678','hei@hei.com','Room7A, 6/F, Test House, Test Road, TKO','12345678',1),(1007,'admin1','admin1','admin1@admin.com','hk','11111111',1),(1008,'tim2','password','tim2@tim2.com','Hong Kong','89898989',1),(1009,'tim3','password','tim3@tim3.com','Hong Kong ','19191919191',1),(1010,'tim5','password','tim5@tim5.com','Hong Kong','181818181818',1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -777,4 +779,5 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-21 16:33:08
+-- Dump completed on 2025-05-01 20:40:50
+
