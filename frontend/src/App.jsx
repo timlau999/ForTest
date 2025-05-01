@@ -8,14 +8,14 @@ import Cart from './pages/Cart/Cart';
 import Home from './pages/Home/Home';
 import Order from './components/Order/Order';
 import Chatbot from './components/Chatbot/Chatbot';
-import UserAvatar from './components/UserAvatar/UserAvatar'; // 导入 UserAvatar 组件
+import UserAvatar from './components/UserAvatar/UserAvatar'; 
 import StoreContextProvider from './context/StoreContext.jsx';
 
 const App = () => {
     // display popup for login
     const [showLogin, setShowLogin] = useState(false);
-    const backendUrl = 'http://192.168.0.174:4000';
-    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); // 检查用户是否登录
+    const backendUrl = 'http://localhost:4000';
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); 
     const customerId = localStorage.getItem('customerId'); 
     return (
         <StoreContextProvider backendUrl={backendUrl}>
@@ -33,8 +33,8 @@ const App = () => {
                     setShowLogin={setShowLogin}
                     isLoggedIn={isLoggedIn}
                     setIsLoggedIn={setIsLoggedIn}
-                    UserAvatar={UserAvatar} // 将 UserAvatar 组件传递给 Navbar
-                    backendUrl={backendUrl} // 传递 backendUrl
+                    UserAvatar={UserAvatar} 
+                    backendUrl={backendUrl} 
                 />
                 <Routes>
                     <Route path="/" element={<Home backendUrl={backendUrl} />} />
