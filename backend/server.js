@@ -14,6 +14,7 @@ import MenuItem from "./models/menuItemModel.js";
 import MenuItemIngredient from "./models/menuItemIngredientModel.js";
 import Ingredient from "./models/ingredientModel.js";
 
+
 const app = express();
 const port = process.env.PORT || 4000;
 
@@ -37,6 +38,7 @@ app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/recommend", recommendationRouter);
+//app.use('/api/points', pointsRouter);
 
 
 app.get("/", (req, res) => {

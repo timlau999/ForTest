@@ -10,4 +10,4 @@ orderRouter.post("/status",authMiddleware,updateStatus);
 orderRouter.post("/userorders",authMiddleware,userOrders);
 orderRouter.get("/list",authMiddleware,listOrders);
 
-export default orderRouter; // 添加这行代码
+export default orderRouter; 

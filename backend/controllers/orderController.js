@@ -1,6 +1,8 @@
 import Order from '../models/orderModel.js';
 import User from '../models/userModel.js';
 import Stripe from 'stripe';
+import CustomerPoints from '../models/customerPointsModel.js';
+import CustomerPointsUsage from '../models/customerPointsUsageModel.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -8,15 +10,38 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const placeOrder = async (req, res) => {
   const frontend_url = "http://192.168.0.174:3000";
   try {
-    const newOrder = await Order.create({
-      userId: req.body.userId,
-      items: req.body.items,
-      amount: req.body.amount,
-      address: req.body.address
-    });
-    await User.update({ cartData: {} }, { where: { id: req.body.userId } });
+    const { userId, items, amount, address, pointsToUse } = req.body;
 
-    const line_items = req.body.items.map((item) => ({
+    // 检查用户积分是否足够
+    const customerPoints = await CustomerPoints.findOne({ where: { customerId: userId } });
+    if (customerPoints && customerPoints.points < pointsToUse) {
+      return res.json({ success: false, message: 'Insufficient points' });
+    }
+
+    const newOrder = await Order.create({
+      userId,
+      items,
+      amount,
+      address
+    });
+
+    // 如果使用了积分，更新积分信息
+    if (pointsToUse > 0) {
+      const newPoints = customerPoints.points - pointsToUse;
+      await customerPoints.update({ points: newPoints });
+      await CustomerPointsUsage.create({
+        orderId: newOrder.id,
+        loyaltyId: customerPoints.loyaltyId,
+        usageDate: new Date()
+      });
+      // 更新订单总金额
+      const newTotalAmount = amount - (pointsToUse / 10);
+      await newOrder.update({ amount: newTotalAmount });
+    }
+
+    await User.update({ cartData: {} }, { where: { id: userId } });
+
+    const line_items = items.map((item) => ({
       price_data: {
         currency: "usd",
         product_data: {
