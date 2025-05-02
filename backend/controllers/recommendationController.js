@@ -37,7 +37,7 @@ function generatePrompt(client, dishes) {
 Available Dishes:
 ${dishes.map(d => `[${d.name}] Ingredients: ${d.MenuItemIngredients.map(mi => mi.Ingredient.name).join(', ')}, Allergens: ${d.sensitiveSource || "None"}, Calories: ${d.calories}`).join('\n')}
 
-Please recommend the most suitable dishes based on the customer's dietary restrictions and health conditions, and explain the reasons. You can recommend a maximum of three dishes, and the reason for each dish should be limited to 10 characters: `;
+This is a question related to diet. Please recommend the most suitable dishes based on the customer's dietary restrictions and health conditions, no need to explain the reasons. The recommended dishes must be selected from the Available Dishes above. A maximum of three dishes can be recommended. For example, if you think Lasagna Rolls, Tomato Pasta, and Wagyu Sushi Roll are suitable for the customer, simply reply with these three dish names and nothing else.
 }
 
 // Get AI recommendation
@@ -119,6 +119,25 @@ export const getRecommendation = async (req, res) => {
               .replace(/\s{2,}/g, ' ')
               .trim()
         };
+
+        // Extract recommended menu item names
+        const recommendedDishes = [];
+        const regex = /\*\*(.*?)\*\*/g;
+        let match;
+        while ((match = regex.exec(recommendation))!== null) {
+            recommendedDishes.push(match[1]);
+        }
+
+        // Insert recommendations into the database
+        for (const dishName of recommendedDishes) {
+            const menuItem = await MenuItem.findOne({ where: { name: dishName } });
+            if (menuItem) {
+                await Recommendation.create({
+                    customerId: customerProfile.customerId,
+                    menuItemId: menuItem.menuItemId
+                });
+            }
+        }
 
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
         res.send(JSON.stringify(responseData, (key, value) => {
