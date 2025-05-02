@@ -37,7 +37,12 @@ function generatePrompt(client, dishes) {
 Available Dishes:
 ${dishes.map(d => `[${d.name}] Calories: ${d.calories}`).join('\n')}
 
-IMPORTANT: You MUST strictly follow the formatting instructions below. Please recommend the most suitable three dishes based on the customer's dietary restrictions and health conditions. Under NO circumstances should you add any additional words, explanations, or formatting. Each dish name MUST be individually enclosed in <>, like this: <Lasagna Rolls>, <Vegan Sandwich>, <Cheese Pasta>. This is a non - negotiable requirement. Do not combine multiple dish names within a single set of <>. ONLY provide the three dish names in the specified format, nothing else.`;
+IMPORTANT:
+1. You MUST strictly follow the formatting instructions below.
+2. The recommended dish names MUST exactly match the names in the "Available Dishes" list above. No variations, synonyms, or abbreviations are allowed.
+Please recommend the most suitable three dishes based on the customer's dietary restrictions and health conditions. Under NO circumstances should you add any additional words, explanations, or formatting, you can only reply with the name of the dish.
+Each dish name MUST be individually enclosed in <>, like this: <Lasagna Rolls>, <Vegan Sandwich>, <Cheese Pasta>. This is a non - negotiable requirement. Do not combine multiple dish names within a single set of <>.
+ONLY provide the three dish names in the specified format, nothing else.`;
 }
 
 // Get AI recommendation
