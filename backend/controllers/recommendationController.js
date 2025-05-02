@@ -35,9 +35,9 @@ function generatePrompt(client, dishes) {
 - Dietary Preferences: ${client.DietaryPreferences || 'None'}
 
 Available Dishes:
-${dishes.map(d => `[${d.name}] Ingredients: ${d.MenuItemIngredients.map(mi => mi.Ingredient.name).join(', ')}, Allergens: ${d.sensitiveSource || "None"}, Calories: ${d.calories}`).join('\n')}
+${dishes.map(d => `[${d.name}] Calories: ${d.calories}`).join('\n')}
 
-This is a question related to diet. Please recommend the most suitable dishes based on the customer's dietary restrictions and health conditions, no need to explain the reasons. The recommended dishes must be selected from the Available Dishes above. A maximum of three dishes can be recommended. For example, if you think Lasagna Rolls, Tomato Pasta, and Wagyu Sushi Roll are suitable for the customer, simply reply with these three dish names and nothing else.
+IMPORTANT: You MUST strictly follow the formatting instructions below. Please recommend the most suitable three dishes based on the customer's dietary restrictions and health conditions. Under NO circumstances should you add any additional words, explanations, or formatting. Each dish name MUST be individually enclosed in <>, like this: <Lasagna Rolls>, <Vegan Sandwich>, <Cheese Pasta>. This is a non - negotiable requirement. Do not combine multiple dish names within a single set of <>. ONLY provide the three dish names in the specified format, nothing else.`;
 }
 
 // Get AI recommendation
@@ -111,22 +111,10 @@ export const getRecommendation = async (req, res) => {
             recommendation = recommendation.replace(/<think>[\s\S]*?<\/think>/, '').trim();
         }
 
-        const responseData = {
-            client: customerProfile.customerId,
-            suitable_dishes: filteredDishes.map(d => d.name),
-            recommendation: (recommendation || "AI recommendation service is temporarily unavailable")
-              .replace(/\\n/g, '\n')
-              .replace(/\s{2,}/g, ' ')
-              .trim()
-        };
-
-        // Extract recommended menu item names
-        const recommendedDishes = [];
-        const regex = /\*\*(.*?)\*\*/g;
-        let match;
-        while ((match = regex.exec(recommendation))!== null) {
-            recommendedDishes.push(match[1]);
-        }
+        // Extract recommended menu item names and remove < >
+        const recommendedDishes = recommendation.split(',').map(dish => {
+            return dish.replace(/[<>]/g, '').trim();
+        });
 
         // Insert recommendations into the database
         for (const dishName of recommendedDishes) {
@@ -138,6 +126,12 @@ export const getRecommendation = async (req, res) => {
                 });
             }
         }
+
+        const responseData = {
+            client: customerProfile.customerId,
+            suitable_dishes: filteredDishes.map(d => d.name),
+            recommendation: recommendedDishes.slice(0, 3).map(dish => `<${dish}>`).join(', ') || "AI recommendation service is temporarily unavailable"
+        };
 
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
         res.send(JSON.stringify(responseData, (key, value) => {
