@@ -1,38 +1,34 @@
 import { Sequelize } from 'sequelize';
 import sequelize from '../config/db.js';
 
-const Order = sequelize.define('order', {
-    orderId: {
+const OrderItem = sequelize.define('orderitem', {
+    orderItemId: {
         type: Sequelize.INTEGER,
         primaryKey: true
     },
-    customerId: {
+    orderId: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    orderDate: {
-        type: Sequelize.DATE,
+    menuItemId: {
+        type: Sequelize.INTEGER,
         allowNull: false
     },
-    orderStatus: {
-        type: Sequelize.STRING,
+    quantity: {
+        type: Sequelize.INTEGER,
         allowNull: false
     },
-    totalAmount: {
+    unitPrice: {
         type: Sequelize.DECIMAL(10, 0),
         allowNull: false
     },
-    paymentStatus: {
-        type: Sequelize.STRING,
+    totalPrice: {
+        type: Sequelize.DECIMAL(10, 0),
         allowNull: false
-    },
-    pointsUsed: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
     }
 }, {
-    tableName: 'order', 
+    tableName: 'orderitem', 
     timestamps: false 
 });
 
-export default Order;
+export default OrderItem;

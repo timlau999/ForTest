@@ -4,7 +4,7 @@ import { StoreContext } from '../../context/StoreContext';
 import './Cart.css';
 
 const Cart = () => {
-    const { cartItems, removeFromCart, menuItem_list, getTotalCartAmount, userPoints, usePoints } = useContext(StoreContext);
+    const { cartItems, removeFromCart, menuItem_list, getTotalCartAmount, userPoints, usePoints, userId, backendUrl } = useContext(StoreContext);
     const navigate = useNavigate();
     const [pointsToUse, setPointsToUse] = useState('');
 
@@ -20,6 +20,42 @@ const Cart = () => {
 
     const handleSubmitPoints = () => {
         usePoints(pointsValue);
+    };
+
+    const handleCheckout = async () => {
+        try {
+            const response = await fetch(`${backendUrl}/api/order/place`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId,
+                    items: menuItem_list.filter(item => cartItems[item._id] > 0).map(item => ({
+                        menuItemId: item._id,
+                        quantity: cartItems[item._id],
+                        unitPrice: item.price,
+                        totalPrice: item.price * cartItems[item._id]
+                    })),
+                    amount: finalAmount,
+                    pointsToUse: pointsValue
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                // 清空购物车
+                // 这里假设 StoreContext 中有一个 clearCart 方法
+                // 你需要根据实际情况修改
+                // const { clearCart } = useContext(StoreContext);
+                // clearCart();
+                navigate('/order');
+            } else {
+                console.error(data.message);
+            }
+        } catch (error) {
+            console.error('Error placing order:', error);
+        }
     };
 
     return (
@@ -71,7 +107,7 @@ const Cart = () => {
                             <b>${finalAmount}</b>
                         </div>
                     </div>
-                    <button onClick={() => navigate('/order')}>Proceed To Checkout</button>
+                    <button onClick={handleCheckout}>Proceed To Checkout</button>
                 </div>
                 <div className="cart-points">
                     <div>

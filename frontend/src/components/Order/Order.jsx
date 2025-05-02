@@ -42,6 +42,7 @@ const Order = ({ backendUrl }) => {
                             <p>Order Status: {order.orderStatus}</p>
                             <p>Total Amount: ${order.totalAmount}</p>
                             <p>Payment Status: {order.paymentStatus}</p>
+                            <p>Points Used: {order.pointsUsed || 0} pts</p>
                             <h3>Order Items</h3>
                             {order.items.map((item) => (
                                 <div key={item.orderItemId}>
