@@ -5,7 +5,8 @@ import Customer from './customerModel.js';
 const Order = sequelize.define('order', {
   orderId: {
     type: DataTypes.INTEGER,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   customerId: {
     type: DataTypes.INTEGER,

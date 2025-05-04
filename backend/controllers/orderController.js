@@ -1,3 +1,4 @@
+												 
 import Order from '../models/orderModel.js';
 import OrderItem from '../models/orderItemModel.js';
 import Customer from '../models/customerModel.js';
@@ -21,10 +22,14 @@ const placeOrder = async (req, res) => {
             paymentStatus: 'Pending'
         });
 
+        // 确保 orderId 被正确获取
+        const orderId = newOrder.get('orderId'); // 使用 get 方法获取 orderId
+        console.log('New order ID:', orderId); // 打印 orderId 进行检查
+
         // 创建订单商品
         for (const item of items) {
             await OrderItem.create({
-                orderId: newOrder.orderId,
+                orderId,
                 menuItemId: item.menuItemId,
                 quantity: item.quantity,
                 unitPrice: item.unitPrice,
@@ -32,7 +37,7 @@ const placeOrder = async (req, res) => {
             });
         }
 
-        res.json({ success: true, message: 'Order placed successfully', orderId: newOrder.orderId });
+        res.json({ success: true, message: 'Order placed successfully', orderId: newOrder.get('orderId') });
     } catch (error) {
         console.error(error);
         res.json({ success: false, message: 'Error placing order' });
