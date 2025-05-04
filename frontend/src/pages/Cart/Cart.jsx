@@ -4,9 +4,10 @@ import { StoreContext } from '../../context/StoreContext';
 import './Cart.css';
 
 const Cart = () => {
-    const { cartItems, removeFromCart, menuItem_list, getTotalCartAmount, userPoints, usePoints, userId, backendUrl } = useContext(StoreContext);
+    const { cartItems, removeFromCart, menuItem_list, getTotalCartAmount, userPoints, usePoints, backendUrl } = useContext(StoreContext);
     const navigate = useNavigate();
     const [pointsToUse, setPointsToUse] = useState('');
+    const customerId = localStorage.getItem('customerId'); // 获取 customerId
 
     const totalAmount = getTotalCartAmount();
     const maxPointsToUse = Math.min(totalAmount * 10, userPoints);
@@ -30,7 +31,7 @@ const Cart = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    userId,
+                    customerId, // 使用 customerId
                     items: menuItem_list.filter(item => cartItems[item._id] > 0).map(item => ({
                         menuItemId: item._id,
                         quantity: cartItems[item._id],

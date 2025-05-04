@@ -1,4 +1,3 @@
-// ForTest/frontend/src/context/StoreContext.jsx
 import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
 
@@ -8,6 +7,8 @@ const StoreContextProvider = (props) => {
     const { backendUrl } = props;
     const [cartItems, setCartItems] = useState({});
     const [menuItem_list, setMenuItemList] = useState([]);
+    const [userPoints, setUserPoints] = useState(0); // 添加 userPoints 状态
+    const customerId = localStorage.getItem('customerId');
 
     useEffect(() => {
         const fetchMenuItems = async () => {
@@ -31,8 +32,22 @@ const StoreContextProvider = (props) => {
             }
         };
 
+        const fetchUserPoints = async () => {
+            if (customerId) {
+                try {
+                    const response = await axios.post(`${backendUrl}/api/points/get`, { customerId });
+                    if (response.data.success) {
+                        setUserPoints(response.data.points);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user points:', error);
+                }
+            }
+        };
+
         fetchMenuItems();
-    }, [backendUrl]);
+        fetchUserPoints();
+    }, [backendUrl, customerId]);
 
     const addToCart = (itemId) => {
         if (!cartItems[itemId]) {
@@ -65,13 +80,34 @@ const StoreContextProvider = (props) => {
         return totalAmount;
     };
 
+    const usePoints = async (pointsToUse) => {
+        if (customerId) {
+            try {
+                const orderId = null; // 这里需要根据实际情况获取订单 ID
+                const response = await axios.post(`${backendUrl}/api/points/use`, {
+                    customerId,
+                    pointsToUse,
+                    orderId
+                });
+                if (response.data.success) {
+                    setUserPoints(userPoints - pointsToUse);
+                }
+            } catch (error) {
+                console.error('Error using points:', error);
+            }
+        }
+    };
+
     const contextValue = {
         menuItem_list,
         cartItems,
         setCartItems,
         addToCart,
         removeFromCart,
-        getTotalCartAmount
+        getTotalCartAmount,
+        userPoints, // 添加 userPoints 到 contextValue
+        usePoints, // 添加 usePoints 到 contextValue
+        backendUrl
     };
 
     return (

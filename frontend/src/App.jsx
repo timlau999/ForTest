@@ -1,4 +1,3 @@
-// ForTest/frontend/src/App.jsx
 import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer/Footer';
@@ -14,7 +13,7 @@ import StoreContextProvider from './context/StoreContext.jsx';
 const App = () => {
     // display popup for login
     const [showLogin, setShowLogin] = useState(false);
-    const backendUrl = 'http://192.168.0.174:4000';
+    const backendUrl = 'http://localhost:4000';
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); 
     const customerId = localStorage.getItem('customerId'); 
     return (
@@ -38,7 +37,7 @@ const App = () => {
                 />
                 <Routes>
                     <Route path="/" element={<Home backendUrl={backendUrl} />} />
-                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/cart" element={<Cart backendUrl={backendUrl} />} />
                     <Route path="/order" element={<Order backendUrl={backendUrl} />} />
                 </Routes>
             </div>

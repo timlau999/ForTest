@@ -1,38 +1,41 @@
-import { Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
+import Customer from './customerModel.js';
 
 const Order = sequelize.define('order', {
-    orderId: {
-        type: Sequelize.INTEGER,
-        primaryKey: true
-    },
-    customerId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    orderDate: {
-        type: Sequelize.DATE,
-        allowNull: false
-    },
-    orderStatus: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    totalAmount: {
-        type: Sequelize.DECIMAL(10, 0),
-        allowNull: false
-    },
-    paymentStatus: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    pointsUsed: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
+  orderId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true
+  },
+  customerId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Customer,
+      key: 'customerId'
     }
+  },
+  orderDate: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  orderStatus: {
+    type: DataTypes.STRING(255),
+    allowNull: false
+  },
+  totalAmount: {
+    type: DataTypes.DECIMAL(10, 0),
+    allowNull: false
+  },
+  paymentStatus: {
+    type: DataTypes.STRING(255),
+    allowNull: false
+  }
 }, {
-    tableName: 'order', 
-    timestamps: false 
+  tableName: 'order',
+  timestamps: false 
 });
+
+Order.belongsTo(Customer, { foreignKey: 'customerId' });
 
 export default Order;
