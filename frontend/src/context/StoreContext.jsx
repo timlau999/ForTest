@@ -1,3 +1,4 @@
+												
 import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
 
@@ -8,7 +9,8 @@ const StoreContextProvider = (props) => {
     const [cartItems, setCartItems] = useState({});
     const [menuItem_list, setMenuItemList] = useState([]);
     const [userPoints, setUserPoints] = useState(0);
-    const [token, setToken] = useState(null); // 添加 token 状态
+    const [token, setToken] = useState(null); 
+    const [table_list, setTableList] = useState([]);
     const customerId = localStorage.getItem('customerId');
 
     useEffect(() => {
@@ -51,8 +53,24 @@ const StoreContextProvider = (props) => {
             }
         };
 
+        const fetchtable = async () => {
+            try{
+                const response = await axios.get(`${backendUrl}/api/table/getTable`);
+                console.log('API response:', response.data); 
+                if (response.data.success) {
+                    setTableList(response.data.data);
+                    console.log('Stored table list in context:', response.data.data);
+                }else{
+                    console.log('Failed to fetch table list:', response.data.message);
+                }          
+            }catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
         fetchMenuItems();
         fetchUserPoints();
+        fetchtable();
     }, [backendUrl, customerId]);
 
     const addToCart = (itemId) => {
@@ -97,6 +115,9 @@ const StoreContextProvider = (props) => {
                 });
                 if (response.data.success) {
                     setUserPoints(userPoints - pointsToUse);
+																				 
+				  
+																				  
                 }
             } catch (error) {
                 console.error('Error using points:', error);
@@ -114,6 +135,38 @@ const StoreContextProvider = (props) => {
         localStorage.removeItem('token');
     };
 
+    const addReservation = async (tableId, userId, reservationTime) => {
+        try {
+            const response = await axios.post(`${backendUrl}/api/table`, {
+                tableId,
+                userId,
+                reservationTime
+            });
+            console.log('API response:', response.data); 
+            if (response.data.success) {
+                console.log('Reservation added successfully:', response.data.data);
+            } else {
+                console.log('Failed to add reservation:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error adding reservation:', error);
+        }
+    };
+
+    const removeReservation = async (reservationId) => {
+        try {
+            const response = await axios.delete(`${backendUrl}/api/table/${reservationId}`);
+            console.log('API response:', response.data); 
+            if (response.data.success) {
+                console.log('Reservation removed successfully:', response.data.data);
+            } else {
+                console.log('Failed to remove reservation:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error removing reservation:', error);
+        }
+    };
+
     const contextValue = {
         menuItem_list,
         cartItems,
@@ -126,7 +179,10 @@ const StoreContextProvider = (props) => {
         backendUrl,
         token,
         setAuthToken,
-        clearAuthToken
+        clearAuthToken,
+        table_list,
+        addReservation,
+        removeReservation
     };
 
     return (
