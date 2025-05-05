@@ -1,7 +1,7 @@
+// ForTest/backend/models/orderItemModel.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
-import Order from './orderModel.js';
-import MenuItem from './menuItemModel.js'; // 假设存在 menuItemModel.js
+import MenuItem from './menuItemModel.js';
 
 const OrderItem = sequelize.define('orderitem', {
   orderItemId: {
@@ -12,7 +12,7 @@ const OrderItem = sequelize.define('orderitem', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Order,
+      model: 'order',
       key: 'orderId'
     }
   },
@@ -41,7 +41,6 @@ const OrderItem = sequelize.define('orderitem', {
   timestamps: false 
 });
 
-OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
 OrderItem.belongsTo(MenuItem, { foreignKey: 'menuItemId' });
 
 export default OrderItem;

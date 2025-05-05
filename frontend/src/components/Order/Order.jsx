@@ -5,34 +5,45 @@ import axios from 'axios';
 import './Order.css';
 
 const Order = ({ backendUrl }) => {
-    const { token, userId } = useContext(StoreContext);
+    const { token } = useContext(StoreContext);
+    const customerId = localStorage.getItem('customerId');
     const [orders, setOrders] = useState([]);
+    const [error, setError] = useState(null);
+
+    console.log('Token:', token); // 打印 token 的值
 
     useEffect(() => {
         const fetchOrders = async () => {
-            if (token && userId) {
+            if (token && customerId) {
                 try {
-                    const customerResponse = await axios.get(`${backendUrl}/api/customer/${userId}`, {
+                    console.log('Fetching orders with customerId:', customerId);
+                    // 修改请求地址
+                    const orderResponse = await axios.get(`${backendUrl}/api/order/${customerId}`, {
                         headers: { token }
                     });
-                    const customerId = customerResponse.data.customerId;
+                    console.log('Order response data:', orderResponse.data);
 
-                    const orderResponse = await axios.get(`${backendUrl}/api/orders/${customerId}`, {
-                        headers: { token }
-                    });
-                    setOrders(orderResponse.data);
+                    if (Array.isArray(orderResponse.data)) {
+                        setOrders(orderResponse.data);
+                    } else {
+                        setError('API response is not an array');
+                    }
                 } catch (error) {
                     console.error('Error fetching orders:', error);
+                    setError('Error fetching orders');
                 }
+            } else {
+                console.log('Token or customerId is missing');
             }
         };
 
         fetchOrders();
-    }, [token, userId, backendUrl]);
+    }, [token, customerId, backendUrl]);
 
     return (
         <div className="order" id="order">
             <h1 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '20px' }}>Order Details</h1> 
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             {orders.length > 0 ? (
                 <div>
                     {orders.map((order) => (
@@ -44,14 +55,18 @@ const Order = ({ backendUrl }) => {
                             <p>Payment Status: {order.paymentStatus}</p>
                             <p>Points Used: {order.pointsUsed || 0} pts</p>
                             <h3>Order Items</h3>
-                            {order.items.map((item) => (
-                                <div key={item.orderItemId}>
-                                    <p>Item Name: {item.menuItemName}</p>
-                                    <p>Quantity: {item.quantity}</p>
-                                    <p>Unit Price: ${item.unitPrice}</p>
-                                    <p>Total Price: ${item.totalPrice}</p>
-                                </div>
-                            ))}
+                            {order.items && order.items.length > 0 ? (
+                                order.items.map((item) => (
+                                    <div key={item.orderItemId}>
+                                        <p>Item Name: {item.menuItemName}</p>
+                                        <p>Quantity: {item.quantity}</p>
+                                        <p>Unit Price: ${item.unitPrice}</p>
+                                        <p>Total Price: ${item.totalPrice}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No items in this order</p>
+                            )}
                         </div>
                     ))}
                 </div>

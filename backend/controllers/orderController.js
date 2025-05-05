@@ -1,4 +1,4 @@
-												 
+// ForTest/backend/controllers/orderController.js
 import Order from '../models/orderModel.js';
 import OrderItem from '../models/orderItemModel.js';
 import Customer from '../models/customerModel.js';
@@ -7,13 +7,11 @@ const placeOrder = async (req, res) => {
     try {
         const { customerId, items, amount, pointsToUse } = req.body;
 
-        // 检查 customerId 是否存在
         const customer = await Customer.findOne({ where: { customerId } });
         if (!customer) {
             return res.json({ success: false, message: 'Customer not found' });
         }
 
-        // 创建订单
         const newOrder = await Order.create({
             customerId,
             orderDate: new Date(),
@@ -22,11 +20,9 @@ const placeOrder = async (req, res) => {
             paymentStatus: 'Pending'
         });
 
-        // 确保 orderId 被正确获取
-        const orderId = newOrder.get('orderId'); // 使用 get 方法获取 orderId
-        console.log('New order ID:', orderId); // 打印 orderId 进行检查
+        const orderId = newOrder.get('orderId');
+        console.log('New order ID:', orderId);
 
-        // 创建订单商品
         for (const item of items) {
             await OrderItem.create({
                 orderId,
@@ -44,4 +40,24 @@ const placeOrder = async (req, res) => {
     }
 };
 
-export { placeOrder };
+const getOrdersByCustomerId = async (req, res) => {
+    try {
+        const customerId = req.params.customerId;
+        const orders = await Order.findAll({
+            where: { customerId },
+            include: [
+                {
+                    model: OrderItem,
+                    as: 'orderItems'
+                }
+            ]
+        });
+
+        res.json(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error fetching orders' });
+    }
+};
+
+export { placeOrder, getOrdersByCustomerId };

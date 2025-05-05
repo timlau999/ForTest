@@ -7,10 +7,16 @@ const StoreContextProvider = (props) => {
     const { backendUrl } = props;
     const [cartItems, setCartItems] = useState({});
     const [menuItem_list, setMenuItemList] = useState([]);
-    const [userPoints, setUserPoints] = useState(0); // 添加 userPoints 状态
+    const [userPoints, setUserPoints] = useState(0);
+    const [token, setToken] = useState(null); // 添加 token 状态
     const customerId = localStorage.getItem('customerId');
 
     useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (storedToken) {
+            setToken(storedToken);
+        }
+
         const fetchMenuItems = async () => {
             try {
                 const response = await axios.get(`${backendUrl}/api/menuItem`);
@@ -83,7 +89,7 @@ const StoreContextProvider = (props) => {
     const usePoints = async (pointsToUse) => {
         if (customerId) {
             try {
-                const orderId = null; // 这里需要根据实际情况获取订单 ID
+                const orderId = null; 
                 const response = await axios.post(`${backendUrl}/api/points/use`, {
                     customerId,
                     pointsToUse,
@@ -98,6 +104,16 @@ const StoreContextProvider = (props) => {
         }
     };
 
+    const setAuthToken = (newToken) => {
+        setToken(newToken);
+        localStorage.setItem('token', newToken);
+    };
+
+    const clearAuthToken = () => {
+        setToken(null);
+        localStorage.removeItem('token');
+    };
+
     const contextValue = {
         menuItem_list,
         cartItems,
@@ -105,9 +121,12 @@ const StoreContextProvider = (props) => {
         addToCart,
         removeFromCart,
         getTotalCartAmount,
-        userPoints, // 添加 userPoints 到 contextValue
-        usePoints, // 添加 usePoints 到 contextValue
-        backendUrl
+        userPoints,
+        usePoints,
+        backendUrl,
+        token,
+        setAuthToken,
+        clearAuthToken
     };
 
     return (
