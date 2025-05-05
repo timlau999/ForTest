@@ -1,4 +1,3 @@
-												
 import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
 
@@ -60,10 +59,10 @@ const StoreContextProvider = (props) => {
                 if (response.data.success) {
                     setTableList(response.data.data);
                     console.log('Stored table list in context:', response.data.data);
-                }else{
+                } else {
                     console.log('Failed to fetch table list:', response.data.message);
                 }          
-            }catch (error) {
+            } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
@@ -115,9 +114,6 @@ const StoreContextProvider = (props) => {
                 });
                 if (response.data.success) {
                     setUserPoints(userPoints - pointsToUse);
-																				 
-				  
-																				  
                 }
             } catch (error) {
                 console.error('Error using points:', error);
@@ -182,7 +178,7 @@ const StoreContextProvider = (props) => {
         clearAuthToken,
         table_list,
         addReservation,
-        removeReservation
+        removeReservation,
     };
 
     return (
@@ -192,4 +188,4 @@ const StoreContextProvider = (props) => {
     );
 };
 
-export default StoreContextProvider;
+export default StoreContextProvider;    

@@ -207,4 +207,17 @@ const updateUserInfoData = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData };
+const getAllCustomer = async (_req, res) => {
+    try {
+        const allcustomer = await User.findAll();
+        if (!User) {
+            return res.json({ success: false, message: 'No customers found' });
+        }
+        res.json({ success: true, data: allcustomer });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error fetching customers' });
+    }
+}
+
+export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer };

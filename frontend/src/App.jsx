@@ -1,3 +1,4 @@
+// ForTest/frontend/src/App.jsx
 import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer/Footer';
@@ -9,6 +10,7 @@ import Order from './components/Order/Order';
 import Chatbot from './components/Chatbot/Chatbot';
 import UserAvatar from './components/UserAvatar/UserAvatar'; 
 import StoreContextProvider from './context/StoreContext.jsx';
+import Reservation from './pages/Reservation/Reservation'; // Import the Reservation component
 
 const App = () => {
     // display popup for login
@@ -37,8 +39,9 @@ const App = () => {
                 />
                 <Routes>
                     <Route path="/" element={<Home backendUrl={backendUrl} />} />
-                    <Route path="/cart" element={<Cart backendUrl={backendUrl} />} />
+                    <Route path="/cart" element={<Cart />} />
                     <Route path="/order" element={<Order backendUrl={backendUrl} />} />
+                    <Route path="/reservation" element={<Reservation />} />
                 </Routes>
             </div>
             <Footer />

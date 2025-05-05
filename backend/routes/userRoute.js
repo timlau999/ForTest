@@ -1,6 +1,6 @@
 // ForTest/backend/routes/userRoute.js
 import express from 'express';
-import { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData } from '../controllers/userController.js';
+import { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer } from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -24,5 +24,7 @@ router.get('/userinfo/:customerId', getUserInfoData);
 
 // 修改用户的详细资料
 router.put('/userinfo/:customerId', updateUserInfoData);
+
+router.get('/getaccount', getAllCustomer);
 
 export default router;

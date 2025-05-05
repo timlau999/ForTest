@@ -1,4 +1,4 @@
-import "./Tablestate.css";
+import "./TableState.css";
 import React, { useContext, useState } from "react";
 import { StoreContext } from "../../context/StoreContext"; 
 

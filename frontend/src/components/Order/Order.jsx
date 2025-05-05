@@ -10,14 +10,14 @@ const Order = ({ backendUrl }) => {
     const [orders, setOrders] = useState([]);
     const [error, setError] = useState(null);
 
-    console.log('Token:', token); // 打印 token 的值
+    console.log('Token:', token);
 
     useEffect(() => {
         const fetchOrders = async () => {
             if (token && customerId) {
                 try {
                     console.log('Fetching orders with customerId:', customerId);
-                    // 修改请求地址
+
                     const orderResponse = await axios.get(`${backendUrl}/api/order/${customerId}`, {
                         headers: { token }
                     });
