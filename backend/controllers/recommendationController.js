@@ -35,17 +35,17 @@ function generatePrompt(client, dishes) {
 - Dietary Preferences: ${client.DietaryPreferences || 'None'}
 
 Available Dishes:
-${dishes.map(d => `<${d.name}>`)}
+${dishes.map(d => `[${d.name}]`)}
 
 Please recommend the three most suitable dishes based on the customer's dietary restrictions and health conditions from the "Available Dishes" list above. You can only reply with the name of the dish, no need to reply with other.
-Each dish name MUST be individually enclosed in <>, like this: <Lasagna Rolls>, <Vegan Sandwich>, <Cheese Pasta>. Do not combine multiple dish names within a single set of <>.`;
+Each dish name MUST be individually enclosed in [], like this: [Lasagna Rolls], [Vegan Sandwich], [Cheese Pasta]. Do not combine multiple dish names within a single set of [].`;
 }
 
 // Get AI recommendation
 async function getAIRecommendation(prompt) {
     try {
         const apiKey = 'ragflow-E5YWRkNGE2MjVhNzExZjBiYTJhMDI0Mm';
-        const chatID = '9fe6964c25a711f099c20242ac120006';
+        const chatID = 'abf05ad82fa511f0a61d0242ac150006';
         const address = '192.168.0.179';
 
         const requestUrl = `http://${address}/api/v1/chats_openai/${chatID}/chat/completions`;
@@ -102,7 +102,9 @@ export const getRecommendation = async (req, res) => {
         };
 
         // Filter menu items based on customer profile
-        const filteredDishes = filterMenuForClient(client, menuItems);
+        //const filteredDishes = filterMenuForClient(client, menuItems);
+        let filteredDishes = filterMenuForClient(client, menuItems);
+        filteredDishes = filteredDishes.filter(dish => dish.category!== 'Deserts');
 
         const prompt = generatePrompt(client, filteredDishes);
         let recommendation = await getAIRecommendation(prompt);
@@ -114,7 +116,7 @@ export const getRecommendation = async (req, res) => {
 
         // Extract recommended menu item names and remove < >
         const recommendedDishes = recommendation.split(',').map(dish => {
-            return dish.replace(/[<>]/g, '').trim();
+            return dish.replace(/^\s*\[\s*|\s*\]\s*$/g, '').trim();
         });
 
         // Insert recommendations into the database
@@ -131,7 +133,7 @@ export const getRecommendation = async (req, res) => {
         const responseData = {
             client: customerProfile.customerId,
             suitable_dishes: filteredDishes.map(d => d.name),
-            recommendation: recommendedDishes.slice(0, 3).map(dish => `<${dish}>`).join(', ') || "AI recommendation service is temporarily unavailable"
+            recommendation: recommendedDishes.slice(0, 3).map(dish => `${dish}`).join(', ') || "AI recommendation service is temporarily unavailable"
         };
 
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
