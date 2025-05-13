@@ -1,0 +1,13 @@
+.table-list-container {
+    display: flex;
+    justify-content: normal;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+    margin: 20px 0px;
+    margin: auto;
+    border-radius: 15px;
+    transition:0.3s ;
+    animation: fadeIn 1s;
+    flex-wrap: wrap;
+}

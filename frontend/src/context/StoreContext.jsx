@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
+import { use } from "react";
+import { toast } from "react-toastify";
 
 export const StoreContext = createContext(null);
 
@@ -11,12 +13,15 @@ const StoreContextProvider = (props) => {
     const [token, setToken] = useState(null); 
     const [table_list, setTableList] = useState([]);
     const customerId = localStorage.getItem('customerId');
+    const [userId, setUserId] = useState(null);
+    const [username, setUsername] = useState(null);
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
             setToken(storedToken);
         }
+
 
         const fetchMenuItems = async () => {
             try {
@@ -52,7 +57,11 @@ const StoreContextProvider = (props) => {
             }
         };
 
-        const fetchtable = async () => {
+        fetchMenuItems();
+        fetchUserPoints();
+    }, [backendUrl, customerId]);
+
+    const fetchtable = async () => {
             try{
                 const response = await axios.get(`${backendUrl}/api/table/getTable`);
                 console.log('API response:', response.data); 
@@ -66,11 +75,9 @@ const StoreContextProvider = (props) => {
                 console.error('Error fetching data:', error);
             }
         };
-
-        fetchMenuItems();
-        fetchUserPoints();
+    useEffect(() => {
         fetchtable();
-    }, [backendUrl, customerId]);
+    }, []);
 
     const addToCart = (itemId) => {
         if (!cartItems[itemId]) {
@@ -131,21 +138,46 @@ const StoreContextProvider = (props) => {
         localStorage.removeItem('token');
     };
 
-    const addReservation = async (tableId, userId, reservationTime) => {
+    const addReservation = async (userId, tableId) => {
+        if (!userId) {
+            console.error('User ID is not available');
+            alert('Please login to reserve a table');
+            return;
+        }
         try {
-            const response = await axios.post(`${backendUrl}/api/table`, {
-                tableId,
+            const response = await axios.post(`${backendUrl}/api/table/addReservation`, {
                 userId,
-                reservationTime
+                tableId,
             });
             console.log('API response:', response.data); 
             if (response.data.success) {
                 console.log('Reservation added successfully:', response.data.data);
+                alert('Reservation added successfully');
+                updateTableState(tableId);
             } else {
                 console.log('Failed to add reservation:', response.data.message);
+                toast.error(response.data.message);
             }
         } catch (error) {
-            console.error('Error adding reservation:', error);
+            console.error('Error add new reservation:', error);
+        }
+    };
+
+    const updateTableState = async (tableId) => {
+        try {
+            const response = await axios.post(`${backendUrl}/api/table/updateTableState`, {
+                tableId,
+                state: 'reserved',
+            });
+            console.log('API response:', response.data); 
+            if (response.data.success) {
+                fetchtable();
+                console.log('Table state updated successfully:', response.data.data);
+            } else {
+                console.log('Failed to update table state:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error updating table state:', error);
         }
     };
 
@@ -179,6 +211,8 @@ const StoreContextProvider = (props) => {
         table_list,
         addReservation,
         removeReservation,
+        userId,
+        username,
     };
 
     return (

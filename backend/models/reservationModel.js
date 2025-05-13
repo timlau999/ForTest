@@ -27,7 +27,7 @@ const Reservation = sequelize.define(
     },
     reservationTime: {
       type: DataTypes.DATE,
-      allowNull: false,
+      
     },
     reservationStatus: {
       type: DataTypes.ENUM("pending", "confirmed", "cancelled"),

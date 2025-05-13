@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
     const navigate = useNavigate();
-    const [currState, setCurrState] = useState("Sign Up");
+    const [currState, setCurrState] = useState("Login");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
