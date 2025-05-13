@@ -11,12 +11,10 @@
     backdrop-filter: blur(2px);
     animation: fadeIn 0.3s ease-out forwards;
 }
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
-
 .login-popup-container {
     position: relative;
     width: min(90vw, 600px);
@@ -29,37 +27,31 @@
     gap: 25px;
     animation: slideUp 0.4s ease-out forwards;
 }
-
 @keyframes slideUp {
     from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
-
 .login-popup-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 }
-
 .login-popup-title h2 {
     font-size: 1.8rem;
     font-weight: 600;
     color: #333;
     margin: 0;
 }
-
 .login-popup-title img {
     width: 20px;
     height: 20px;
     cursor: pointer;
     transition: transform 0.2s;
 }
-
 .login-popup-title img:hover {
     transform: rotate(90deg);
 }
-
 .error-message {
     padding: 10px 15px;
     background-color: #ffebee;
@@ -68,13 +60,11 @@
     font-size: 0.9rem;
     text-align: center;
 }
-
 .login-popup-inputs {
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
-
 .section-title {
     font-size: 1.1rem;
     font-weight: 500;
@@ -83,29 +73,24 @@
     padding-bottom: 8px;
     border-bottom: 1px solid #eee;
 }
-
 .input-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 18px;
 }
-
 .input-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
-
 .input-group.full-width {
     grid-column: 1 / -1;
 }
-
 .input-group label {
     font-size: 0.9rem;
     font-weight: 500;
     color: #666;
 }
-
 .input-group input {
     padding: 12px 15px;
     border: 1px solid #ddd;
@@ -113,19 +98,16 @@
     font-size: 1rem;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 .input-group input:focus {
     outline: none;
     border-color: #ff6347;
     box-shadow: 0 0 0 3px rgba(255, 99, 71, 0.2);
 }
-
 .error-text {
     color: #e53935;
     font-size: 0.8rem;
     margin-top: 2px;
 }
-
 .submit-button {
     padding: 14px;
     background-color: #ff6347;
@@ -138,34 +120,103 @@
     transition: background-color 0.2s, transform 0.2s;
     margin-top: 10px;
 }
-
 .submit-button:hover {
     background-color: #e5563f;
     transform: translateY(-2px);
 }
-
 .submit-button:active {
     transform: translateY(0);
 }
-
 .toggle-text {
     text-align: center;
     font-size: 0.95rem;
     color: #666;
 }
-
 .toggle-text span {
     color: #ff6347;
     font-weight: 500;
     cursor: pointer;
     transition: color 0.2s;
 }
-
 .toggle-text span:hover {
     color: #e5563f;
 }
 
-/* Responsive adjustments */
+.multi-select-dropdown {
+    position: relative;
+    flex: 1;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 18px;
+    color: #666;
+    transition: border-color 0.3s ease;
+}
+.multi-select-dropdown:focus-within {
+    border-color: #007BFF;
+}
+.dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    min-height: 42px;
+}
+.dropdown-header:hover {
+    background-color: #f9f9f9;
+}
+.dropdown-header i {
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+}
+.dropdown-open .dropdown-header i {
+    transform: rotate(180deg);
+}
+.dropdown-options {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: white;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 8px; 
+    padding: 8px; 
+}
+.option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex: 1 0 45%; 
+    min-width: 200px; 
+    padding: 4px; 
+    gap: 8px; 
+    background: #fff; 
+    border-radius: 4px; 
+}
+.option input {
+    width: 18px; 
+    height: 18px; 
+    margin: 0; 
+}
+.option span {
+    flex-grow: 1; 
+    color: #666;
+    font-size: 16px;
+    padding: 4px; 
+}
+.option:hover {
+    background-color: #f9f9f9;
+}
+
 @media (max-width: 500px) {
     .input-grid {
         grid-template-columns: 1fr;
@@ -179,4 +230,4 @@
     .login-popup-title h2 {
         font-size: 1.5rem;
     }
-}    
+}
