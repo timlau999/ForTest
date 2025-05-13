@@ -38,7 +38,7 @@ const User = sequelize.define('User', {
   }
 }, {
   tableName: 'user',
-  timestamps: false // 移除 createdAt 和 updatedAt 字段
+  timestamps: false 
 });
 
 User.belongsTo(Permission, { foreignKey: 'permissionId' });

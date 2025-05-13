@@ -29,7 +29,6 @@ MenuItem.hasMany(MenuItemIngredient, { foreignKey: 'menuItemId' });
 MenuItemIngredient.belongsTo(MenuItem, { foreignKey: 'menuItemId' });
 MenuItemIngredient.belongsTo(Ingredient, { foreignKey: 'ingredientId' });
 
-// 指定别名 orderItems
 Order.hasMany(OrderItem, { foreignKey: 'orderId', as: 'orderItems' });
 OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
 

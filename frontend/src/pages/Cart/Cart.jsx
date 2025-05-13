@@ -7,7 +7,7 @@ const Cart = () => {
     const { cartItems, removeFromCart, menuItem_list, getTotalCartAmount, userPoints, usePoints, backendUrl } = useContext(StoreContext);
     const navigate = useNavigate();
     const [pointsToUse, setPointsToUse] = useState('');
-    const customerId = localStorage.getItem('customerId'); // 获取 customerId
+    const customerId = localStorage.getItem('customerId'); 
 
     const totalAmount = getTotalCartAmount();
     const maxPointsToUse = Math.min(totalAmount * 10, userPoints);
@@ -31,7 +31,7 @@ const Cart = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    customerId, // 使用 customerId
+                    customerId, 
                     items: menuItem_list.filter(item => cartItems[item._id] > 0).map(item => ({
                         menuItemId: item._id,
                         quantity: cartItems[item._id],
@@ -45,9 +45,6 @@ const Cart = () => {
 
             const data = await response.json();
             if (data.success) {
-                // 清空购物车
-                // 这里假设 StoreContext 中有一个 clearCart 方法
-                // 你需要根据实际情况修改
                 // const { clearCart } = useContext(StoreContext);
                 // clearCart();
                 navigate('/order');

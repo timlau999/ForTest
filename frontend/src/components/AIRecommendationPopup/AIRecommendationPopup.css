@@ -36,7 +36,6 @@
     font-weight: 600;
 }
 
-/* 使用更具体的选择器 */
 .ai-popup-title button {
     background: transparent;
     font-size: 28px;

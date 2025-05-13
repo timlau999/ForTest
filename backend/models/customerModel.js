@@ -18,8 +18,8 @@ const Customer = sequelize.define('customer', {
     }
   }
 }, {
-  tableName: 'customer', // 指定表名
-  timestamps: false // 移除 createdAt 和 updatedAt 字段
+  tableName: 'customer', 
+  timestamps: false 
 });
 
 Customer.belongsTo(User, { foreignKey: 'userId' });

@@ -4,7 +4,6 @@ import './MenuItem.css';
 
 const MenuItem = ({ id, name, price, description, image }) => {
     const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
-    // 直接使用图片名，因为图片在 public 根目录
     const imgPath = `/${image}`; 
 
     return (

@@ -5,7 +5,7 @@ import './MenuItemDisplay.css';
 
 export const MenuItemDisplay = ({ category }) => {
     const { menuItem_list } = useContext(StoreContext);
-    console.log('Received menuItem list in MenuItemDisplay:', menuItem_list); // 添加调试日志
+    console.log('Received menuItem list in MenuItemDisplay:', menuItem_list); 
 
     return (
         <div className='menuItem-display' id='menuItem-display'>

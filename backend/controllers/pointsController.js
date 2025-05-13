@@ -41,7 +41,7 @@ const usePoints = async (req, res) => {
 
         await CustomerPointsUsage.create({
             orderId,
-            pointsId: pointsData.id, // 假设模型中有 id 字段代表主键
+            pointsId: pointsData.id, 
             usageDate: new Date()
         }, { transaction: t });
 
@@ -52,7 +52,7 @@ const usePoints = async (req, res) => {
         if (!order) {
             throw new Error('Order not found');
         }
-        const newTotalAmount = order.amount - (pointsToUse / 10); // 注意这里使用的是 amount 字段，因为 Order 模型中定义的是 amount
+        const newTotalAmount = order.amount - (pointsToUse / 10); 
         await order.update({ amount: newTotalAmount }, { transaction: t });
 
         await t.commit();

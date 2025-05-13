@@ -67,13 +67,11 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                 password: password
             });
             if (response.data.success) {
-                // 登录成功，存储 token 和用户信息
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('role', response.data.role);
                 localStorage.setItem('username', response.data.username);
                 localStorage.setItem('userId', response.data.id);
 
-                // 获取 customerId 并存储
                 const userId = response.data.id;
                 const customerResponse = await axios.get(`${backendUrl}/api/user/customer/${userId}`);
                 if (customerResponse.data.success) {
@@ -82,7 +80,6 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
 
                 console.log('Login successful');
                 setShowLogin(false);
-                // 更新登录状态
                 setIsLoggedIn(true);
             } else {
                 console.log('Login failed:', response.data.message);

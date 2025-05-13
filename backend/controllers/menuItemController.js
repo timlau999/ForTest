@@ -54,16 +54,15 @@ const removeMenuItem = async (req, res) => {
   }
 };
 
-// 原 menuItemController.js 中的 listMenuItems 函数
 const listMenuItems = async (req, res) => {
     try {
         const menuItems = await MenuItem.findAll({ attributes: ['menuItemId', 'menuID', 'name', 'description', 'price', 'category'] });
         const formattedMenuItems = menuItems.map(item => ({
-            _id: item.menuItemId.toString(), // 转为字符串（避免类型问题）
+            _id: item.menuItemId.toString(), 
             name: item.name,
             description: item.description,
             price: parseFloat(item.price),
-            image: `menuItem_${item.menuItemId}.png`, // 确保 image 路径正确
+            image: `menuItem_${item.menuItemId}.png`,
             category: item.category
         }));
         res.json({ success: true, data: formattedMenuItems });

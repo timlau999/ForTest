@@ -1,4 +1,3 @@
-/* 悬浮图标样式 */
 .chatbot-icon {
     position: fixed;
     bottom: 20px;
@@ -16,7 +15,6 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-/* 聊天窗口样式 */
 .chatbot-window {
     position: fixed;
     bottom: 90px;
@@ -29,12 +27,10 @@
     display: none;
 }
 
-/* 聊天窗口显示时的样式 */
 .chatbot-window.show {
     display: block;
 }
 
-/* 聊天窗口中的 iframe 样式 */
 .chatbot-window iframe {
     width: 100%;
     height: 100%;

@@ -30,7 +30,7 @@ const registerUser = async (req, res) => {
 
         // Create a new customer record
         const newCustomer = await Customer.create({
-            customerId: newUser.userId, // 假设 customerId 和 userId 相同
+            customerId: newUser.userId, 
             userId: newUser.userId
         });
 
@@ -94,12 +94,10 @@ const loginUser = async (req, res) => {
     }
 };
 
-// 获取用户的 profile 资料
 const getProfileData = async (req, res) => {
     try {
         const customerId = req.params.customerId;
         console.log('Received customerId:', customerId); 
-        // 查找用戶的 profile 資料
         const profileData = await CustomerProfile.findOne({ where: { customerId } });
         if (!profileData) {
             return res.json({ success: false, message: 'Profile data not found' });
@@ -112,7 +110,6 @@ const getProfileData = async (req, res) => {
     }
 };
 
-// 新增：获取 customerId
 const getCustomerId = async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -127,7 +124,6 @@ const getCustomerId = async (req, res) => {
     }
 };
 
-// 修改用户的 profile 资料
 const updateProfileData = async (req, res) => {
     try {
         const customerId = req.params.customerId;
@@ -153,7 +149,6 @@ const updateProfileData = async (req, res) => {
     }
 };
 
-// 获取用户的详细资料
 const getUserInfoData = async (req, res) => {
     try {
         const customerId = req.params.customerId;
@@ -180,7 +175,6 @@ const getUserInfoData = async (req, res) => {
     }
 };
 
-// 修改用户的详细资料
 const updateUserInfoData = async (req, res) => {
     try {
         const customerId = req.params.customerId;

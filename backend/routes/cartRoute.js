@@ -12,4 +12,4 @@ cartRouter.post("/add",authMiddleware, addToCart);
 cartRouter.post("/remove",authMiddleware, removeFromCart);
 cartRouter.post("/get",authMiddleware, getCart);
 
-export default cartRouter; // 添加这行代码
+export default cartRouter; 
