@@ -43,13 +43,13 @@ Each dish name MUST be individually enclosed in [], like this: [Lasagna Rolls], 
 // Get AI recommendation
 async function getAIRecommendation(prompt) {
     try {
-        const apiKey = 'ragflow-E5YWRkNGE2MjVhNzExZjBiYTJhMDI0Mm';
+      /*    const apiKey = 'ragflow-E5YWRkNGE2MjVhNzExZjBiYTJhMDI0Mm';
         const chatID = 'abf05ad82fa511f0a61d0242ac150006';
-        const address = '192.168.0.179';
+        const address = '192.168.0.179'; */
 
-     /*   const apiKey = 'ragflow-NjYjg3ZTU4MzE4ZTExZjBhN2RmMDI0Mm';
+        const apiKey = 'ragflow-NjYjg3ZTU4MzE4ZTExZjBhN2RmMDI0Mm';
         const chatID = '5f9b44c2318f11f0a41b0242ac120006';
-        const address = '34.234.143.101';  */
+        const address = '34.234.143.101'; 
 
 
         const requestUrl = `http://${address}/api/v1/chats_openai/${chatID}/chat/completions`;
