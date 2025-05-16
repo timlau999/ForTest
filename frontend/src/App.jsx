@@ -10,7 +10,7 @@ import Order from './components/Order/Order';
 import Chatbot from './components/Chatbot/Chatbot';
 import UserAvatar from './components/UserAvatar/UserAvatar'; 
 import StoreContextProvider from './context/StoreContext.jsx';
-import Reservation from './pages/Reservation/Reservation'; // Import the Reservation component
+import Reservation from './pages/Reservation/Reservation'; 
 
 const App = () => {
     // display popup for login
