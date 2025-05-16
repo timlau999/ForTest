@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
+import MenuItem from './menuItemModel.js';
 
 const Recommendation = sequelize.define('Recommendation', {
     recommendationId: {
@@ -26,5 +27,7 @@ const Recommendation = sequelize.define('Recommendation', {
     tableName: 'recommendation',
     timestamps: false
 });
+
+Recommendation.belongsTo(MenuItem, { foreignKey: 'menuItemId' });
 
 export default Recommendation;

@@ -29,7 +29,6 @@ function filterMenuForClient(client, menuItems) {
 // Generate AI prompt
 function generatePrompt(client, dishes) {
     return `Customer Information:
-- Name: ${client.Name || 'Unknown'}
 - Allergens: ${client.Allergens || 'None'}
 - Medical Conditions: ${client.MedicalConditions || 'None'}
 - Dietary Preferences: ${client.DietaryPreferences || 'None'}
@@ -47,6 +46,11 @@ async function getAIRecommendation(prompt) {
         const apiKey = 'ragflow-E5YWRkNGE2MjVhNzExZjBiYTJhMDI0Mm';
         const chatID = 'abf05ad82fa511f0a61d0242ac150006';
         const address = '192.168.0.179';
+
+     /*   const apiKey = 'ragflow-NjYjg3ZTU4MzE4ZTExZjBhN2RmMDI0Mm';
+        const chatID = '5f9b44c2318f11f0a41b0242ac120006';
+        const address = '34.234.143.101';  */
+
 
         const requestUrl = `http://${address}/api/v1/chats_openai/${chatID}/chat/completions`;
         const requestBody = {
@@ -101,44 +105,56 @@ export const getRecommendation = async (req, res) => {
             DietaryPreferences: customerProfile.dietaryPreference
         };
 
-        // Filter menu items based on customer profile
-        //const filteredDishes = filterMenuForClient(client, menuItems);
+																		
         let filteredDishes = filterMenuForClient(client, menuItems);
         filteredDishes = filteredDishes.filter(dish => dish.category!== 'Deserts');
 
         const prompt = generatePrompt(client, filteredDishes);
         let recommendation = await getAIRecommendation(prompt);
 
-        // Remove <think> and </think> tags and their contents
         if (recommendation) {
             recommendation = recommendation.replace(/<think>[\s\S]*?<\/think>/, '').trim();
         }
 
-        // Extract recommended menu item names and remove < >
-        const recommendedDishes = recommendation.split(',').map(dish => {
+        const recommendedDishes = recommendation? recommendation.split(',').map(dish => {
             return dish.replace(/^\s*\[\s*|\s*\]\s*$/g, '').trim();
+        }) : [];
+
+        const validRecommendedDishes = recommendedDishes.filter(dish => {
+            return menuItems.some(item => item.name === dish);
         });
 
-        // Insert recommendations into the database
-        for (const dishName of recommendedDishes) {
-            const menuItem = await MenuItem.findOne({ where: { name: dishName } });
-            if (menuItem) {
-                await Recommendation.create({
-                    customerId: customerProfile.customerId,
-                    menuItemId: menuItem.menuItemId
-                });
+        let finalRecommendedDishes = [];
+        if (validRecommendedDishes.length > 0) {
+            await Recommendation.destroy({ where: { customerId: customerProfile.customerId } });
+	    await sequelize.query('ALTER TABLE recommendation AUTO_INCREMENT = 1;');
+            for (const dishName of validRecommendedDishes.slice(0, 3)) {
+                const menuItem = await MenuItem.findOne({ where: { name: dishName } });
+                if (menuItem) {
+                    await Recommendation.create({
+                        customerId: customerProfile.customerId,
+                        menuItemId: menuItem.menuItemId
+                    });
+                    finalRecommendedDishes.push(dishName);
+                }
             }
+        } else {
+            const existingRecommendations = await Recommendation.findAll({
+                where: { customerId: customerProfile.customerId },
+                include: [{
+                    model: MenuItem
+                }]
+            });
+            finalRecommendedDishes = existingRecommendations.map(recommendation => recommendation.MenuItem.name);
         }
 
         const responseData = {
-            client: customerProfile.customerId,
-            suitable_dishes: filteredDishes.map(d => d.name),
-            recommendation: recommendedDishes.slice(0, 3).map(dish => `${dish}`).join(', ') || "AI recommendation service is temporarily unavailable"
+            recommendation: finalRecommendedDishes.slice(0, 3).join(', ') || "AI recommendation service is temporarily unavailable"
         };
 
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
         res.send(JSON.stringify(responseData, (key, value) => {
-            return value === undefined ? null : value;
+            return value === undefined? null : value;
         }, 2) + '\n');
 
     } catch (error) {
@@ -151,3 +167,4 @@ export const getRecommendation = async (req, res) => {
         }
     }
 };
+

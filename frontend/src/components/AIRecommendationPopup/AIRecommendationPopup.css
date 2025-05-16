@@ -17,7 +17,7 @@
     background-color: white;
     padding: 40px;
     border-radius: 16px;
-    width: 800px;
+    width: 1000px;
     max-width: 95%;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
@@ -57,3 +57,9 @@
     flex-direction: column;
     gap: 30px;
 }
+
+.menuItem-item-image{
+    width: 100%;
+    border-radius: 15px 15px 0px 0px;
+}
+
