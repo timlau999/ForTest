@@ -55,10 +55,10 @@ const Order = ({ backendUrl }) => {
                             <p>Payment Status: {order.paymentStatus}</p>
                             <p>Points Used: {order.pointsUsed || 0} pts</p>
                             <h3>Order Items</h3>
-                            {order.items && order.items.length > 0 ? (
-                                order.items.map((item) => (
+                            {order.orderItems && order.orderItems.length > 0 ? (
+                                order.orderItems.map((item) => (
                                     <div key={item.orderItemId}>
-                                        <p>Item Name: {item.menuItemName}</p>
+                                        <p>Item Name: {item.menuItemName || 'unknown'}</p>
                                         <p>Quantity: {item.quantity}</p>
                                         <p>Unit Price: ${item.unitPrice}</p>
                                         <p>Total Price: ${item.totalPrice}</p>

@@ -53,6 +53,7 @@ const getOrdersByCustomerId = async (req, res) => {
             ]
         });
 
+     //   console.log('Fetched orders:', orders);
         res.json(orders);
     } catch (error) {
         console.error(error);
