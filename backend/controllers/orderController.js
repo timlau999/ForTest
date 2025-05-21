@@ -2,6 +2,7 @@
 import Order from '../models/orderModel.js';
 import OrderItem from '../models/orderItemModel.js';
 import Customer from '../models/customerModel.js';
+import MenuItem from '../models/menuItemModel.js';
 
 const placeOrder = async (req, res) => {
     try {
@@ -48,11 +49,16 @@ const getOrdersByCustomerId = async (req, res) => {
             include: [
                 {
                     model: OrderItem,
-                    as: 'orderItems'
+                    as: 'orderItems',
+                    include: [
+                        {
+                            model: MenuItem,
+                            attributes: ['name'] 
+                        }
+                    ]
                 }
             ]
         });
-
         res.json(orders);
     } catch (error) {
         console.error(error);

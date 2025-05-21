@@ -59,9 +59,9 @@ const Order = ({ backendUrl }) => {
                                 {order.orderItems && order.orderItems.length > 0 ? (
                                     order.orderItems.map((item) => (
                                         <div key={item.orderItemId} className="order-item-card">
-                                            <img src={`/menuItem_${item.menuItemId}.png`} alt={item.menuItemName || 'unknown'} />
+                                            <img src={`/menuItem_${item.menuItemId}.png`} alt={item.MenuItem?.name || 'unknown'} />
                                             <div className="order-item-info">
-                                                <p>Item Name: {item.menuItemName || 'unknown'}</p>
+                                                <p>Item Name: {item.MenuItem?.name || 'unknown'}</p>
                                                 <p>Quantity: {item.quantity}</p>
                                                 <p>Unit Price: ${item.unitPrice}</p>
                                                 <p>Total Price: ${item.totalPrice}</p>
