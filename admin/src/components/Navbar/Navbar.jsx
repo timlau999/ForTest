@@ -7,10 +7,14 @@ import {useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate=useNavigate();
-  const {token, admin, setAdmin, setToken } = useContext(StoreContext);
+  const {token, admin, setAdmin, setToken, username, userId, setUsername, setUserId } = useContext(StoreContext);
   const logout=()=>{
     localStorage.removeItem("token");
     localStorage.removeItem("admin");
+    localStorage.removeItem("username");
+    localStorage.removeItem("userId");
+    setUsername("");
+    setUserId("");
     setToken("");
     setAdmin(false);
     toast.success("Logout Successfully")
@@ -18,13 +22,15 @@ const Navbar = () => {
   }
   return (
     <div className="navbar">
-      <img className="logo" src={assets.logo} alt="" />
+      <img className="logo" src={assets.logo} alt="Restaruant Logo" />
+      
       {token && admin ? (
-        <p className="login-conditon" onClick={logout}>Logout</p>
+        <p className="login-conditon" onClick={logout}><label className="username">User: {username}  ID: {userId} </label>
+        <button className="logoutButton">Logout</button></p>
       ) : (
         <p className="login-conditon" onClick={()=>navigate("/")}>Login</p>
       )}
-      <img className="profile" src={assets.profile_image} alt="" />
+      
     </div>
   );
 };

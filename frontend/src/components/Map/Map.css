@@ -1,0 +1,110 @@
+/* ===== 地址連結樣式 ===== */
+.address-link {
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.address-link:hover {
+  color: #1890ff;
+  text-decoration: underline;
+}
+.address-card {
+color:#333;
+}
+
+/* ===== 地圖模態框遮罩層 ===== */
+.map-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* 加深背景透明度 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px); /* 背景模糊效果 */
+}
+
+/* ===== 地圖模態框主體 ===== */
+.map-modal-content {
+  position: relative;
+  background: white;
+  border-radius: 12px; /* 加大圓角 */
+  width: 65%; /* 加寬視窗 */
+  max-width: 1200px; /* 最大寬度加大 */
+  height: 85vh; /* 高度佔視窗 85% */
+  max-height: 900px; /* 限制最大高度 */
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* 更明顯的陰影 */
+  animation: modalFadeIn 0.3s ease-out; /* 開啟動畫 */
+}
+
+/* ===== 關閉按鈕 ===== */
+.map-close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 32px; /* 加大按鈕 */
+  cursor: pointer;
+  color: #555;
+  transition: transform 0.2s;
+}
+
+.map-close-button:hover {
+  transform: scale(1.2); /* 懸停放大效果 */
+  color: #333;
+}
+
+/* ===== 地圖容器 ===== */
+.map-container {
+  width: 100%;
+  height: calc(100% - 20px); /* 扣除標題空間 */
+  border-radius: 14px;
+  overflow: hidden; /* 確保地圖圓角生效 */
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 25%;
+  min-height: 60vh; /
+}
+
+/* ===== 動畫定義 ===== */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 響應式調整 ===== */
+@media (max-width: 992px) {
+  .map-modal-content {
+    width: 95%;
+    height: 80vh;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .map-modal-content {
+    width: 98%;
+    height: 70vh;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .map-close-button {
+    top: 10px;
+    right: 10px;
+    font-size: 28px;
+  }
+}

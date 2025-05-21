@@ -83,6 +83,9 @@ import settings from './settings.png'
 import shopping_bag from './shopping_bag.png'
 import tick from './tick.png'
 
+import OpenfoodfactsLogo from './OpenfoodfactsLogo.svg'
+import OpenfoodfactsTitle from './OpenfoodfactsTitle.svg'
+
 export const assets = {
     logo,
     user_icon,
@@ -124,7 +127,9 @@ export const assets = {
     settings_sliders,
     settings,
     shopping_bag,
-    tick
+    tick,
+    OpenfoodfactsLogo,
+    OpenfoodfactsTitle
 }
 
 export const menu_list = [

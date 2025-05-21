@@ -1,0 +1,27 @@
+.foodwiki-logo{
+    position: fixed;
+    bottom: 70px;
+    right: 0px;
+    display: flex;
+    width: 90px;
+    height: 90px;
+}
+
+.foodwiki-window{
+    display: none;
+    position: fixed;
+    bottom: 120px;
+    right: 80px;
+    width: 350px;
+    height: 500px;
+    background-color:rgb(255, 255, 254);
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    padding: 5px 5px;
+}
+.foodwiki-window.show{
+    display: block;
+}
+.foodwiki-window:hover{
+    border: 3px solid #ffc691;
+}

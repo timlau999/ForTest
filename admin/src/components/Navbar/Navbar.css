@@ -3,13 +3,37 @@
     justify-content: space-between;
     align-items: center;
     padding: 8px 4%;
+
 }
 .navbar .logo{
     width: max(10%,80px);
 }
-.navbar .profile{
-    width: 40px;
-}
+
 .login-conditon{
     font-size: 20px;
+}
+
+.logoutButton{
+    background-color: transparent;
+    border: rgb(252, 96, 96) 2px solid;
+    color: rgb(252, 96, 96);
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 20px;
+}
+.logoutButton:hover{
+    background-color: rgb(252, 96, 96);
+    color: white;
+}
+
+.username{
+    margin: 5px 10px;
+    border: black solid 1px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    color:none;
+    font-size: 16px;
 }

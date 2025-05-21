@@ -1,0 +1,30 @@
+.table-container {
+    background-color: none;
+    border-radius: 15px;
+    border: none 2px solid;
+    margin: 5px 0px;
+    margin-right: 10px;
+    padding: 5px 5px;
+    text-align: left;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+    display: inline;
+}
+
+.table-container:hover {
+    border: lightsalmon 2px solid;
+}
+
+.TableSteteButton {
+    margin: 3px 3px;
+    padding: 3px 3px;
+    border-radius: 15px;
+    border: transparent 2px solid;
+    background-color: transparent;
+    font-size: 14px;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.TableSteteButton:hover {
+    border: lightsalmon 2px solid;
+    background-color: lightsalmon;
+}

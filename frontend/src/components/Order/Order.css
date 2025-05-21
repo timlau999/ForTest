@@ -25,3 +25,30 @@
     margin-top: 15px;
     margin-bottom: 5px;
 }
+
+.order-item-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.order-item-card {
+    border: 1px solid #e2e2e2;
+    border-radius: 10px;
+    width: 400px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+}
+
+.order-item-card img {
+    width: 120px; 
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.order-item-card .order-item-info {
+    flex: 1;
+}

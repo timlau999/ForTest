@@ -12,7 +12,7 @@ const List = ({ url }) => {
   const [list, setList] = useState([]);
 
   const fetchList = async () => {
-    const response = await axios.get(`${url}/api/menuItem/list`);
+    const response = await axios.get(`${url}/api/food/list`);
     if (response.data.success) {
       setList(response.data.data);
     } else {
@@ -20,10 +20,10 @@ const List = ({ url }) => {
     }
   };
 
-  const removeMenuItem = async (menuItemId) => {
+  const removeFood = async (foodId) => {
     const response = await axios.post(
-      `${url}/api/menuItem/remove`,
-      { id: menuItemId },
+      `${url}/api/food/remove`,
+      { id: foodId },
       { headers: { token } }
     );
     await fetchList();
@@ -43,7 +43,7 @@ const List = ({ url }) => {
 
   return (
     <div className="list add flex-col">
-      <p>All MenuItem List</p>
+      <p>All Food List</p>
       <div className="list-table">
         <div className="list-table-format title">
           <b>Image</b>
@@ -59,7 +59,7 @@ const List = ({ url }) => {
               <p>{item.name}</p>
               <p>{item.category}</p>
               <p>${item.price}</p>
-              <p onClick={() => removeMenuItem(item._id)} className="cursor">
+              <p onClick={() => removeFood(item._id)} className="cursor">
                 X
               </p>
             </div>

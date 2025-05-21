@@ -1,0 +1,48 @@
+.Account-list{
+    width: 70%;
+}
+
+.Account-Button {
+    background-color: transparent;
+    border: none;
+    color: black;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 20px;
+    margin: 2px;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.Account-Button:hover {
+    background-color: antiquewhite;
+    border: antiquewhite 2px solid;
+    
+}
+
+.account-pencil{
+    max-width: 20px;
+    max-height: 20px;
+    margin-left: 1px;
+}
+
+.Account-table{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.Account-container{
+    display: flex;
+    margin-top: 10px;
+    margin-right: 10px;
+    border: none 2px solid;
+    border-radius: 15px;
+    padding: 5px 5px;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+    flex-wrap: wrap;
+}
+
+.Account-container:hover{
+    border: antiquewhite 2px solid;
+}

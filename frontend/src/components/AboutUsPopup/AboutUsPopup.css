@@ -1,0 +1,147 @@
+/* ===== 彈窗遮罩層 ===== */
+.about-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ===== 彈窗內容 ===== */
+.about-modal-content {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  width: 85%;
+  max-width: 650px;
+  padding: 40px 30px 30px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transform: translateZ(0); /* 硬體加速 */
+}
+
+/* ===== 標題 ===== */
+.about-title {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 28px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+/* ===== 內容區域 ===== */
+.about-content {
+  line-height: 1.7;
+  color: #34495e;
+}
+
+.about-description {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+/* ===== 特色列表 ===== */
+.about-features {
+  margin: 25px 0;
+  padding-left: 5px;
+  list-style: none;
+}
+
+.feature-item {
+  margin-bottom: 12px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.feature-icon {
+  color: #27ae60;
+  font-weight: bold;
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+/* ===== 聯繫資訊 ===== */
+.about-contact {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #f1f1f1;
+}
+
+.contact-title {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.contact-info {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+/* ===== 關閉按鈕 ===== */
+.about-close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #7f8c8d;
+  transition: all 0.2s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.about-close-button:hover {
+  color: #e74c3c;
+  background-color: #f9f9f9;
+  transform: rotate(90deg);
+}
+
+/* ===== 動畫 ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===== 響應式設計 ===== */
+@media (max-width: 768px) {
+  .about-modal-content {
+    width: 90%;
+    padding: 30px 20px 20px;
+  }
+  
+  .about-title {
+    font-size: 24px;
+  }
+  
+  .feature-item {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-modal-content {
+    width: 95%;
+    padding: 25px 15px 15px;
+  }
+  
+  .about-close-button {
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+  }
+}

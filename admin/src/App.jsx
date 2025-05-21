@@ -8,9 +8,11 @@ import Orders from "./pages/Orders/Orders";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./components/Login/Login";
+import Reservation from "./pages/Reservation/Reservation";
+import Account from "./pages/Account/Account";
 
 const App = () => {
-  const url = "http://192.168.0.174:4000";
+  const url = "http://localhost:4000";
   return (
     <div>
       <ToastContainer />
@@ -23,6 +25,8 @@ const App = () => {
           <Route path="/add" element={<Add url={url}/>} />
           <Route path="/list" element={<List url={url}/>} />
           <Route path="/orders" element={<Orders url={url}/>} />
+          <Route path="/Reservation" element={<Reservation url={url}/>} />
+          <Route path="/Account" element={<Account url={url}/>} />
         </Routes>
       </div>
     </div>

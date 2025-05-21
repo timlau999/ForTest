@@ -10,7 +10,8 @@ import Order from './components/Order/Order';
 import Chatbot from './components/Chatbot/Chatbot';
 import UserAvatar from './components/UserAvatar/UserAvatar'; 
 import StoreContextProvider from './context/StoreContext.jsx';
-import Reservation from './pages/Reservation/Reservation'; 
+import Reservation from './pages/Reservation/Reservation';
+import Foodwiki from './components/Foodwiki/Foodwiki.jsx';
 
 const App = () => {
     // display popup for login
@@ -46,6 +47,7 @@ const App = () => {
             </div>
             <Footer />
             <Chatbot />
+            <Foodwiki />
         </StoreContextProvider>
     );
 };

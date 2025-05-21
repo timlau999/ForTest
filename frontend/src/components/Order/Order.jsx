@@ -55,18 +55,23 @@ const Order = ({ backendUrl }) => {
                             <p>Payment Status: {order.paymentStatus}</p>
                             <p>Points Used: {order.pointsUsed || 0} pts</p>
                             <h3>Order Items</h3>
-                            {order.orderItems && order.orderItems.length > 0 ? (
-                                order.orderItems.map((item) => (
-                                    <div key={item.orderItemId}>
-                                        <p>Item Name: {item.menuItemName || 'unknown'}</p>
-                                        <p>Quantity: {item.quantity}</p>
-                                        <p>Unit Price: ${item.unitPrice}</p>
-                                        <p>Total Price: ${item.totalPrice}</p>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No items in this order</p>
-                            )}
+                            <div className="order-item-items">
+                                {order.orderItems && order.orderItems.length > 0 ? (
+                                    order.orderItems.map((item) => (
+                                        <div key={item.orderItemId} className="order-item-card">
+                                            <img src={`/menuItem_${item.menuItemId}.png`} alt={item.menuItemName || 'unknown'} />
+                                            <div className="order-item-info">
+                                                <p>Item Name: {item.menuItemName || 'unknown'}</p>
+                                                <p>Quantity: {item.quantity}</p>
+                                                <p>Unit Price: ${item.unitPrice}</p>
+                                                <p>Total Price: ${item.totalPrice}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No items in this order</p>
+                                )}
+                            </div>
                         </div>
                     ))}
                 </div>

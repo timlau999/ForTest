@@ -8,7 +8,7 @@ import {useNavigate } from "react-router-dom";
 
 const Login = ({ url }) => {
   const navigate=useNavigate();
-  const {admin,setAdmin,token, setToken } = useContext(StoreContext);
+  const {admin,setAdmin,token, setToken,username,setUsername,userID,setUserId} = useContext(StoreContext);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -25,8 +25,12 @@ const Login = ({ url }) => {
       if (response.data.role === "admin") {
         setToken(response.data.token);
         setAdmin(true);
+        setUsername(response.data.username);
+        setUserId(response.data.id);
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("admin", true);
+        localStorage.setItem("username", response.data.username);
+        localStorage.setItem("userId", response.data.id);
         toast.success("Login Successfully");
         navigate("/add")
       }else{
