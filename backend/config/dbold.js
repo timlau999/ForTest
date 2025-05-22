@@ -1,8 +1,8 @@
 // /MyFYP_HD/backend/config/db.js
 import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize('fyp-db', 'admin1', 'FYPdb2025', {
-  host: 'hhh-fyp2025.mysql.database.azure.com',
+const sequelize = new Sequelize('fyp-db', 'systemgp24', 'Active@caseRA1', {
+  host: 'itp4915m22gp24.mysql.database.azure.com',
   dialect: 'mysql'
 });
 

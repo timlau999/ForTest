@@ -55,7 +55,7 @@ const Order = ({ backendUrl }) => {
                             <p>Payment Status: {order.paymentStatus}</p>
                             <p>Points Used: {order.pointsUsed || 0} pts</p>
                             <h3>Order Items</h3>
-                            <div className="order-item-items">
+                                 <div className="order-item-items">
                                 {order.orderItems && order.orderItems.length > 0 ? (
                                     order.orderItems.map((item) => (
                                         <div key={item.orderItemId} className="order-item-card">

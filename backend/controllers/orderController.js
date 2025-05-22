@@ -59,6 +59,7 @@ const getOrdersByCustomerId = async (req, res) => {
                 }
             ]
         });
+
         res.json(orders);
     } catch (error) {
         console.error(error);
