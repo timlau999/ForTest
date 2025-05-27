@@ -1,26 +1,98 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import './Cart.css';
 
 const Cart = () => {
-    const { cartItems, removeFromCart, menuItem_list, getTotalCartAmount, userPoints, usePoints, backendUrl } = useContext(StoreContext);
+    const { cartItems, removeFromCart, menuItem_list, getTotalCartAmount, backendUrl, token } = useContext(StoreContext);
     const navigate = useNavigate();
     const [pointsToUse, setPointsToUse] = useState('');
     const customerId = localStorage.getItem('customerId'); 
+    const [userPoints, setUserPoints] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchPoints = async () => {
+            if (!customerId) {
+                setError('Customer ID not found');
+                setLoading(false);
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${backendUrl}/api/points/${customerId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch points');
+                }
+                
+                const data = await response.json();
+                setUserPoints(data.points);
+                setLoading(false);
+            } catch (err) {
+                console.error(err);
+                setError('Error fetching points');
+                setLoading(false);
+            }
+        };
+        
+        fetchPoints();
+    }, [customerId, backendUrl, token]);
+
+    const handleSubmitPoints = async () => {
+        if (!pointsToUse || pointsToUse <= 0) return;
+        
+        try {
+            const response = await fetch(`${backendUrl}/api/points/${customerId}/use`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ pointsToUse: parseInt(pointsToUse) })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                setUserPoints(data.points);
+                setPointsToUse('');
+                alert('Points used successfully');
+            } else {
+                alert(data.message || 'Failed to use points');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error using points');
+        }
+    };
 
     const totalAmount = getTotalCartAmount();
-    const maxPointsToUse = Math.min(totalAmount * 10, userPoints);
+    const maxPointsToUse = userPoints; // 直接使用用户所有积分作为上限
     const pointsValue = pointsToUse ? Math.min(parseInt(pointsToUse) || 0, maxPointsToUse) : 0;
     const finalAmount = totalAmount - pointsValue / 10;
 
     const handlePointsChange = (e) => {
-        const inputPoints = parseInt(e.target.value) || 0;
-        setPointsToUse(inputPoints <= maxPointsToUse ? inputPoints.toString() : maxPointsToUse.toString());
-    };
-
-    const handleSubmitPoints = () => {
-        usePoints(pointsValue);
+        const input = e.target.value;
+        
+        if (input === '') {
+            setPointsToUse('');
+            return;
+        }
+        
+        if (/^\d+$/.test(input)) {
+            const inputPoints = parseInt(input);
+            
+            if (inputPoints > maxPointsToUse) {
+                setPointsToUse(maxPointsToUse.toString());
+            } else {
+                setPointsToUse(input);
+            }
+        }
     };
 
     const handleCheckout = async () => {
@@ -28,7 +100,8 @@ const Cart = () => {
             const response = await fetch(`${backendUrl}/api/order/place`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify({
                     customerId, 
@@ -45,8 +118,6 @@ const Cart = () => {
 
             const data = await response.json();
             if (data.success) {
-                // const { clearCart } = useContext(StoreContext);
-                // clearCart();
                 navigate('/order');
             } else {
                 console.error(data.message);
@@ -109,18 +180,26 @@ const Cart = () => {
                 </div>
                 <div className="cart-points">
                     <div>
-                        <p>Enter the points you want to use</p>
+                        <p>Enter points to use</p>
                         <div className="cart-points-input">
                             <input
                                 type="number"
                                 placeholder="Points"
                                 value={pointsToUse}
                                 onChange={handlePointsChange}
+                                min="0"
+                                max={maxPointsToUse}
                             />
                             <button onClick={handleSubmitPoints}>Submit</button>
                         </div>
                         <div style={{ marginTop: '10px' }}>
-                            <p>Your remaining points: {userPoints - pointsValue}</p>
+                            {loading ? (
+                                <p>Loading points...</p>
+                            ) : error ? (
+                                <p style={{ color: 'red' }}>{error}</p>
+                            ) : (
+                                <p>Your available points: {userPoints}</p>
+                            )}
                         </div>
                     </div>
                 </div>

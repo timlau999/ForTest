@@ -19,7 +19,9 @@ const Order = ({ backendUrl }) => {
                     console.log('Fetching orders with customerId:', customerId);
 
                     const orderResponse = await axios.get(`${backendUrl}/api/order/${customerId}`, {
-                        headers: { token }
+                        headers: {
+                            Authorization: `Bearer ${token}` 
+                        }
                     });
                     console.log('Order response data:', orderResponse.data);
 

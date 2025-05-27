@@ -1,11 +1,9 @@
-// backend/models/pointsRoute.js
 import express from 'express';
-import { getUserPoints, usePoints } from '../controllers/pointsController';
-import authMiddleware from '../middleware/auth';
+import { getCustomerPoints, usePoints } from '../controllers/pointsController.js';
 
-const pointsRouter = express.Router();
+const router = express.Router();
 
-pointsRouter.post('/get', authMiddleware, getUserPoints);
-pointsRouter.post('/use', authMiddleware, usePoints);
+router.get('/:customerId', getCustomerPoints);
+router.post('/:customerId/use', usePoints);
 
-export default pointsRouter;
+export default router;    

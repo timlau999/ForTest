@@ -1,67 +1,46 @@
-// ForTest/backend/controllers/pointsController.js
 import CustomerPoints from '../models/customerPointsModel.js';
-import CustomerPointsUsage from '../models/customerPointsUsageModel.js';
-import Order from '../models/orderModel.js';
-import sequelize from '../config/db.js';
 
-const getUserPoints = async (req, res) => {
+export const getCustomerPoints = async (req, res) => {
     try {
-        const customerId = req.body.customerId;
-        const pointsData = await CustomerPoints.findOne({
+        const { customerId } = req.params;
+        const points = await CustomerPoints.findOne({
             where: { customerId }
         });
-        if (pointsData) {
-            res.json({ success: true, points: pointsData.points });
-        } else {
-            res.json({ success: false, message: 'No points data found for this customer' });
+        
+        if (!points) {
+            return res.status(404).json({ success: false, message: 'Points not found' });
         }
+        
+        res.status(200).json({ success: true, points: points.points });
     } catch (error) {
         console.error(error);
-        res.json({ success: false, message: 'Error fetching points data' });
+        res.status(500).json({ success: false, message: 'Server error' });
     }
 };
 
-const usePoints = async (req, res) => {
-    const t = await sequelize.transaction();
+export const usePoints = async (req, res) => {
     try {
-        const { customerId, pointsToUse, orderId } = req.body;
-        const pointsData = await CustomerPoints.findOne({
-            where: { customerId },
-            transaction: t
+        const { customerId } = req.params;
+        const { pointsToUse } = req.body;
+        
+        const pointsRecord = await CustomerPoints.findOne({
+            where: { customerId }
         });
-        if (!pointsData) {
-            throw new Error('No points data found for this customer');
+        
+        if (!pointsRecord) {
+            return res.status(404).json({ success: false, message: 'Points not found' });
         }
-        if (pointsData.points < pointsToUse) {
-            throw new Error('Insufficient points');
+        
+        if (pointsRecord.points < pointsToUse) {
+            return res.status(400).json({ success: false, message: 'Insufficient points' });
         }
 
-        const newPoints = pointsData.points - pointsToUse;
-        await pointsData.update({ points: newPoints }, { transaction: t });
-
-        await CustomerPointsUsage.create({
-            orderId,
-            pointsId: pointsData.id, 
-            usageDate: new Date()
-        }, { transaction: t });
-
-        const order = await Order.findOne({
-            where: { orderId },
-            transaction: t
-        });
-        if (!order) {
-            throw new Error('Order not found');
-        }
-        const newTotalAmount = order.amount - (pointsToUse / 10); 
-        await order.update({ amount: newTotalAmount }, { transaction: t });
-
-        await t.commit();
-        res.json({ success: true, message: 'Points used successfully' });
+        pointsRecord.points -= pointsToUse;
+        await pointsRecord.save();
+        
+        res.status(200).json({ success: true, points: pointsRecord.points });
     } catch (error) {
-        await t.rollback();
         console.error(error);
-        res.json({ success: false, message: error.message });
+        res.status(500).json({ success: false, message: 'Server error' });
     }
-};
-
-export { getUserPoints, usePoints };
+};    

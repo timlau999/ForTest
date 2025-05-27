@@ -1,4 +1,3 @@
-// ForTest/backend/server.js
 import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
@@ -17,6 +16,8 @@ import Order from "./models/orderModel.js";
 import tableRouter from "./routes/tableRouter.js";
 import OrderItem from "./models/orderItemModel.js";
 import openfooddataRouter from "./routes/openfooddataRoute.js";
+import pointsRouter from "./routes/pointsRoute.js";
+import CustomerPoints from "./models/customerPointsModel.js"; 
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -45,8 +46,8 @@ app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/recommend", recommendationRouter);
 app.use("/api/table", tableRouter);
-app.use("/api/openfooddata", openfooddataRouter);								   
-//app.use('/api/points', pointsRouter);
+app.use("/api/openfooddata", openfooddataRouter);
+app.use("/api/points", pointsRouter);
 
 app.get("/", (req, res) => {
     res.send("API Working");
@@ -54,4 +55,4 @@ app.get("/", (req, res) => {
 
 app.listen(port, () => {
     console.log(`Server Started on port: ${port}`);
-});
+});    
