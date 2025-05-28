@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import './Cart.css';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 const Cart = () => {
     const { cartItems, removeFromCart, menuItem_list, getTotalCartAmount, backendUrl, token } = useContext(StoreContext);
@@ -11,6 +12,7 @@ const Cart = () => {
     const [userPoints, setUserPoints] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [showPayPal, setShowPayPal] = useState(false);
 
     useEffect(() => {
         const fetchPoints = async () => {
@@ -95,7 +97,23 @@ const Cart = () => {
         }
     };
 
-    const handleCheckout = async () => {
+    const handleCheckout = () => {
+        setShowPayPal(true);
+    };
+
+    const createOrder = (data, actions) => {
+        return actions.order.create({
+            purchase_units: [
+                {
+                    amount: {
+                        value: finalAmount.toFixed(2)
+                    }
+                }
+            ]
+        });
+    };
+
+    const onApprove = async (data, actions) => {
         try {
             const response = await fetch(`${backendUrl}/api/order/place`, {
                 method: 'POST',
@@ -116,11 +134,11 @@ const Cart = () => {
                 })
             });
 
-            const data = await response.json();
-            if (data.success) {
+            const dataResponse = await response.json();
+            if (dataResponse.success) {
                 navigate('/order');
             } else {
-                console.error(data.message);
+                console.error(dataResponse.message);
             }
         } catch (error) {
             console.error('Error placing order:', error);
@@ -128,83 +146,91 @@ const Cart = () => {
     };
 
     return (
-        <div className="cart">
-            <div className="cart-items">
-                <div className="cart-item-title">
-                    <p>Items</p>
-                    <p>Title</p>
-                    <p>Price</p>
-                    <p>Quantity</p>
-                    <p>Total</p>
-                    <p>Remove</p>
+        <PayPalScriptProvider options={{ "client-id": "AZTUwfMptslRno6C0KoC3nsEpFClYKq0nKWj0S1aaaU81GpB65XFZFrRwvUwoHsrKggPUVh_R2iyaLKC" }}>
+            <div className="cart">
+                <div className="cart-items">
+                    <div className="cart-item-title">
+                        <p>Items</p>
+                        <p>Title</p>
+                        <p>Price</p>
+                        <p>Quantity</p>
+                        <p>Total</p>
+                        <p>Remove</p>
+                    </div>
+                    <hr />
+                    <br />
+                    {menuItem_list.map((item, index) => {
+                        if (cartItems[item._id] > 0) {
+                            return (
+                                <div className="cart-items-item" key={item._id}>
+                                    <img src={item.image} alt={item.name} />
+                                    <p>{item.name}</p>
+                                    <p>${item.price}</p>
+                                    <p>{cartItems[item._id]}</p>
+                                    <p>${item.price * cartItems[item._id]}</p>
+                                    <p className='cross' onClick={() => removeFromCart(item._id)}>x</p>
+                                </div>
+                            );
+                        }
+                        return null;
+                    })}
                 </div>
                 <hr />
-                <br />
-                {menuItem_list.map((item, index) => {
-                    if (cartItems[item._id] > 0) {
-                        return (
-                            <div className="cart-items-item" key={item._id}>
-                                <img src={item.image} alt={item.name} />
-                                <p>{item.name}</p>
-                                <p>${item.price}</p>
-                                <p>{cartItems[item._id]}</p>
-                                <p>${item.price * cartItems[item._id]}</p>
-                                <p className='cross' onClick={() => removeFromCart(item._id)}>x</p>
+                <div className="card-bottom">
+                    <div className="cart-total">
+                        <h2>Cart totals</h2>
+                        <div>
+                            <div className="cart-total-details">
+                                <p>Subtotal</p>
+                                <p>${totalAmount}</p>
                             </div>
-                        );
-                    }
-                    return null;
-                })}
-            </div>
-            <hr />
-            <div className="card-bottom">
-                <div className="cart-total">
-                    <h2>Cart totals</h2>
-                    <div>
-                        <div className="cart-total-details">
-                            <p>Subtotal</p>
-                            <p>${totalAmount}</p>
+                            <hr />
+                            <div className="cart-total-details">
+                                <p>Points Deducted</p>
+                                <p>{pointsValue} pts (${pointsValue / 10})</p>
+                            </div>
+                            <hr />
+                            <div className="cart-total-details">
+                                <b>Total</b>
+                                <b>${finalAmount}</b>
+                            </div>
                         </div>
-                        <hr />
-                        <div className="cart-total-details">
-                            <p>Points Deducted</p>
-                            <p>{pointsValue} pts (${pointsValue / 10})</p>
-                        </div>
-                        <hr />
-                        <div className="cart-total-details">
-                            <b>Total</b>
-                            <b>${finalAmount}</b>
-                        </div>
-                    </div>
-                    <button onClick={handleCheckout}>Proceed To Checkout</button>
-                </div>
-                <div className="cart-points">
-                    <div>
-                        <p>Enter points to use</p>
-                        <div className="cart-points-input">
-                            <input
-                                type="number"
-                                placeholder="Points"
-                                value={pointsToUse}
-                                onChange={handlePointsChange}
-                                min="0"
-                                max={maxPointsToUse}
+                        {!showPayPal && <button onClick={handleCheckout}>Proceed To Checkout</button>}
+                        {showPayPal && (
+                            <PayPalButtons
+                                createOrder={createOrder}
+                                onApprove={onApprove}
                             />
-                            <button onClick={handleSubmitPoints}>Submit</button>
-                        </div>
-                        <div style={{ marginTop: '10px' }}>
-                            {loading ? (
-                                <p>Loading points...</p>
-                            ) : error ? (
-                                <p style={{ color: 'red' }}>{error}</p>
-                            ) : (
-                                <p>Your available points: {userPoints}</p>
-                            )}
+                        )}
+                    </div>
+                    <div className="cart-points">
+                        <div>
+                            <p>Enter points to use</p>
+                            <div className="cart-points-input">
+                                <input
+                                    type="number"
+                                    placeholder="Points"
+                                    value={pointsToUse}
+                                    onChange={handlePointsChange}
+                                    min="0"
+                                    max={maxPointsToUse}
+                                />
+                                <button onClick={handleSubmitPoints}>Submit</button>
+                            </div>
+                            <div style={{ marginTop: '10px' }}>
+                                {loading ? (
+                                    <p>Loading points...</p>
+                                ) : error ? (
+                                    <p style={{ color: 'red' }}>{error}</p>
+                                ) : (
+                                    <p>Your available points: {userPoints}</p>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </PayPalScriptProvider>
     );
 };
 
