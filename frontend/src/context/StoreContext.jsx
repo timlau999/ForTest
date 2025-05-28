@@ -1,7 +1,6 @@
-///frontend/src/context/StoreContext.jsx
 import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
-//import { use } from "react";
+import { use } from "react";
 import { toast } from "react-toastify";
 
 export const StoreContext = createContext(null);
@@ -45,9 +44,21 @@ const StoreContextProvider = (props) => {
             }
         };
 
-
+        const fetchUserPoints = async () => {
+            if (customerId) {
+                try {
+                    const response = await axios.post(`${backendUrl}/api/points/get`, { customerId });
+                    if (response.data.success) {
+                        setUserPoints(response.data.points);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user points:', error);
+                }
+            }
+        };
 
         fetchMenuItems();
+        fetchUserPoints();
     }, [backendUrl, customerId]);
 
     const fetchtable = async () => {
@@ -99,6 +110,23 @@ const StoreContextProvider = (props) => {
         return totalAmount;
     };
 
+    const usePoints = async (pointsToUse) => {
+        if (customerId) {
+            try {
+                const orderId = null; 
+                const response = await axios.post(`${backendUrl}/api/points/use`, {
+                    customerId,
+                    pointsToUse,
+                    orderId
+                });
+                if (response.data.success) {
+                    setUserPoints(userPoints - pointsToUse);
+                }
+            } catch (error) {
+                console.error('Error using points:', error);
+            }
+        }
+    };
 
     const setAuthToken = (newToken) => {
         setToken(newToken);
@@ -174,6 +202,8 @@ const StoreContextProvider = (props) => {
         addToCart,
         removeFromCart,
         getTotalCartAmount,
+        userPoints,
+        usePoints,
         backendUrl,
         token,
         setAuthToken,

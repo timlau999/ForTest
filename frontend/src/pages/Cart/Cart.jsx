@@ -72,7 +72,7 @@ const Cart = () => {
     };
 
     const totalAmount = getTotalCartAmount();
-    const maxPointsToUse = userPoints; // 直接使用用户所有积分作为上限
+    const maxPointsToUse = userPoints; 
     const pointsValue = pointsToUse ? Math.min(parseInt(pointsToUse) || 0, maxPointsToUse) : 0;
     const finalAmount = totalAmount - pointsValue / 10;
 
