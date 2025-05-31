@@ -3,10 +3,11 @@ import Order from '../models/orderModel.js';
 import OrderItem from '../models/orderItemModel.js';
 import Customer from '../models/customerModel.js';
 import MenuItem from '../models/menuItemModel.js';
+import Payment from '../models/paymentModel.js';
 
 const placeOrder = async (req, res) => {
     try {
-        const { customerId, items, amount, pointsToUse } = req.body;
+        const { customerId, items, amount, pointsToUse, paymentMethodId } = req.body;
 
         const customer = await Customer.findOne({ where: { customerId } });
         if (!customer) {
@@ -31,6 +32,15 @@ const placeOrder = async (req, res) => {
                 quantity: item.quantity,
                 unitPrice: item.unitPrice,
                 totalPrice: item.totalPrice
+            });
+        }
+
+        if (paymentMethodId!== 1) { // If not PayPal
+            await newOrder.update({ paymentStatus: 'Paid' });
+            await Payment.create({
+                orderId,
+                paymentMethodId,
+                paymentDate: new Date()
             });
         }
 

@@ -18,7 +18,8 @@ import tableRouter from "./routes/tableRouter.js";
 import OrderItem from "./models/orderItemModel.js";
 import openfooddataRouter from "./routes/openfooddataRoute.js";
 import pointsRouter from "./routes/pointsRoute.js";
-import CustomerPoints from "./models/customerPointsModel.js"; 
+import CustomerPoints from "./models/customerPointsModel.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -47,8 +48,9 @@ app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/recommend", recommendationRouter);
 app.use("/api/table", tableRouter);
-app.use("/api/openfooddata", openfooddataRouter);								   
+app.use("/api/openfooddata", openfooddataRouter);
 app.use('/api/points', pointsRouter);
+app.use('/api', paymentRoutes);
 
 app.get("/", (req, res) => {
     res.send("API Working");

@@ -13,6 +13,9 @@ const Cart = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [showPayPal, setShowPayPal] = useState(false);
+    const [paymentMethods, setPaymentMethods] = useState([]);
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
 
     useEffect(() => {
         const fetchPoints = async () => {
@@ -42,8 +45,35 @@ const Cart = () => {
                 setLoading(false);
             }
         };
+
+        const fetchPaymentMethods = async () => {
+            try {
+                const response = await fetch(`${backendUrl}/api/paymentmethods`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch payment methods');
+                }
+
+                const data = await response.json();
+                // 为每种支付方式添加对应的图片路径
+                const methodsWithImages = data.paymentMethods.map(method => {
+                    return {
+                        ...method,
+                        image: `/payment/${method.paymentMethodName.toLowerCase().replace(' ', '_')}.png`
+                    };
+                });
+                setPaymentMethods(methodsWithImages);
+            } catch (err) {
+                console.error(err);
+            }
+        };
         
         fetchPoints();
+        fetchPaymentMethods();
     }, [customerId, backendUrl, token]);
 
     const handleSubmitPoints = async () => {
@@ -98,7 +128,18 @@ const Cart = () => {
     };
 
     const handleCheckout = () => {
-        setShowPayPal(true);
+        setShowPaymentModal(true);
+    };
+
+    const selectPaymentMethod = (method) => {
+        setSelectedPaymentMethod(method);
+        setShowPaymentModal(false);
+        
+        if (method.paymentMethodId === 1) { // PayPal
+            setShowPayPal(true);
+        } else {
+            placeOrder(method.paymentMethodId);
+        }
     };
 
     const createOrder = (data, actions) => {
@@ -114,6 +155,10 @@ const Cart = () => {
     };
 
     const onApprove = async (data, actions) => {
+        placeOrder(1);
+    };
+
+    const placeOrder = async (paymentMethodId) => {
         try {
             const response = await fetch(`${backendUrl}/api/order/place`, {
                 method: 'POST',
@@ -130,7 +175,8 @@ const Cart = () => {
                         totalPrice: item.price * cartItems[item._id]
                     })),
                     amount: finalAmount,
-                    pointsToUse: pointsValue
+                    pointsToUse: pointsValue,
+                    paymentMethodId
                 })
             });
 
@@ -229,6 +275,56 @@ const Cart = () => {
                         </div>
                     </div>
                 </div>
+
+            {showPaymentModal && (
+    <div className="payment-modal">
+        <div className="payment-modal-content">
+            <h3>Select Payment Method</h3>
+            <div className="payment-methods-container">
+                {paymentMethods.map(method => (
+                    <div 
+                        key={method.paymentMethodId}
+                        className={`payment-method-option ${selectedPaymentMethod?.paymentMethodId === method.paymentMethodId ? 'selected' : ''}`}
+                        onClick={() => setSelectedPaymentMethod(method)}
+                    >
+                        <img 
+                            src={`/payment/PaymentMethod_${method.paymentMethodId}.png`} 
+                            alt={method.paymentMethodName} 
+                            className="payment-icon"
+                        />
+                        <span>{method.paymentMethodName}</span>
+                    </div>
+                ))}
+            </div>
+            <div className="modal-actions">
+                <button 
+                    className="modal-btn confirm-payment-btn"
+                    onClick={() => {
+                        if (selectedPaymentMethod) {
+                            setShowPaymentModal(false);
+                            if (selectedPaymentMethod.paymentMethodId === 1) {
+                                setShowPayPal(true);
+                            } else {
+                                placeOrder(selectedPaymentMethod.paymentMethodId);
+                            }
+                        } else {
+                            alert('Please select a payment method');
+                        }
+                    }}
+                    disabled={!selectedPaymentMethod}
+                >
+                    Confirm Payment
+                </button>
+                <button 
+                    className="modal-btn close-modal-btn"
+                    onClick={() => setShowPaymentModal(false)}
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+)}
             </div>
         </PayPalScriptProvider>
     );

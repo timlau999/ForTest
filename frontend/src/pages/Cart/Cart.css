@@ -106,3 +106,111 @@
       justify-content: start;
   }
 }
+
+.payment-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.payment-modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 350px;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-methods-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.payment-method-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-method-option:hover {
+  border-color: #4CAF50;
+  transform: translateY(-2px);
+}
+
+.payment-method-option.selected {
+  border-color: #4CAF50;
+  background-color: #f0fff0;
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.2);
+}
+
+.payment-method-option img {
+  width: 60px;
+  height: 40px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.modal-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid transparent;
+  color: white;
+}
+
+.confirm-payment-btn {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+
+.confirm-payment-btn:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.confirm-payment-btn:disabled {
+  background-color: #e0f2e9;
+  color: #a5d6a7;
+  border-color: #a5d6a7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.close-modal-btn {
+  background-color: #f44336;
+  border-color: #f44336;
+  min-width: 100px;
+}
+
+.close-modal-btn:hover {
+  background-color: #d32f2f;
+  transform: translateY(-2px);
+}
