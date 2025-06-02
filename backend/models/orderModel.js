@@ -2,6 +2,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 import Customer from './customerModel.js';
+import CustomerPointsUsage from './customerPointsUsageModel.js';
 
 const Order = sequelize.define('order', {
   orderId: {
@@ -39,5 +40,6 @@ const Order = sequelize.define('order', {
 });
 
 Order.belongsTo(Customer, { foreignKey: 'customerId' });
+Order.hasMany(CustomerPointsUsage, { foreignKey: 'orderId' });
 
 export default Order;

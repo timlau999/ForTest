@@ -44,7 +44,7 @@ const StoreContextProvider = (props) => {
             }
         };
 
-        const fetchUserPoints = async () => {
+/*        const fetchUserPoints = async () => {
             if (customerId) {
                 try {
                     const response = await axios.post(`${backendUrl}/api/points/get`, { customerId });
@@ -56,9 +56,9 @@ const StoreContextProvider = (props) => {
                 }
             }
         };
-
+*/
         fetchMenuItems();
-        fetchUserPoints();
+//        fetchUserPoints();
     }, [backendUrl, customerId]);
 
     const fetchtable = async () => {

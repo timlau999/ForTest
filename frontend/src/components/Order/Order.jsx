@@ -46,34 +46,37 @@ const Order = ({ backendUrl }) => {
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {orders.length > 0 ? (
                 <div>
-                    {orders.map((order) => (
-                        <div key={order.orderId} className="order-item">
-                            <p>Order ID: {order.orderId}</p>
-                            <p>Order Date: {order.orderDate}</p>
-                            <p>Order Status: {order.orderStatus}</p>
-                            <p>Total Amount: ${order.totalAmount}</p>
-                            <p>Payment Status: {order.paymentStatus}</p>
-                            <p>Points Used: {order.pointsUsed || 0} pts</p>
-                            <h3>Order Items</h3>
-                                 <div className="order-item-items">
-                                {order.orderItems && order.orderItems.length > 0 ? (
-                                    order.orderItems.map((item) => (
-                                        <div key={item.orderItemId} className="order-item-card">
-                                            <img src={`/menuItem_${item.menuItemId}.png`} alt={item.MenuItem?.name || 'unknown'} />
-                                            <div className="order-item-info">
-                                                <p>Item Name: {item.MenuItem?.name || 'unknown'}</p>
-                                                <p>Quantity: {item.quantity}</p>
-                                                <p>Unit Price: ${item.unitPrice}</p>
-                                                <p>Total Price: ${item.totalPrice}</p>
+                    {orders.map((order) => {
+                        const totalUsedPoints = (order.customer_points_usages || []).reduce((sum, usage) => sum + (usage.usedPoints || 0), 0);
+                        return (
+                            <div key={order.orderId} className="order-item">
+                                <p>Order ID: {order.orderId}</p>
+                                <p>Order Date: {order.orderDate}</p>
+                                <p>Order Status: {order.orderStatus}</p>
+                                <p>Total Amount: ${order.totalAmount}</p>
+                                <p>Payment Status: {order.paymentStatus}</p>
+                                <p>Points Used: {totalUsedPoints} pts</p>
+                                <h3>Order Items</h3>
+                                <div className="order-item-items">
+                                    {order.orderItems && order.orderItems.length > 0 ? (
+                                        order.orderItems.map((item) => (
+                                            <div key={item.orderItemId} className="order-item-card">
+                                                <img src={`/menuItem_${item.menuItemId}.png`} alt={item.MenuItem?.name || 'unknown'} />
+                                                <div className="order-item-info">
+                                                    <p>Item Name: {item.MenuItem?.name || 'unknown'}</p>
+                                                    <p>Quantity: {item.quantity}</p>
+                                                    <p>Unit Price: ${item.unitPrice}</p>
+                                                    <p>Total Price: ${item.totalPrice}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No items in this order</p>
-                                )}
+                                        ))
+                                    ) : (
+                                        <p>No items in this order</p>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             ) : (
                 <p style={{ fontSize: '18px', color: '#747474' }}>No order now</p>

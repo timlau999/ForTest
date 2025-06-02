@@ -4,6 +4,8 @@ import OrderItem from '../models/orderItemModel.js';
 import Customer from '../models/customerModel.js';
 import MenuItem from '../models/menuItemModel.js';
 import Payment from '../models/paymentModel.js';
+import CustomerPoints from '../models/customerPointsModel.js';
+import CustomerPointsUsage from '../models/customerPointsUsageModel.js';
 
 const placeOrder = async (req, res) => {
     try {
@@ -35,13 +37,31 @@ const placeOrder = async (req, res) => {
             });
         }
 
-        if (paymentMethodId!== 1) { // If not PayPal
+        if (paymentMethodId!== 1) { 
             await newOrder.update({ paymentStatus: 'Paid' });
             await Payment.create({
                 orderId,
                 paymentMethodId,
                 paymentDate: new Date()
             });
+        }
+
+        if (pointsToUse > 0) {
+            const pointsRecord = await CustomerPoints.findOne({
+                where: { customerId }
+            });
+
+            if (pointsRecord) {
+                await CustomerPointsUsage.create({
+                    orderId,
+                    pointsId: pointsRecord.pointsId,
+                    usageDate: new Date(),
+                    usedPoints: pointsToUse
+                });
+
+                pointsRecord.points -= pointsToUse;
+                await pointsRecord.save();
+            }
         }
 
         res.json({ success: true, message: 'Order placed successfully', orderId: newOrder.get('orderId') });
@@ -66,6 +86,10 @@ const getOrdersByCustomerId = async (req, res) => {
                             attributes: ['name'] 
                         }
                     ]
+                },
+                {
+                    model: CustomerPointsUsage,
+                    attributes: ['usedPoints']
                 }
             ]
         });

@@ -41,7 +41,8 @@ const Cart = () => {
                 setLoading(false);
             } catch (err) {
                 console.error(err);
-                setError('Error fetching points');
+                setUserPoints(0);
+                setError(null);
                 setLoading(false);
             }
         };
@@ -59,7 +60,7 @@ const Cart = () => {
                 }
 
                 const data = await response.json();
-                // 为每种支付方式添加对应的图片路径
+ 
                 const methodsWithImages = data.paymentMethods.map(method => {
                     return {
                         ...method,
@@ -75,33 +76,6 @@ const Cart = () => {
         fetchPoints();
         fetchPaymentMethods();
     }, [customerId, backendUrl, token]);
-
-    const handleSubmitPoints = async () => {
-        if (!pointsToUse || pointsToUse <= 0) return;
-        
-        try {
-            const response = await fetch(`${backendUrl}/api/points/${customerId}/use`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ pointsToUse: parseInt(pointsToUse) })
-            });
-            
-            const data = await response.json();
-            if (data.success) {
-                setUserPoints(data.points);
-                setPointsToUse('');
-                alert('Points used successfully');
-            } else {
-                alert(data.message || 'Failed to use points');
-            }
-        } catch (err) {
-            console.error(err);
-            alert('Error using points');
-        }
-    };
 
     const totalAmount = getTotalCartAmount();
     const maxPointsToUse = userPoints; 
@@ -135,7 +109,7 @@ const Cart = () => {
         setSelectedPaymentMethod(method);
         setShowPaymentModal(false);
         
-        if (method.paymentMethodId === 1) { // PayPal
+        if (method.paymentMethodId === 1) { 
             setShowPayPal(true);
         } else {
             placeOrder(method.paymentMethodId);
@@ -159,6 +133,30 @@ const Cart = () => {
     };
 
     const placeOrder = async (paymentMethodId) => {
+        if (pointsValue > 0) {
+            try {
+                const response = await fetch(`${backendUrl}/api/points/${customerId}/use`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ pointsToUse: pointsValue })
+                });
+                
+                const data = await response.json();
+                if (!data.success) {
+                    alert(data.message || 'Failed to use points');
+                    return;
+                }
+                setUserPoints(data.points);
+            } catch (err) {
+                console.error(err);
+                alert('Error using points');
+                return;
+            }
+        }
+
         try {
             const response = await fetch(`${backendUrl}/api/order/place`, {
                 method: 'POST',
@@ -261,7 +259,6 @@ const Cart = () => {
                                     min="0"
                                     max={maxPointsToUse}
                                 />
-                                <button onClick={handleSubmitPoints}>Submit</button>
                             </div>
                             <div style={{ marginTop: '10px' }}>
                                 {loading ? (

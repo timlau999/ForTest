@@ -1,3 +1,4 @@
+// ForTest/backend/controllers/pointsController.js
 import CustomerPoints from '../models/customerPointsModel.js';
 
 export const getCustomerPoints = async (req, res) => {
@@ -38,7 +39,7 @@ export const usePoints = async (req, res) => {
         pointsRecord.points -= pointsToUse;
         await pointsRecord.save();
         
-        res.status(200).json({ success: true, points: pointsRecord.points });
+        res.status(200).json({ success: true, points: pointsRecord.points, pointsId: pointsRecord.pointsId });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Server error' });
