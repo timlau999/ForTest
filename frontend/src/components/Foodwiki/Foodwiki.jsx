@@ -9,8 +9,7 @@ const Foodwiki = () => {
     const [logo, setLogo] = useState(assets.OpenfoodfactsLogo);
     const onMove = () => {setLogo(assets.OpenfoodfactsTitle);}
     const onLeave = () => {setLogo(assets.OpenfoodfactsLogo);}
-    const onClick = () => {setIsOpen(!isOpen);}
-
+    
     const [term, setTerm] = useState('');
     const [result, setResult] = useState(null);
     const [foodDetail, setFoodDetail] = useState(null);
@@ -54,7 +53,7 @@ const Foodwiki = () => {
     
     return (
         <div className="foodwiki-logo">
-        <img src={logo} onClick={onClick} onMouseMove={onMove} onMouseLeave={onLeave} alt="Foodwiki Logo" className="foodwiki-logo" />
+        <img src={logo} onClick={() => setIsOpen(!isOpen)} onMouseMove={onMove} onMouseLeave={onLeave} alt="Foodwiki Logo" className="foodwiki-logo" />
           <div className={`foodwiki-window ${isOpen ? 'show' : ''}`}>
             <h3>Spoonacular API</h3>
             <input className="foodwiki-window-input" value={term} onChange={e => setTerm(e.target.value)} placeholder="Search food..." />
@@ -80,12 +79,12 @@ const Foodwiki = () => {
                       <h4>Nutrition Info.:</h4>
                       {foodDetail2 && (
                         <div className="openfood-detail-item">
-                          <p>Weight per serving: {foodDetail2.amount}{foodDetail2.unit}</p>
+                          <p>Weight per serving: {foodDetail2.amount} {foodDetail2.unit}</p>
                         </div>
                       )}
                     {foodDetail.map((item, index) => (
                         <div className="openfood-detail-item" key={index}>
-                          <p>{item.name}: {item.amount}{item.unit}, {item.percentOfDailyNeeds}% of daily need </p>
+                          <p>{item.name}: {item.amount} {item.unit}, {item.percentOfDailyNeeds} % of daily need </p>
                         </div>
                       ))}
                     

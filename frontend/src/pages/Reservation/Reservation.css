@@ -1,13 +1,20 @@
 .table-list-container {
     display: flex;
-    justify-content: normal;
-    align-items: center;
-    text-align: center;
     gap: 30px;
-    margin: 20px 0px;
-    margin: auto;
-    border-radius: 15px;
     transition:0.3s ;
     animation: fadeIn 1s;
     flex-wrap: wrap;
+}
+
+.reservation-form{
+    padding: 10px 10px;
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 0px 3px rgba(0, 0, 0, 0.2);
+    width: fit-content;
+}
+
+.reservation-form:hover {
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgb(255, 216, 186);
 }

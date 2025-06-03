@@ -1,17 +1,118 @@
-.table-container {
-    background-color:rgb(250, 176, 106);
-    border-radius: 15px;
+.table-state-container {
+    display: flex;
     
 }
 
-.reserveButton {
-    background-color: #04AA6D; /* Green */
+.table-container {
+    border-radius: 15px;
     border: none;
-    color: white;
+    width:max-content;
+    height:max-content;
+    width: auto;
+    display: grid;
+    grid-template-rows: min-content;
+    box-shadow: 0 0px 3px rgba(0, 0, 0, 0.2);
+}
+.table-container:hover {
+    box-shadow: 0 0px 3px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgb(255, 216, 186);
+}
+
+.table-info{
+    /*background-image: url("../../assets/chair_office.png");*/
+    background-repeat:no-repeat;
+    background-size:auto 50%;
+    background-position: center;
+    background-color: none;
+    text-align: center;
+    border-radius: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    padding: 10px 10px;
+    width:auto;
+    box-shadow: 0 0px 3px rgba(0, 0, 0, 0.2);
+    color:none;
+}
+.table-info:hover {
+    border: 1px solid rgb(255, 216, 186);
+}
+
+.button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: min-content;
+}
+
+.reserveButton {
+    background-color:white;
+    color:none;
+    border: 1px solid ;
     padding: 5px 10px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     border-radius: 20px;
+    margin: 5px 0px;
+    width: auto;
+}
+
+.reserveButton:hover {
+    background-color: #04AA6D;
+    border: none;
+    color: white;
+    border: 2px solid antiquewhite;
+    transition: 0.1s;
+}
+
+.table-timeslot-tilte{
+    text-decoration: underline;
+}
+
+.table-timeslot-close{
+    padding: 2px 2px;
+    border:  none;
+}
+.table-timeslot-close:hover {
+    background-color:darkgray;
+    border: none;
+    color: white;
+    border-radius: 15px;
+    transition: 0.1s;
+}
+.table-timeslot-close-container{
+    display: flex;
+    border: none;
+    justify-content: right;
+}
+
+.table-timeslot{
+    display: none;
+    border: none;
+    border-radius: 15px;
+    width: auto;
+    padding: 10px 10px;
+    box-shadow: 0 0px 3px rgba(0, 0, 0, 0.2);
+    margin: 0px 0px;
+    text-align: center;
+}
+.table-timeslot.show {
+    display: block;
+}
+.table-timeslot:hover {
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgb(255, 216, 186);
+}
+
+.timeslot{
+    padding: 2px 2px;
+}
+
+.timeslot:hover {
+    background-color: #04AA6D;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    border: 2px solid #04AA6D;
+    transition: 0.1s;
 }
