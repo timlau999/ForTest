@@ -101,4 +101,47 @@ const getOrdersByCustomerId = async (req, res) => {
     }
 };
 
-export { placeOrder, getOrdersByCustomerId };
+const getAllOrders = async (req, res) => {
+    try {
+        const orders = await Order.findAll({
+            include: [
+                {
+                    model: OrderItem,
+                    as: 'orderItems',
+                    include: [
+                        {
+                            model: MenuItem,
+                            attributes: ['name'] 
+                        }
+                    ]
+                },
+                {
+                    model: CustomerPointsUsage,
+                    attributes: ['usedPoints']
+                }
+            ]
+        });
+
+        res.json({ success: true, data: orders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error fetching all orders' });
+    }
+};
+
+const updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId, status } = req.query;
+    const order = await Order.findOne({ where: { orderId } });
+    if (!order) {
+      return res.json({ success: false, message: 'Order not found' });
+    }
+    await order.update({ orderStatus: status });
+    res.json({ success: true, message: 'Order status updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: 'Error updating order status' });
+  }
+};
+
+export { placeOrder, getOrdersByCustomerId, getAllOrders, updateOrderStatus };
