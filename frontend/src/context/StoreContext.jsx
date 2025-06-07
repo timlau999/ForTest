@@ -15,7 +15,8 @@ const StoreContextProvider = (props) => {
     const customerId = localStorage.getItem('customerId');
     const [userId, setUserId] = useState(null);
     const [username, setUsername] = useState(null);
-
+    const [reservationF_list, setReservationF_list] = useState([]);
+    
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
@@ -138,7 +139,7 @@ const StoreContextProvider = (props) => {
         localStorage.removeItem('token');
     };
 
-    const addReservation = async (userId, tableId) => {
+    const addReservation = async (userId, tableId, timeslot) => {
         if (!userId) {
             console.error('User ID is not available');
             alert('Please login to reserve a table');
@@ -148,15 +149,16 @@ const StoreContextProvider = (props) => {
             const response = await axios.post(`${backendUrl}/api/table/addReservation`, {
                 userId,
                 tableId,
+                timeslot
             });
             console.log('API response:', response.data); 
             if (response.data.success) {
                 console.log('Reservation added successfully:', response.data.data);
                 alert('Reservation added successfully');
-                updateTableState(tableId);
+                //updateTableState(tableId);
             } else {
                 console.log('Failed to add reservation:', response.data.message);
-                toast.error(response.data.message);
+                alert(response.data.message);
             }
         } catch (error) {
             console.error('Error add new reservation:', error);
@@ -181,12 +183,14 @@ const StoreContextProvider = (props) => {
         }
     };
 
-    const removeReservation = async (reservationId) => {
+    const removeReservationF = async (userId) => {
         try {
-            const response = await axios.delete(`${backendUrl}/api/table/${reservationId}`);
-            console.log('API response:', response.data); 
+            const response = await axios.post(`${backendUrl}/api/table/removeReservationF`,{
+               userId 
+            });
             if (response.data.success) {
                 console.log('Reservation removed successfully:', response.data.data);
+                alert('Reservation removed successfully');
             } else {
                 console.log('Failed to remove reservation:', response.data.message);
             }
@@ -194,6 +198,26 @@ const StoreContextProvider = (props) => {
             console.error('Error removing reservation:', error);
         }
     };
+
+    const getReservationF = async () => {
+        const userId = localStorage.getItem('userId');
+        try{
+            const response = await axios.post(`${backendUrl}/api/table/getReservationF`,{
+                userId
+            });
+            if (response.data.success) {
+              setReservationF_list(response.data.data);
+            } else {
+              console.log(response.data.message);
+            }
+        }catch(error){
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        getReservationF();
+    }, []);
 
     const contextValue = {
         menuItem_list,
@@ -210,9 +234,11 @@ const StoreContextProvider = (props) => {
         clearAuthToken,
         table_list,
         addReservation,
-        removeReservation,
+        removeReservationF,
         userId,
         username,
+        getReservationF,
+        reservationF_list,
     };
 
     return (

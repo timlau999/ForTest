@@ -12,12 +12,13 @@
     position: fixed;
     bottom: 115px;
     right: 80px;
-    width: 350px;
-    height: 500px;
+    width: 250px;
+    height: 400px;
     background-color:rgb(255, 255, 254);
     border-radius: 10px;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
     padding: 5px 5px;
+    overflow:scroll;
 }
 .foodwiki-window.show{
     display: block;
@@ -31,6 +32,12 @@
     flex-direction: row;
     justify-content:space-around;
     align-items: center;
+    overflow: scroll;
+    height: 35%;
+}
+
+.openfood-item-image{
+    color: black;
 }
 
 .openfood-item{
@@ -39,6 +46,8 @@
     border-radius: 10px;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
     text-align: center;
+    text-wrap: nowrap;
+    color: #525252;
 }
 
 .openfood-item:hover{
@@ -65,19 +74,24 @@
     margin-right: 2px;
 }
 
-.openfood-detail-container{
-    width: 335px;
-    height: 300px;
-    overflow:scroll;
-}
-
-.openfood-detail-container:hover{
-    border: 3px solid rgb(109, 171, 109);
-}
+.openfood-detail{
     
+    
+}
 
 .openfood-detail-item{
-    display: inline;
+    display: inline-flex;
     text-align: left;
-    text-wrap: nowrap;    
+    text-wrap: wrap;
+    margin: 3px 1px;
+    color: #525252;  
+}
+
+@media (min-width: 750px) {
+
+    .foodwiki-window {
+        width: 400px;
+        height: 500px;
+    }
+
 }

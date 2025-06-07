@@ -27,10 +27,10 @@ const Login = ({ url }) => {
         setAdmin(true);
         setUsername(response.data.username);
         setUserId(response.data.id);
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("admin", true);
-        localStorage.setItem("username", response.data.username);
-        localStorage.setItem("userId", response.data.id);
+        sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("admin", true);
+        sessionStorage.setItem("username", response.data.username);
+        sessionStorage.setItem("userId", response.data.id);
         toast.success("Login Successfully");
         navigate("/add")
       }else{
@@ -41,7 +41,7 @@ const Login = ({ url }) => {
     }
   };
   useEffect(()=>{
-    if(admin && token){
+    if(sessionStorage.getItem("admin") && sessionStorage.getItem("token")){
        navigate("/add");
     }
   },[])

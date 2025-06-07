@@ -58,7 +58,7 @@
     padding: 5px 5px;
     background-color: none;
     border-radius: 15px;
-    display:inline-flex;
+    display: inline;
     animation: fadeIn 1s;
     justify-content: normal;
     align-items: center;
@@ -73,4 +73,13 @@
 
 .All-Reservation-list{
     margin: 5px 0px;
+}
+.search-reservation-bar{
+    border: none solid 1px;
+    background-color: none;
+    border-radius: 10px;
+}
+
+.search-reservation-bar-datepicker{
+     border-radius: 10px;
 }

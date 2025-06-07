@@ -2,16 +2,18 @@
    width: 100%;
    position: sticky;
    top: 0;
-   z-index: 1000;
+   z-index: 999;
    background-color: white;
    flex-wrap: none;
    display:flex;
    justify-content:space-between;
    align-items: center;
+   border: none 1px solid;
 }
  .navbar .log{
     width:120px;
     height: 86px;
+    border: none 1px solid;
  }
  .navbar-menu{
    display: flex;
@@ -20,13 +22,15 @@
    gap:20px;
    color:#49557e;
    font-size: 18px;
+   text-wrap: nowrap;
  }
 
 .showmenubar{
    display: none;
-    position: fixed;
+    position:absolute;
       top: 70px;
-      width: 80%;
+      inset-inline-start: 30%;
+      width: 40%;
       justify-items: center;
       text-align: center;
       border: none 1px solid;
@@ -34,6 +38,8 @@
       padding: 5px 5px;
       background-color: white;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      color: #49557e;
+      
  }
  .showmenubar.show{
     display: block;
@@ -42,14 +48,17 @@
  .navbar-menu-logo-img{
     width: 20px;
     height: 20px;
-    margin: 0 15px;
     display: none;
+    border: none 1px solid;
+    cursor: pointer;
  }
 
  .navbar-right{
     display: flex;
     align-items: center;
     gap:40px;
+    border: none 1px solid;
+    padding: 0 5px;
  }
  .navbar button{
     background: transparent;
@@ -60,7 +69,7 @@
     border-radius: 50px;
     cursor: pointer;
     transition: 0.3s;
-
+   text-wrap: nowrap;
  }
  .navbar button:hover{
     background: tomato;
@@ -112,8 +121,8 @@
       width:120px ;
    }
    .navbar-menu{
-     gap:15px;
-     font-size: 16px;
+     gap:12px;
+     font-size: 15px;
    }
    .navbar-right{
      gap:20px;
@@ -127,6 +136,11 @@
       padding:7px 20 px;
       font-size: 15px;
    }
+
+   .navbar button{
+      width: 50%;
+      padding: 10px 15px;
+   }
  }
  @media (max-width:750px){
    
@@ -136,6 +150,29 @@
 
    .navbar-menu-logo-img{
       display: flex;
+   }
+
+   .navbar .log{
+      width: 100px;
+      height: 71px;
+   }
+
+   .navbar-menu-logo-img{
+      width: 20px;
+   }
+
+   .navbar-right{
+      max-width: 150px;
+      gap: 15px;
+   }
+
+   .navbar{ 
+      justify-content: none;
+   }
+
+   .navbar button{
+      width: 50%;
+      padding: 10px 15px;
    }
    
  }

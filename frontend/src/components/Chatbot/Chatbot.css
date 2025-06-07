@@ -41,3 +41,12 @@
 .chatbot-window:hover {
     border: 3px solid #90c6ff;
 }
+
+@media (max-width: 750px) {
+
+    .chatbot-window {
+        width: 250px;
+        height: 400px;
+    }
+
+}

@@ -1,6 +1,6 @@
 .table-state-container {
     display: flex;
-    
+    margin: 10px 0px;
 }
 
 .table-container {
@@ -53,7 +53,7 @@
     text-decoration: none;
     font-size: 14px;
     border-radius: 20px;
-    margin: 5px 0px;
+    margin: 5px 5px;
     width: auto;
 }
 

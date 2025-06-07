@@ -9,10 +9,7 @@ const Navbar = () => {
   const navigate=useNavigate();
   const {token, admin, setAdmin, setToken, username, userId, setUsername, setUserId } = useContext(StoreContext);
   const logout=()=>{
-    localStorage.removeItem("token");
-    localStorage.removeItem("admin");
-    localStorage.removeItem("username");
-    localStorage.removeItem("userId");
+    sessionStorage.clear();
     setUsername("");
     setUserId("");
     setToken("");
@@ -25,8 +22,8 @@ const Navbar = () => {
       <img className="logo" src={assets.logo} alt="Restaruant Logo" />
       
       {token && admin ? (
-        <p className="login-conditon" onClick={logout}><label className="username">User: {username}  ID: {userId} </label>
-        <button className="logoutButton">Logout</button></p>
+        <p className="login-conditon"><label className="username">User: {username}  ID: {userId} </label>
+        <button className="logoutButton" onClick={logout}>Logout</button></p>
       ) : (
         <p className="login-conditon" onClick={()=>navigate("/")}>Login</p>
       )}

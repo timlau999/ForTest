@@ -15,17 +15,17 @@ const StoreContextProvider = (props) => {
 
   useEffect(() => {
     async function loadData() {
-      if (localStorage.getItem("token")) {
-        setToken(localStorage.getItem("token"));
+      if (sessionStorage.getItem("token")) {
+        setToken(sessionStorage.getItem("token"));
       }
-      if (localStorage.getItem("admin")) {
-        setAdmin(localStorage.getItem("admin"));
+      if (sessionStorage.getItem("admin")) {
+        setAdmin(sessionStorage.getItem("admin"));
       }
-      if (localStorage.getItem("userId")) {
-        setUserId(localStorage.getItem("userId"));
+      if (sessionStorage.getItem("userId")) {
+        setUserId(sessionStorage.getItem("userId"));
       }
-      if (localStorage.getItem("username")) {
-        setUsername(localStorage.getItem("username"));
+      if (sessionStorage.getItem("username")) {
+        setUsername(sessionStorage.getItem("username"));
       }
     }
     loadData();
@@ -48,19 +48,19 @@ const StoreContextProvider = (props) => {
 
   useEffect(() => {
     fetchtable();
-  }, []);
+  }, [/*table_list*/]);
 
-  const updateTableState = async (tableId) => {
+  const updateTableState = async (tableId, state) => {
         try {
             const response = await axios.post(`${url}/api/table/updateTableState`, {
                 tableId,
-                state: 'available'
+                state
             });
             console.log('API response:', response.data); 
             if (response.data.success) {
                 console.log('Table state updated successfully:', response.data.data);
                 toast.success('Table state updated successfully');
-                fetchtable(); // Refresh the table list after updating
+                fetchtable();
             } else {
                 console.log('Failed to update table state:', response.data.message);
             }

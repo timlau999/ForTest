@@ -3,7 +3,8 @@ import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize('fyp-db', 'admin1', 'FYPdb2025', {
   host: 'hhh-fyp2025.mysql.database.azure.com',
-  dialect: 'mysql'
+  dialect: 'mysql',
+  timezone: '+08:00',
 });
 
 export const connectDB = async () => {

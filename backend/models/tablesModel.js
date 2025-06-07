@@ -19,13 +19,8 @@ const Tables = sequelize.define(
         allowNull: false,
     },
     tablestates: {
-      type: DataTypes.ENUM("available", "occupied", "reserved"),
+      type: DataTypes.ENUM("available", "unavailable", "occupied", "reserved"),
       defaultValue: "available",
-    },
-    tableupdate: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      onUpdate: DataTypes.NOW,
     },
   },
   

@@ -1,21 +1,64 @@
 import tablesModel from '../models/tablesModel.js';
 import reservationModel from '../models/reservationModel.js';
 import { response } from 'express';
+import {Op, fn, col, where} from 'sequelize';
 
 const getTable = async (req, res) => {
     try {
-        const getTables = await tablesModel.findAll();
-        res.json({ success: true, data: getTables });
+        const response = await tablesModel.findAll();
+        res.json({ success: true, data: response });
     } catch (error) {
         console.error('Error fetching tables:', error);
         res.json({ success: false, message: 'Server error' });
     }
 }
 
-const getReservation = async (req, res) => {
+const getReservationA = async (req, res) => {
+    const {inputuserId, selectedDate} = req.body;
+
     try {
-        const getReservation = await reservationModel.findAll();
-        res.json({ success: true, data: getReservation });
+        const conditions = {
+            [Op.or]: []
+        };
+        if (inputuserId) {
+            conditions[Op.or].push({ userId : inputuserId});
+        }
+        if (selectedDate) {
+            conditions[Op.or].push(
+                where(fn('DATE', col('timeslot')), selectedDate)
+            );
+        }
+        if (conditions[Op.or].length === 0) {
+            return res.json({ success: false, message: 'Please provide userId or selectedDate.' });
+        }
+
+        const response = await reservationModel.findAll({
+            where: conditions,
+            order: [['timeslot', 'ASC']]
+        });
+
+        if (response.length > 0){
+            return res.json({ success: true, data: response, message: "Done" });
+        }else{
+            console.log(conditions);return res.json({ success: false, message: "No reservation on this day" });
+            
+        }
+    } catch (error) {
+        console.error('Error fetching reservations:', error);
+        res.json({ success: false, message: 'Server error' });
+    }
+}
+
+const getReservationF = async (req, res) => {
+    const {userId} = req.body;
+    try {
+        const response = await reservationModel.findOne({
+            where: {
+                userId: userId,
+                reservationStatus: 'pending',
+            },
+        });
+        res.json({ success: true, data: response });
     } catch (error) {
         console.error('Error fetching reservations:', error);
         res.json({ success: false, message: 'Server error' });
@@ -23,21 +66,53 @@ const getReservation = async (req, res) => {
 }
 
 const addReservation = async (req, res) => {
-    const {userId, tableId} = req.body;
+    const {userId, tableId, timeslot} = req.body;
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1;
+    const currentDate = new Date().getDate();
+
     try {
-        const existingReservation = await tablesModel.findOne({
-            where: {tableId: tableId, tablestates: 'reserved'},
-        });
-            if (existingReservation) {
-                return res.json({ success: false, message: 'Table is already reserved' });
-            }
-            else{
-                const newReservation = await reservationModel.create({
+        
+        const alreadyReserved = await reservationModel.findOne({
+            where: {
                 userId: userId,
+                reservationStatus: 'pending',
+            },
+        });
+
+        if (alreadyReserved) {
+            return res.json({ success: false, message: 'You already have a pending reservation' });
+        }else{
+            const existingReservation = await reservationModel.findOne({
+            where: {
                 tableId: tableId,
+                reservationStatus: 'pending', 
+                timeslot: `${currentYear}-${currentMonth}-${currentDate} ${timeslot}:00:00`, 
+            },
+            });
+            if (existingReservation) {
+            return res.json({ success: false, message: 'Table is already reserved' });
+            }else{
+
+                const checktablestates = await tablesModel.findOne({
+                    where: {
+                        tableId: tableId,
+                        tablestates : "available"
+                    }
                 });
-                res.json({ success: true, data: newReservation });
+                if (!checktablestates){
+                    return res.json({ success: false, message: 'Table is not available' });
+                }else{
+                    const response = await reservationModel.create({
+            userId: userId,
+            tableId: tableId,
+            timeslot: `${currentYear}-${currentMonth}-${currentDate} ${timeslot}:00:00`,
+            });
+            res.json({ success: true, data: response });
             }
+            }
+        }
+
         }catch (error) {
         console.error('Error adding reservation:', error);
         res.json({ success: false, message: 'Server error' });
@@ -48,15 +123,35 @@ const addReservation = async (req, res) => {
 const updateTableState = async (req, res) => {
     const { tableId, state } = req.body;
     try {
-        const updatedTable = await tablesModel.update(
+        const response = await tablesModel.update(
             { tablestates: state },
             { where: { tableId: tableId } }
         );
-        res.json({ success: true, data: updatedTable });
+        res.json({ success: true, data: response });
     } catch (error) {
         console.error('Error updating table state:', error);
         res.json({ success: false, message: 'Server error' });
     }
 }
 
-export {getTable, addReservation, updateTableState, getReservation};
+const removeReservationF = async (req, res) =>{
+    const {userId} = req.body;
+    try{
+        const response = await reservationModel.update(
+            {reservationStatus: 'cancelled'},
+            {
+                where:{
+                    userId: userId,
+                    reservationStatus: 'pending',
+                }
+            }
+        );
+        res.json({ success: true, data: response });
+    }
+    catch (error) {
+        console.error('Error cancel reservation:', error);
+        res.json({ success: false, message: 'Server error' });
+    }
+}
+
+export {getTable, addReservation, updateTableState, getReservationA, getReservationF, removeReservationF};

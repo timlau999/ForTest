@@ -8,7 +8,7 @@
             params: {
             apiKey: '34193f37f9a94e108526c1facb04e52d',
             query: term,
-            number: 2,
+            number: 3,
             },
         });
             console.log(response.data.results);

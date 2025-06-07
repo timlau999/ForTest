@@ -16,6 +16,7 @@ const Reservation = sequelize.define(
       references: {
         model: User,
         key: "userId",
+        allowNull: false,
       },
     },
     tableId: {
@@ -23,28 +24,21 @@ const Reservation = sequelize.define(
       references: {
         model: Tables,
         key: "tableId",
+        allowNull: false,
       },
     },
-    reservationTime: {
+    timeslot: {
       type: DataTypes.DATE,
-      
+      allowNull: false,
     },
     reservationStatus: {
       type: DataTypes.ENUM("pending", "confirmed", "cancelled"),
       defaultValue: "pending",
     },
-    reservationUpdate: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      onUpdate: DataTypes.NOW,
-    },
   },
   {
-    timestamps: true, // Enable timestamps
+    timestamps: true,
   }
 );
-
-Tables.belongsToMany(User, {through: Reservation,});
-User.belongsToMany(Tables, {through: Reservation,});
 
 export default Reservation;

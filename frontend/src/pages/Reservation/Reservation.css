@@ -12,9 +12,32 @@
     border: none;
     box-shadow: 0 0px 3px rgba(0, 0, 0, 0.2);
     width: fit-content;
+    margin: 10px 0px;
 }
 
 .reservation-form:hover {
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
     border: 2px solid rgb(255, 216, 186);
+}
+
+.your-reservation-button {
+    background-color:white;
+    color:none;
+    border: 1px solid ;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 20px;
+    margin: 5px 5px;
+    width: auto;
+    
+}
+
+.your-reservation-button:hover {
+    background-color: rgb(255, 74, 74);
+    border: none;
+    color: white;
+    border: 2px solid antiquewhite;
+    transition: 0.1s;
 }

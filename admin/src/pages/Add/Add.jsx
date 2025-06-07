@@ -49,7 +49,7 @@ const Add = ({url}) => {
     }
   };
   useEffect(()=>{
-    if(!admin && !token){
+    if(!sessionStorage.getItem("admin") && !sessionStorage.getItem("token")){
       toast.error("Please Login First");
        navigate("/");
     }

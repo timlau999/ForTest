@@ -42,7 +42,7 @@ const App = () => {
                     <Route path="/" element={<Home backendUrl={backendUrl} />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/order" element={<Order backendUrl={backendUrl} />} />
-                    <Route path="/reservation" element={<Reservation />} />
+                    <Route path="/reservation" element={<Reservation backendUrl={backendUrl}/>} />
                 </Routes>
             </div>
             <Footer />

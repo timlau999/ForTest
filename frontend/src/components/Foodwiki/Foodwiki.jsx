@@ -59,20 +59,20 @@ const Foodwiki = () => {
             <input className="foodwiki-window-input" value={term} onChange={e => setTerm(e.target.value)} placeholder="Search food..." />
             <button className="openfood-item-button" onClick={()=>search(term)} >Search</button>
             
-            <h3>Search Results:</h3>
+            
             {result && (
                 <div className="openfood-result">
                     {result.map((item, index) => (
                         <div className="openfood-item" key={index}>
-                          <img src={item.image} alt={item.name} />
+                          <p><img className="openfood-item-image" src={item.image} alt={item.name} /></p>
                           <p>{item.name}</p>
-                          <button className="openfood-item-button" onClick={()=>showFoodDetail(item.id)}>Choose</button>
+                          <p><button className="openfood-item-button" onClick={()=>showFoodDetail(item.id)}>Choose</button></p>
                         </div>
                       ))}
                 </div>
             )}
             
-            <div className="openfood-detail-container">
+            
             
             {foodDetail && (
                 <div className="openfood-detail">
@@ -90,7 +90,7 @@ const Foodwiki = () => {
                     
                 </div>
             )}
-            </div>
+            
         </div>
         </div>
     );

@@ -1,3 +1,8 @@
+.table-item{
+    display: flex;
+    margin: 10px 0px;
+}
+
 .table-container {
     background-color: none;
     border-radius: 15px;
@@ -27,4 +32,54 @@
 .TableSteteButton:hover {
     border: lightsalmon 2px solid;
     background-color: lightsalmon;
+}
+
+.table-timeslot{
+    display: none;
+    border: none;
+    border-radius: 15px;
+    width: auto;
+    padding: 10px 10px;
+    box-shadow: 0 0px 3px rgba(0, 0, 0, 0.2);
+    margin: 0px 0px;
+    text-align: center;
+}
+.table-timeslot.show {
+    display: block;
+}
+
+.table-timeslot-tilte{
+    text-decoration: underline;
+}
+
+.table-timeslot-close{
+    padding: 2px 2px;
+    border:  none;
+}
+
+.table-timeslot-close:hover {
+    background-color:darkgray;
+    border: none;
+    color: white;
+    border-radius: 15px;
+    transition: 0.1s;
+}
+
+.table-timeslot-close-container{
+    display: flex;
+    border: none;
+    justify-content: right;
+}
+
+.timeslot{
+    padding: 2px 2px;
+}
+
+.timeslot:hover {
+    background-color: #04AA6D;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    border: 2px solid #04AA6D;
+    transition: 0.1s;
 }
