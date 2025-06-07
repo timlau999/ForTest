@@ -201,70 +201,24 @@ const updateUserInfoData = async (req, res) => {
     }
 };
 
-const getAllCustomer = async (_req, res) => {
+const getAllCustomer = async (req, res) => {
     try {
-        const customers = await Customer.findAll({ attributes: ['userId'] });
-        const customerUserIds = customers.map(customer => customer.userId);
+        const page = parseInt(req.body.page) || 1; 
+        const limit = 10;
+        const offset = (page - 1) * limit;
 
-        const allCustomers = await User.findAll({
-            where: {
-                userId: customerUserIds
-            }
+        const allcustomer = await User.findAll({
+            limit,
+            offset
         });
-
-        if (allCustomers.length === 0) {
+        if (!allcustomer || allcustomer.length === 0) {
             return res.json({ success: false, message: 'No customers found' });
         }
-
-        res.json({ success: true, data: allCustomers });
+        res.json({ success: true, data: allcustomer });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: 'Error fetching customers' });
     }
-};
+}
 
-const getAllAdmin = async (_req, res) => {
-    try {
-        const admins = await Admin.findAll({ attributes: ['userId'] });
-        const adminUserIds = admins.map(admin => admin.userId);
-
-        const allAdmins = await User.findAll({
-            where: {
-                userId: adminUserIds
-            }
-        });
-
-        if (allAdmins.length === 0) {
-            return res.json({ success: false, message: 'No admins found' });
-        }
-
-        res.json({ success: true, data: allAdmins });
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: 'Error fetching admins' });
-    }
-};
-
-const getAllStaff = async (_req, res) => {
-    try {
-        const staffs = await Staff.findAll({ attributes: ['userId'] });
-        const staffUserIds = staffs.map(staff => staff.userId);
-
-        const allStaffs = await User.findAll({
-            where: {
-                userId: staffUserIds
-            }
-        });
-
-        if (allStaffs.length === 0) {
-            return res.json({ success: false, message: 'No staffs found' });
-        }
-
-        res.json({ success: true, data: allStaffs });
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: 'Error fetching staffs' });
-    }
-};
-
-export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer, getAllAdmin, getAllStaff };
+export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer };

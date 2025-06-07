@@ -20,7 +20,7 @@ const Account = ({ url }) => {
 
     const fetchAccount = async (page) => {
       try{
-        const response = await axios.post(`${url}/api/user/getAdmin`, {page});
+        const response = await axios.post(`${url}/api/user/getaccount`, {page});
         if (response.data.success) {
           setAccount(response.data.data);
           if (response.data.data.length < 10) {
