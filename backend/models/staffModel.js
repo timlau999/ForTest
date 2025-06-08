@@ -24,5 +24,6 @@ const Staff = sequelize.define('Staff', {
 });
 
 Staff.belongsTo(User, { foreignKey: 'userId' });
+User.hasOne(Staff, { foreignKey: 'userId', sourceKey: 'userId' });
 
 export default Staff;

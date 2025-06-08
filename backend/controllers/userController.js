@@ -207,18 +207,82 @@ const getAllCustomer = async (req, res) => {
         const limit = 10;
         const offset = (page - 1) * limit;
 
-        const allcustomer = await User.findAll({
+        const allCustomers = await User.findAll({
             limit,
-            offset
+            offset,
+            include: [
+                {
+                    model: Customer,
+                    required: true // 只返回有對應 customer 記錄的 user
+                }
+            ]
         });
-        if (!allcustomer || allcustomer.length === 0) {
+
+        if (!allCustomers || allCustomers.length === 0) {
             return res.json({ success: false, message: 'No customers found' });
         }
-        res.json({ success: true, data: allcustomer });
+
+        res.json({ success: true, data: allCustomers });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: 'Error fetching customers' });
     }
 }
 
-export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer };
+const getAllAdmin = async (req, res) => {
+    try {
+        const page = parseInt(req.body.page) || 1;
+        const limit = 10;
+        const offset = (page - 1) * limit;
+
+        const allAdmins = await User.findAll({
+            limit,
+            offset,
+            include: [
+                {
+                    model: Admin,
+                    required: true
+                }
+            ]
+        });
+
+        if (!allAdmins || allAdmins.length === 0) {
+            return res.json({ success: false, message: 'No admins found' });
+        }
+
+        res.json({ success: true, data: allAdmins });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error fetching admins' });
+    }
+};
+
+const getAllStaff = async (req, res) => {
+    try {
+        const page = parseInt(req.body.page) || 1;
+        const limit = 10;
+        const offset = (page - 1) * limit;
+
+        const allStaff = await User.findAll({
+            limit,
+            offset,
+            include: [
+                {
+                    model: Staff,
+                    required: true
+                }
+            ]
+        });
+
+        if (!allStaff || allStaff.length === 0) {
+            return res.json({ success: false, message: 'No staff found' });
+        }
+
+        res.json({ success: true, data: allStaff });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error fetching staff' });
+    }
+};
+
+export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer, getAllAdmin, getAllStaff };

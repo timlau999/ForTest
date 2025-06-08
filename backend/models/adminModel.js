@@ -24,5 +24,6 @@ const Admin = sequelize.define('Admin', {
 });
 
 Admin.belongsTo(User, { foreignKey: 'userId' });
+User.hasOne(Admin, { foreignKey: 'userId', sourceKey: 'userId' });
 
 export default Admin;

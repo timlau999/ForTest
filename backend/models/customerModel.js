@@ -23,5 +23,6 @@ const Customer = sequelize.define('customer', {
 });
 
 Customer.belongsTo(User, { foreignKey: 'userId' });
+User.hasOne(Customer, { foreignKey: 'userId', sourceKey: 'userId' });
 
 export default Customer;
