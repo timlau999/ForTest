@@ -22,10 +22,12 @@ const Navbar = () => {
       <img className="logo" src={assets.logo} alt="Restaruant Logo" />
       
       {token && admin ? (
-        <p className="login-conditon"><label className="username">User: {username}  ID: {userId} </label>
-        <button className="logoutButton" onClick={logout}>Logout</button></p>
+        <div className="login-conditon">
+          <label className="username">User: {username}  ID: {userId} </label>
+          <button className="logoutButton" onClick={logout}>Logout</button>
+        </div>
       ) : (
-        <p className="login-conditon" onClick={()=>navigate("/")}>Login</p>
+        <div className="login-conditon" onClick={()=>navigate("/")}>Login</div>
       )}
       
     </div>

@@ -3,14 +3,10 @@
     justify-content: space-between;
     align-items: center;
     padding: 8px 4%;
-
 }
+
 .navbar .logo{
     width: max(10%,80px);
-}
-
-.login-conditon{
-    font-size: 20px;
 }
 
 .logoutButton{
@@ -36,4 +32,23 @@
     border-radius: 20px;
     color:none;
     font-size: 16px;
+}
+
+@media (max-width:750px) {
+    .navbar{
+    
+    }
+
+    .login-conditon{
+
+    }
+
+    .username{
+    margin: 5px 5px;
+    font-size: 14px;
+    }
+
+    .logoutButton{
+    font-size: 14px;
+    }
 }

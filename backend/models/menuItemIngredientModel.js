@@ -24,10 +24,6 @@ const MenuItemIngredient = sequelize.define('MenuItemIngredient', {
             model: Ingredient,
             key: 'ingredientId'
         }
-    },
-    quantity: {
-        type: DataTypes.DOUBLE,
-        allowNull: false
     }
 }, {
     tableName: 'menuitemingredient',

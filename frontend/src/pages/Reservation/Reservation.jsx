@@ -18,8 +18,8 @@ import axios from "axios";
             <h1>Reservation</h1>
             <div className="reservation-form">
                 <p><label >Your Reservation : {userId? "UserID:" + userId : "Please Login"}</label></p>
-                <p><label >Table : {reservationF_list?.tableId}</label></p>
-                <p><label >Time : {new Date(reservationF_list?.timeslot).toLocaleString()}</label></p>
+                <p><label >Table : {userId? (reservationF_list?.tableId) : "~"}</label></p>
+                <p><label >Time : {userId? new Date(reservationF_list?.timeslot).toLocaleString() : "~"}</label></p>
                 <button className="your-reservation-button" 
                     onClick={()=>{{
                         if(window.confirm("Confirm cancel you reservation?")){

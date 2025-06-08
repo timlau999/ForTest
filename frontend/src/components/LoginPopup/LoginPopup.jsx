@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { assets } from '../../assets/assets';
 import './LoginPopup.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const ALLERGY_OPTIONS = [
-  'No Allergy', 'Dairy', 'Eggs', 'Fish', 'Shellfish', 'Tree Nuts', 'Peanuts', 
-  'Wheat', 'Soy', 'Gluten', 'Sesame', 'Milk', 'Pollen', 'Latex'
-];
 const MEDICAL_CONDITIONS_OPTIONS = [
   'No Medical issue', 'Diabetes', 'Hypertension', 'Heart Disease', 'Asthma', 'Allergies', 
   'Arthritis', 'Depression', 'Anxiety', 'High Cholesterol', 'Thyroid Issues',
@@ -36,6 +32,25 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
     medicalConditions: false,
     dietaryPreference: false
   });
+  const [allergyOptions, setAllergyOptions] = useState([]);
+  const [isLoadingAllergyOptions, setIsLoadingAllergyOptions] = useState(true); 
+
+  useEffect(() => {
+    const fetchAllergyOptions = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/ingredients`);
+        const ingredients = response.data.data;
+        const options = ingredients.map(ingredient => ingredient.name);
+        setAllergyOptions(options);
+      } catch (error) {
+        console.error('Error fetching allergy options:', error);
+      } finally {
+        setIsLoadingAllergyOptions(false);
+      }
+    };
+
+    fetchAllergyOptions();
+  }, [backendUrl]);
 
   const validateLogin = () => {
     const newErrors = {};
@@ -272,23 +287,27 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                     </div>
                     {dropdownOpen.allergy && (
                       <div className="dropdown-options">
-                        {ALLERGY_OPTIONS.map(option => (
-                          <div 
-                            key={option} 
-                            className="option"
-                            onClick={() => {
-                              toggleOption('allergy', option);
-                              toggleDropdown('allergy');
-                            }}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={allergy.includes(option)}
-                              readOnly
-                            />
-                            <span>{option}</span>
-                          </div>
-                        ))}
+                        {isLoadingAllergyOptions ? (
+                          <p>Loading allergy options...</p>
+                        ) : (
+                          allergyOptions.map(option => (
+                            <div 
+                              key={option} 
+                              className="option"
+                              onClick={() => {
+                                toggleOption('allergy', option);
+                                toggleDropdown('allergy');
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={allergy.includes(option)}
+                                readOnly
+                              />
+                              <span>{option}</span>
+                            </div>
+                          ))
+                        )}
                       </div>
                     )}
                   </div>

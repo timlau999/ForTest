@@ -12,16 +12,6 @@ const Ingredient = sequelize.define('Ingredient', {
         type: DataTypes.STRING(100),
         allowNull: false,
         unique: true
-    },
-    unit: {
-        type: DataTypes.STRING(20),
-        allowNull: false
-    },
-    category: {
-        type: DataTypes.STRING(50)
-    },
-    sensitiveSource: {
-        type: DataTypes.STRING(255)
     }
 }, {
     tableName: 'ingredient',

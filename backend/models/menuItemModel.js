@@ -31,13 +31,6 @@ const MenuItem = sequelize.define('MenuItem', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    carbohydrate: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    sensitiveSource: {
-        type: DataTypes.STRING(255)
-    },
     category: {
         type: DataTypes.STRING(255),
         allowNull: false

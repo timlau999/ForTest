@@ -10,10 +10,13 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./components/Login/Login";
 import Reservation from "./pages/Reservation/Reservation";
 import Account from "./pages/Account/Account";
+import StoreContextProvider from './context/StoreContext.jsx';
 
 const App = () => {
   const url = "http://localhost:4000";
+
   return (
+    <StoreContextProvider url={url}>
     <div>
       <ToastContainer />
       <Navbar />
@@ -30,6 +33,7 @@ const App = () => {
         </Routes>
       </div>
     </div>
+    </StoreContextProvider>
   );
 };
 

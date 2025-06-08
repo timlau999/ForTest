@@ -11,7 +11,7 @@ const StoreContextProvider = (props) => {
   const [userId, setUserId] = useState("");
   const [username, setUsername] = useState("");
   const [table_list, setTableList] = useState([]);
-  const url = "http://localhost:4000";
+  const {url} = props;
 
   useEffect(() => {
     async function loadData() {

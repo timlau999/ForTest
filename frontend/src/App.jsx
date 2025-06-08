@@ -12,15 +12,18 @@ import UserAvatar from './components/UserAvatar/UserAvatar';
 import StoreContextProvider from './context/StoreContext.jsx';
 import Reservation from './pages/Reservation/Reservation';
 import Foodwiki from './components/Foodwiki/Foodwiki.jsx';
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
     // display popup for login
     const [showLogin, setShowLogin] = useState(false);
     const backendUrl = 'http://localhost:4000';
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); 
-    const customerId = localStorage.getItem('customerId'); 
+    const customerId = localStorage.getItem('customerId');
+    
     return (
         <StoreContextProvider backendUrl={backendUrl}>
+            <ToastContainer />
             {showLogin ? (
                 <LoginPopup
                     setShowLogin={setShowLogin}

@@ -2,11 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ProfilePopup.css';
 
-const ALLERGY_OPTIONS = [
-  'No Allergy', 'Dairy', 'Eggs', 'Fish', 'Shellfish', 'Tree Nuts', 'Peanuts', 
-  'Wheat', 'Soy', 'Gluten', 'Sesame', 'Milk', 'Pollen', 'Latex'
-];
-
 const MEDICAL_CONDITIONS_OPTIONS = [
   'No Medical issue', 'Diabetes', 'Hypertension', 'Heart Disease', 'Asthma', 'Allergies', 
   'Arthritis', 'Depression', 'Anxiety', 'High Cholesterol', 'Thyroid Issues',
@@ -25,6 +20,22 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({});
   const [dropdownOpen, setDropdownOpen] = useState({});
+  const [allergyOptions, setAllergyOptions] = useState([]); // 新增状态来存储过敏选项
+
+  useEffect(() => {
+    const fetchAllergyOptions = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/ingredients`); // 假设后端有获取食材的接口
+        const ingredients = response.data.data;
+        const options = ingredients.map(ingredient => ingredient.name);
+        setAllergyOptions(options);
+      } catch (error) {
+        console.error('Error fetching allergy options:', error);
+      }
+    };
+
+    fetchAllergyOptions();
+  }, [backendUrl]);
 
   useEffect(() => {
     if (isOpen) {
@@ -177,7 +188,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
                   </div>
                   {dropdownOpen.allergy && (
                     <div className="dropdown-options">
-                      {ALLERGY_OPTIONS.map(option => (
+                      {allergyOptions.map(option => (
                         <div 
                           key={option} 
                           className="option"

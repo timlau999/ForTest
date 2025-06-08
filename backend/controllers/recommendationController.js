@@ -9,18 +9,16 @@ import sequelize from '../config/db.js';
 // Filter menu items based on customer profile
 function filterMenuForClient(client, menuItems) {
     const clientAllergens = client.Allergens ? client.Allergens.toLowerCase().split(',').map(a => a.trim()) : [];
-    const clientConditions = client.MedicalConditions ? client.MedicalConditions.toLowerCase().split(',').map(c => c.trim()) : [];
-    const dietaryPref = client.DietaryPreferences ? client.DietaryPreferences.toLowerCase() : '';
 
     return menuItems.filter(dish => {
         const dishAllergens = dish.sensitiveSource ? dish.sensitiveSource.toLowerCase().split(',').map(a => a.trim()) : [];
         if (dishAllergens.some(a => clientAllergens.includes(a))) return false;
 
-        const ingredients = dish.MenuItemIngredients.flatMap(mi => mi.Ingredient.name.toLowerCase());
-        const nonVegetarianKeywords = ['meat', 'pork', 'beef', 'chicken', 'fish', 'seabass', 'shellfish'];
-        const isVegetarian = !ingredients.some(ing => nonVegetarianKeywords.includes(ing));
-
-        if (dietaryPref === 'vegetarian' && !isVegetarian) return false;
+        const ingredients = dish.MenuItemIngredients.flatMap(mi => mi.Ingredient);
+        const ingredientAllergens = ingredients.flatMap(ing => {
+            return ing.sensitiveSource ? ing.sensitiveSource.toLowerCase().split(',').map(a => a.trim()) : [];
+        });
+        if (ingredientAllergens.some(a => clientAllergens.includes(a))) return false;
 
         return true;
     });

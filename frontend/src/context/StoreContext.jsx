@@ -142,7 +142,7 @@ const StoreContextProvider = (props) => {
     const addReservation = async (userId, tableId, timeslot) => {
         if (!userId) {
             console.error('User ID is not available');
-            alert('Please login to reserve a table');
+            toast.error('Please login to reserve a table');
             return;
         }
         try {
@@ -154,14 +154,15 @@ const StoreContextProvider = (props) => {
             console.log('API response:', response.data); 
             if (response.data.success) {
                 console.log('Reservation added successfully:', response.data.data);
-                alert('Reservation added successfully');
+                toast.success('Reservation added successfully');
                 //updateTableState(tableId);
             } else {
                 console.log('Failed to add reservation:', response.data.message);
-                alert(response.data.message);
+                toast.error('Failed to add reservation:');
             }
         } catch (error) {
             console.error('Error add new reservation:', error);
+            toast.error(error);
         }
     };
 
@@ -190,12 +191,14 @@ const StoreContextProvider = (props) => {
             });
             if (response.data.success) {
                 console.log('Reservation removed successfully:', response.data.data);
-                alert('Reservation removed successfully');
+                toast.success('Reservation removed successfully');
             } else {
                 console.log('Failed to remove reservation:', response.data.message);
+                toast.error('Failed to remove reservation')
             }
         } catch (error) {
             console.error('Error removing reservation:', error);
+            toast.error(error);
         }
     };
 

@@ -36,7 +36,9 @@ const TableState = ({tableNumber,tableCapacity,tablestates }) => {
             {/*tablestates === "available" && !isReserved && (
                 <button className="reserveButton"  >Reserve</button>
             )*/}
-            <button className="reserveButton" onClick={onClickReserve} >Reserve <BsChevronRight/></button>
+            <button className="reserveButton" onClick={()=>{onClickReserve();
+                toast.info("Testing")
+            }} >Reserve <BsChevronRight/></button>
             </div>
         </div>
 
