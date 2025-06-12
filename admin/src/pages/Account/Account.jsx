@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import { BsChevronRight } from "react-icons/bs";
 import { BsChevronLeft } from "react-icons/bs";
+import { BsSearch } from "react-icons/bs";
 
 const Account = ({ url }) => {
     const navigate = useNavigate();
@@ -242,7 +243,7 @@ const Account = ({ url }) => {
                             }
                         />
                         <button type="submit" className="search-button">
-                            <img src={assets.search} alt="search" className="search-icon" />
+                            <BsSearch />
                         </button>
                     </form>
                 </div>

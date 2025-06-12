@@ -40,8 +40,12 @@ const getReservationA = async (req, res) => {
         if (response.length > 0){
             return res.json({ success: true, data: response, message: "Done" });
         }else{
-            console.log(conditions);return res.json({ success: false, message: "No reservation on this day" });
-            
+            console.log(conditions);
+            if(selectedDate){
+                return res.json({ success: false, message: "No reservation on this day" });
+            }else{
+                return res.json({ success: false, message: "No reservation of this user" });
+            }
         }
     } catch (error) {
         console.error('Error fetching reservations:', error);
@@ -58,7 +62,11 @@ const getReservationF = async (req, res) => {
                 reservationStatus: 'pending',
             },
         });
-        res.json({ success: true, data: response });
+        if (response){
+            res.json({ success: true, data: response });
+        }else{
+            res.json({ success: false, data: response });
+        }
     } catch (error) {
         console.error('Error fetching reservations:', error);
         res.json({ success: false, message: 'Server error' });
@@ -134,19 +142,33 @@ const updateTableState = async (req, res) => {
     }
 }
 
-const removeReservationF = async (req, res) =>{
-    const {userId} = req.body;
+const updateReservation = async (req, res) =>{
+    const {userId, reservationStatus, reservationId} = req.body;
     try{
+        const conditions = {
+            [Op.or]: []
+        };
+        if (reservationId) {
+            conditions[Op.or].push({ reservationId : reservationId});
+        }
+        if (userId) {
+            conditions[Op.or].push({userId: userId, reservationStatus: 'pending',});
+        }
+        if (conditions[Op.or].length === 0) {
+            return res.json({ success: false, message: 'Please provide information.' });
+        }
+
         const response = await reservationModel.update(
-            {reservationStatus: 'cancelled'},
+            {reservationStatus: reservationStatus},
             {
-                where:{
-                    userId: userId,
-                    reservationStatus: 'pending',
-                }
+                where:conditions
             }
-        );
-        res.json({ success: true, data: response });
+        ); 
+        if (response == 1){
+            res.json({ success: true, data: response });
+        }else{
+            res.json({ success: false, message: "You have no reservation to cancel" });
+        }
     }
     catch (error) {
         console.error('Error cancel reservation:', error);
@@ -154,4 +176,4 @@ const removeReservationF = async (req, res) =>{
     }
 }
 
-export {getTable, addReservation, updateTableState, getReservationA, getReservationF, removeReservationF};
+export {getTable, addReservation, updateTableState, getReservationA, getReservationF, updateReservation};

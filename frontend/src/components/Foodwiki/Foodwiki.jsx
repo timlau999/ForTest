@@ -64,7 +64,7 @@ const Foodwiki = () => {
                 <div className="openfood-result">
                     {result.map((item, index) => (
                         <div className="openfood-item" key={index}>
-                          <p><img className="openfood-item-image" src={item.image} alt={item.name} /></p>
+                          <p><img className="openfood-item-image" src={`https://spoonacular.com/cdn/ingredients_250x250/${item.image}`} alt={item.name} /></p>
                           <p>{item.name}</p>
                           <p><button className="openfood-item-button" onClick={()=>showFoodDetail(item.id)}>Choose</button></p>
                         </div>

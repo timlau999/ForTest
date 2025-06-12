@@ -20,12 +20,12 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({});
   const [dropdownOpen, setDropdownOpen] = useState({});
-  const [allergyOptions, setAllergyOptions] = useState([]); // 新增状态来存储过敏选项
+  const [allergyOptions, setAllergyOptions] = useState([]); 
 
   useEffect(() => {
     const fetchAllergyOptions = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/ingredients`); // 假设后端有获取食材的接口
+        const response = await axios.get(`${backendUrl}/api/ingredients`); 
         const ingredients = response.data.data;
         const options = ingredients.map(ingredient => ingredient.name);
         setAllergyOptions(options);

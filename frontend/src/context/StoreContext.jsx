@@ -15,7 +15,7 @@ const StoreContextProvider = (props) => {
     const customerId = localStorage.getItem('customerId');
     const [userId, setUserId] = useState(null);
     const [username, setUsername] = useState(null);
-    const [reservationF_list, setReservationF_list] = useState([]);
+    const [reservationF_list, setReservationF_list] = useState();
     
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
@@ -158,7 +158,7 @@ const StoreContextProvider = (props) => {
                 //updateTableState(tableId);
             } else {
                 console.log('Failed to add reservation:', response.data.message);
-                toast.error('Failed to add reservation:');
+                toast.error(response.data.message);
             }
         } catch (error) {
             console.error('Error add new reservation:', error);
@@ -184,17 +184,18 @@ const StoreContextProvider = (props) => {
         }
     };
 
-    const removeReservationF = async (userId) => {
+    const updateReservation = async (userId, reservationStatus) => {
         try {
-            const response = await axios.post(`${backendUrl}/api/table/removeReservationF`,{
-               userId 
+            const response = await axios.post(`${backendUrl}/api/table/updateReservation`,{
+               userId,
+               reservationStatus 
             });
             if (response.data.success) {
                 console.log('Reservation removed successfully:', response.data.data);
                 toast.success('Reservation removed successfully');
             } else {
                 console.log('Failed to remove reservation:', response.data.message);
-                toast.error('Failed to remove reservation')
+                toast.error(response.data.message)
             }
         } catch (error) {
             console.error('Error removing reservation:', error);
@@ -211,7 +212,7 @@ const StoreContextProvider = (props) => {
             if (response.data.success) {
               setReservationF_list(response.data.data);
             } else {
-              console.log(response.data.message);
+              console.log(response.data.data);
             }
         }catch(error){
             console.error(error);
@@ -237,7 +238,7 @@ const StoreContextProvider = (props) => {
         clearAuthToken,
         table_list,
         addReservation,
-        removeReservationF,
+        updateReservation,
         userId,
         username,
         getReservationF,

@@ -21,9 +21,8 @@
 }
 
 .search-icon{
-    width: 15px;
-    height: 15px;
-    margin-left: 5px;
+    border-radius: 15px;
+    padding: 3px 5px;
 }
 
 .ReservationButton {
@@ -74,7 +73,7 @@
 .All-Reservation-list{
     margin: 5px 0px;
 }
-.search-reservation-bar{
+.search-bar{
     border: none solid 1px;
     background-color: none;
     border-radius: 10px;

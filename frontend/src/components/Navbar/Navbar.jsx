@@ -46,7 +46,9 @@ const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn, UserAvatar, backendUr
                         backendUrl={backendUrl} 
                     />
                 ) : (
-                    <button onClick={() => setShowLogin(true)}>sign in</button>
+                    
+                        <button className='signInButton' onClick={() => setShowLogin(true)}>sign in</button>
+                    
                 )}
             </div>
         </div>

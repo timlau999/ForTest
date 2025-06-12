@@ -42,3 +42,61 @@
 .dropdown button:hover {
     color: #000;
 }
+
+
+
+/* Shockwave effect on focus */
+@keyframes shockwave {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 127, 127, 0.4);
+  }
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 20px rgba(255, 127, 127, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 127, 127, 0);
+  }
+}
+
+.usernameEmoji:active {
+  animation: shockwave 0.5s ease-out;
+}
+
+.usernameEmoji{
+
+}
+/* Emoji styles */
+.usernameEmoji::after {
+  content: "😎";
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  z-index: 3;
+  transition: all 0.3s ease;
+}
+/* Emoji animations */
+@keyframes dance {
+  0%,
+  100% {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-50%) rotate(-20deg) scale(1.1);
+  }
+  75% {
+    transform: translateY(-50%) rotate(20deg) scale(1.1);
+  }
+}
+
+.usernameEmoji:hover::after {
+  animation: dance 0.5s ease infinite;
+}
+
+.usernameEmoji:active::after {
+  content: "😂";
+  animation: dance 0.3s ease infinite;
+}

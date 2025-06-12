@@ -58,7 +58,7 @@ const UserAvatar = ({ onLogout, backendUrl }) => {
 
     return (
         <div className="user-avatar" onClick={toggleDropdown}>
-            <span>{username}</span>
+            <span className='usernameEmoji'>{username}</span>
             <div className={`dropdown ${isDropdownOpen ? 'open' : ''}`}>
                 <button onClick={handleUserInfoClick}>{username}</button> 
                 <hr />

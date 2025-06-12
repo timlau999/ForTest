@@ -9,17 +9,21 @@ import sequelize from '../config/db.js';
 // Filter menu items based on customer profile
 function filterMenuForClient(client, menuItems) {
     const clientAllergens = client.Allergens ? client.Allergens.toLowerCase().split(',').map(a => a.trim()) : [];
+    console.log('Client allergens:', clientAllergens);
 
-    return menuItems.filter(dish => {
-        const dishAllergens = dish.sensitiveSource ? dish.sensitiveSource.toLowerCase().split(',').map(a => a.trim()) : [];
-        if (dishAllergens.some(a => clientAllergens.includes(a))) return false;
+    return menuItems.filter((dish, index) => {
 
         const ingredients = dish.MenuItemIngredients.flatMap(mi => mi.Ingredient);
         const ingredientAllergens = ingredients.flatMap(ing => {
-            return ing.sensitiveSource ? ing.sensitiveSource.toLowerCase().split(',').map(a => a.trim()) : [];
+            return ing.name ? ing.name.toLowerCase().split(',').map(a => a.trim()) : [];
         });
-        if (ingredientAllergens.some(a => clientAllergens.includes(a))) return false;
+        console.log(`  Ingredient allergens:`, ingredientAllergens);
+        if (ingredientAllergens.some(a => clientAllergens.includes(a))) {
+            console.log(`  Dish ${dish.name} excluded due to ingredient allergens`);
+            return false;
+        }
 
+        console.log(`  Dish ${dish.name} included`);
         return true;
     });
 }
@@ -27,7 +31,6 @@ function filterMenuForClient(client, menuItems) {
 // Generate AI prompt
 function generatePrompt(client, dishes) {
     return `Customer Information:
-- Allergens: ${client.Allergens || 'None'}
 - Medical Conditions: ${client.MedicalConditions || 'None'}
 - Dietary Preferences: ${client.DietaryPreferences || 'None'}
 

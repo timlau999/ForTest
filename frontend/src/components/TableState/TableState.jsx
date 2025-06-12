@@ -36,8 +36,8 @@ const TableState = ({tableNumber,tableCapacity,tablestates }) => {
             {/*tablestates === "available" && !isReserved && (
                 <button className="reserveButton"  >Reserve</button>
             )*/}
-            <button className="reserveButton" onClick={()=>{onClickReserve();
-                toast.info("Testing")
+            <button className="reserveButton" onClick={()=>{
+                onClickReserve();
             }} >Reserve <BsChevronRight/></button>
             </div>
         </div>
@@ -49,15 +49,23 @@ const TableState = ({tableNumber,tableCapacity,tablestates }) => {
             <h4 className="table-timeslot-tilte">Available Time Slots</h4>
                 {time.timeSlots.map((item, index) => {
                     return (
-                        <div className="timeslot" key={index} onClick={()=>{{
-                            if (item<(new Date().getHours())) {
-                                alert("You can only reserve for future time slots.");
+                        <div className="timeslot" key={index} onClick={()=>{
+                            if ( item < (new Date().getHours()) ) {
+                                toast.warning("You can only reserve for future time slots.");
                                 return;
-                            }else if(window.confirm("Confirm your reserveration?")){
-                                addReservation(userId, tableNumber, item);
-                            };
-                            onClickReserve();
-                        }}}>
+                            }else{
+                                toast.info((t) => (
+                                <div>Confirm your reserveration?
+                                <button onClick={() => {
+                                    toast.dismiss(t.id);
+                                    addReservation(userId, tableNumber, item);
+                                    onClickReserve();
+                                }}>Yes</button>
+                                <button onClick={() => toast.dismiss(t.id)}>No</button>
+                                </div>
+                                ),{autoClose: false, position: "bottom-center",});
+                            }
+                        }}>
                             {item}:00
                         </div>
                     );

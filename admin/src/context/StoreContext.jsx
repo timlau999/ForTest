@@ -69,6 +69,25 @@ const StoreContextProvider = (props) => {
         }
     };
 
+    const updateReservation = async (reservationId, reservationStatus) => {
+        try {
+            const response = await axios.post(`${url}/api/table/updateReservation`,{
+               reservationId,
+               reservationStatus 
+            });
+            if (response.data.success) {
+                console.log('Update reservation status successfully:', response.data.data);
+                toast.success('Update reservation status successfully');
+            } else {
+                console.log('Failed to update reservation:', response.data.message);
+                toast.error('Failed to update reservation')
+            }
+        } catch (error) {
+            console.error('Error update reservation:', error);
+            toast.error(error);
+        }
+    };
+
   const contextValue = {
     token,
     setToken,
@@ -79,7 +98,8 @@ const StoreContextProvider = (props) => {
     username,
     setUsername,
     table_list,
-    updateTableState
+    updateTableState,
+    updateReservation
   };
 
   return (

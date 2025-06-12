@@ -4,7 +4,7 @@ import { addReservation } from '../controllers/tableController.js';
 import { updateTableState } from '../controllers/tableController.js';
 import { getReservationA } from '../controllers/tableController.js';
 import { getReservationF } from '../controllers/tableController.js';
-import { removeReservationF } from '../controllers/tableController.js';
+import { updateReservation } from '../controllers/tableController.js';
 
 const tableRouter = express.Router();
 
@@ -13,6 +13,6 @@ tableRouter.post('/addReservation', addReservation);
 tableRouter.post('/updateTableState', updateTableState);
 tableRouter.post('/getReservationA', getReservationA);
 tableRouter.post('/getReservationF', getReservationF);
-tableRouter.post('/removeReservationF', removeReservationF);
+tableRouter.post('/updateReservation', updateReservation);
 
 export default tableRouter;
