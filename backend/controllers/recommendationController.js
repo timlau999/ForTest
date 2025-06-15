@@ -145,7 +145,7 @@ export const getRecommendation = async (req, res) => {
         };
 
         let filteredDishes = filterMenuForClient(client, menuItems);
-        filteredDishes = filteredDishes.filter(dish => dish.category!== 'Deserts');
+        filteredDishes = filteredDishes.filter(dish => dish.category !== 'Deserts');
 
         const prompt = generatePrompt(client, filteredDishes);
         console.log('AI Request Prompt:', prompt);  
@@ -164,18 +164,26 @@ export const getRecommendation = async (req, res) => {
 
         if (validDishes.length >= 3) {
             await Recommendation.destroy({ where: { customerId } });
-            await sequelize.query('ALTER TABLE recommendation AUTO_INCREMENT = 1;');
             
-            for (const dishName of validDishes.slice(0, 3)) {
-                const menuItem = await MenuItem.findOne({ where: { name: dishName } });
-                if (menuItem) {
-                    await Recommendation.create({
-                        customerId,
-                        menuItemId: menuItem.menuItemId
-                    });
-                    finalRecommendedDishes.push(dishName);
+            // 使用事务确保数据一致性
+            await sequelize.transaction(async (t) => {
+                for (let i = 0; i < 3; i++) {
+                    const dishName = validDishes[i];
+                    const menuItem = await MenuItem.findOne({ where: { name: dishName } }, { transaction: t });
+                    if (menuItem) {
+                        // 显式计算并设置 recommendationId
+                        const recommendationId = parseInt(customerId.toString() + (i + 1));
+                        
+                        await Recommendation.create({
+                            recommendationId,
+                            customerId,
+                            menuItemId: menuItem.menuItemId
+                        }, { transaction: t });
+                        
+                        finalRecommendedDishes.push(dishName);
+                    }
                 }
-            }
+            });
             
             console.log('Using AI recommendation:', finalRecommendedDishes);
         } else {
@@ -183,18 +191,26 @@ export const getRecommendation = async (req, res) => {
             const randomDishes = getRandomDishes(filteredDishes);
             
             await Recommendation.destroy({ where: { customerId } });
-            await sequelize.query('ALTER TABLE recommendation AUTO_INCREMENT = 1;');
             
-            for (const dishName of randomDishes) {
-                const menuItem = await MenuItem.findOne({ where: { name: dishName } });
-                if (menuItem) {
-                    await Recommendation.create({
-                        customerId,
-                        menuItemId: menuItem.menuItemId
-                    });
-                    finalRecommendedDishes.push(dishName);
+            // 使用事务确保数据一致性
+            await sequelize.transaction(async (t) => {
+                for (let i = 0; i < 3; i++) {
+                    const dishName = randomDishes[i];
+                    const menuItem = await MenuItem.findOne({ where: { name: dishName } }, { transaction: t });
+                    if (menuItem) {
+                        // 显式计算并设置 recommendationId
+                        const recommendationId = parseInt(customerId.toString() + (i + 1));
+                        
+                        await Recommendation.create({
+                            recommendationId,
+                            customerId,
+                            menuItemId: menuItem.menuItemId
+                        }, { transaction: t });
+                        
+                        finalRecommendedDishes.push(dishName);
+                    }
                 }
-            }
+            });
             
             console.log('Using random recommendation:', finalRecommendedDishes);
         }

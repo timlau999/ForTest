@@ -4,8 +4,10 @@ import MenuItem from './menuItemModel.js';
 
 const Recommendation = sequelize.define('Recommendation', {
     recommendationId: {
-        type: DataTypes.INTEGER,
-        primaryKey: true
+        type: DataTypes.BIGINT,
+        primaryKey: true,
+        allowNull: false,
+        unique: true
     },
     customerId: {
         type: DataTypes.INTEGER,
