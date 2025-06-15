@@ -1,18 +1,7 @@
+// ForTest/frontend/src/components/ProfilePopup/ProfilePopup.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ProfilePopup.css';
-
-const MEDICAL_CONDITIONS_OPTIONS = [
-  'No Medical issue', 'Diabetes', 'Hypertension', 'Heart Disease', 'Asthma', 'Allergies', 
-  'Arthritis', 'Depression', 'Anxiety', 'High Cholesterol', 'Thyroid Issues',
-  'Celiac Disease', 'Crohn’s Disease', 'Ulcerative Colitis'
-];
-
-const DIETARY_PREFERENCE_OPTIONS = [
-  'No Dietary Preference', 'Vegetarian', 'Vegan', 'Pescetarian', 'Gluten-Free', 'Dairy-Free', 
-  'Kosher', 'Halal', 'Paleo', 'Ketogenic', 'Low Carb', 'High Protein',
-  'Mediterranean', 'Flexitarian'
-];
 
 const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
   const [profileData, setProfileData] = useState(null);
@@ -20,12 +9,14 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({});
   const [dropdownOpen, setDropdownOpen] = useState({});
-  const [allergyOptions, setAllergyOptions] = useState([]); 
+  const [allergyOptions, setAllergyOptions] = useState([]);
+  const [medicalConditionOptions, setMedicalConditionOptions] = useState([]);
+  const [dietaryPreferenceOptions, setDietaryPreferenceOptions] = useState([]);
 
   useEffect(() => {
     const fetchAllergyOptions = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/ingredients`); 
+        const response = await axios.get(`${backendUrl}/api/options/ingredients`);
         const ingredients = response.data.data;
         const options = ingredients.map(ingredient => ingredient.name);
         setAllergyOptions(options);
@@ -34,7 +25,31 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
       }
     };
 
+    const fetchMedicalConditionOptions = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/options/medical-conditions`);
+        const conditions = response.data.data;
+        const options = conditions.map(condition => condition.name);
+        setMedicalConditionOptions(options);
+      } catch (error) {
+        console.error('Error fetching medical condition options:', error);
+      }
+    };
+
+    const fetchDietaryPreferenceOptions = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/options/dietary-preferences`);
+        const preferences = response.data.data;
+        const options = preferences.map(preference => preference.name);
+        setDietaryPreferenceOptions(options);
+      } catch (error) {
+        console.error('Error fetching dietary preference options:', error);
+      }
+    };
+
     fetchAllergyOptions();
+    fetchMedicalConditionOptions();
+    fetchDietaryPreferenceOptions();
   }, [backendUrl]);
 
   useEffect(() => {
@@ -83,7 +98,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
         medicalConditions: editedData.medicalConditions?.join(','),
         dietaryPreference: editedData.dietaryPreference?.join(',')
       };
-      
+
       const response = await axios.put(`${backendUrl}/api/user/profile/${customerId}`, dataToSave);
       if (response.data.success) {
         setProfileData(editedData);
@@ -115,13 +130,13 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
     setEditedData(prevData => {
       const currentValues = [...(prevData[field] || [])];
       const index = currentValues.indexOf(option);
-      
+
       if (index > -1) {
         currentValues.splice(index, 1);
       } else {
         currentValues.push(option);
       }
-      
+
       return {
         ...prevData,
         [field]: currentValues
@@ -148,7 +163,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
         ) : profileData ? (
           <div className="profile-popup-content">
             <div className="profile-field">
-              <label>Height:</label>
+              <label>Height (cm):</label>
               {isEditing ? (
                 <input
                   type="text"
@@ -161,7 +176,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
               )}
             </div>
             <div className="profile-field">
-              <label>Weight:</label>
+              <label>Weight (kg):</label>
               {isEditing ? (
                 <input
                   type="text"
@@ -224,7 +239,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
                   </div>
                   {dropdownOpen.medicalConditions && (
                     <div className="dropdown-options">
-                      {MEDICAL_CONDITIONS_OPTIONS.map(option => (
+                      {medicalConditionOptions.map(option => (
                         <div 
                           key={option} 
                           className="option"
@@ -260,7 +275,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
                   </div>
                   {dropdownOpen.dietaryPreference && (
                     <div className="dropdown-options">
-                      {DIETARY_PREFERENCE_OPTIONS.map(option => (
+                      {dietaryPreferenceOptions.map(option => (
                         <div 
                           key={option} 
                           className="option"
@@ -290,4 +305,4 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
   );
 };
 
-export default ProfilePopup;    
+export default ProfilePopup;

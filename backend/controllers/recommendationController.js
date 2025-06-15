@@ -31,13 +31,15 @@ function filterMenuForClient(client, menuItems) {
 // Generate AI prompt
 function generatePrompt(client, dishes) {
     return `Customer Information:
+- Height: ${client.height ? `${client.height} cm` : 'Not provided'}
+- Weight: ${client.weight ? `${client.weight} kg` : 'Not provided'}
 - Medical Conditions: ${client.MedicalConditions || 'None'}
 - Dietary Preferences: ${client.DietaryPreferences || 'None'}
 
 Available Dishes:
 ${dishes.map(d => `[${d.name}]`).join(', ')}
 
-Please recommend the three most suitable dishes based on the customer's dietary restrictions and health conditions from the "Available Dishes" list above. Reply with dish names enclosed in [], e.g., [Lasagna Rolls], [Vegan Sandwich], [Cheese Pasta].`;
+Please recommend the three most suitable dishes based on the customer's dietary restrictions, health conditions, height and weight from the "Available Dishes" list above. Reply with dish names enclosed in [], e.g., [Lasagna Rolls], [Vegan Sandwich], [Cheese Pasta].`;
 }
 
 // Get AI recommendation
@@ -141,7 +143,9 @@ export const getRecommendation = async (req, res) => {
         const client = {
             Allergens: customerProfile.allergy,
             MedicalConditions: customerProfile.medicalConditions,
-            DietaryPreferences: customerProfile.dietaryPreference
+            DietaryPreferences: customerProfile.dietaryPreference,
+            height: customerProfile.height,
+            weight: customerProfile.weight
         };
 
         let filteredDishes = filterMenuForClient(client, menuItems);
@@ -165,13 +169,11 @@ export const getRecommendation = async (req, res) => {
         if (validDishes.length >= 3) {
             await Recommendation.destroy({ where: { customerId } });
             
-            // 使用事务确保数据一致性
             await sequelize.transaction(async (t) => {
                 for (let i = 0; i < 3; i++) {
                     const dishName = validDishes[i];
                     const menuItem = await MenuItem.findOne({ where: { name: dishName } }, { transaction: t });
                     if (menuItem) {
-                        // 显式计算并设置 recommendationId
                         const recommendationId = parseInt(customerId.toString() + (i + 1));
                         
                         await Recommendation.create({
@@ -192,13 +194,11 @@ export const getRecommendation = async (req, res) => {
             
             await Recommendation.destroy({ where: { customerId } });
             
-            // 使用事务确保数据一致性
             await sequelize.transaction(async (t) => {
                 for (let i = 0; i < 3; i++) {
                     const dishName = randomDishes[i];
                     const menuItem = await MenuItem.findOne({ where: { name: dishName } }, { transaction: t });
                     if (menuItem) {
-                        // 显式计算并设置 recommendationId
                         const recommendationId = parseInt(customerId.toString() + (i + 1));
                         
                         await Recommendation.create({
