@@ -6,12 +6,11 @@ import PaymentMethod from './paymentMethodModel.js';
 
 const Payment = sequelize.define('payment', {
     paymentId: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.STRING, 
         primaryKey: true
     },
     orderId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
         references: {
             model: Order,

@@ -6,9 +6,8 @@ import CustomerPointsUsage from './customerPointsUsageModel.js';
 
 const Order = sequelize.define('order', {
   orderId: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+    type: DataTypes.STRING,
+    primaryKey: true
   },
   customerId: {
     type: DataTypes.INTEGER,
