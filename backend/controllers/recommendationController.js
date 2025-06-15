@@ -12,14 +12,14 @@ function filterMenuForClient(client, menuItems) {
     console.log('Client allergens:', clientAllergens);
 
     return menuItems.filter((dish, index) => {
-
         const ingredients = dish.MenuItemIngredients.flatMap(mi => mi.Ingredient);
         const ingredientAllergens = ingredients.flatMap(ing => {
             return ing.name ? ing.name.toLowerCase().split(',').map(a => a.trim()) : [];
         });
-        console.log(`  Ingredient allergens:`, ingredientAllergens);
+        console.log(`  Dish ${dish.name} ingredient allergens:`, ingredientAllergens);
+        
         if (ingredientAllergens.some(a => clientAllergens.includes(a))) {
-            console.log(`  Dish ${dish.name} excluded due to ingredient allergens`);
+            console.log(`  Dish ${dish.name} excluded due to allergen match`);
             return false;
         }
 
@@ -35,23 +35,17 @@ function generatePrompt(client, dishes) {
 - Dietary Preferences: ${client.DietaryPreferences || 'None'}
 
 Available Dishes:
-${dishes.map(d => `[${d.name}]`)}
+${dishes.map(d => `[${d.name}]`).join(', ')}
 
-Please recommend the three most suitable dishes based on the customer's dietary restrictions and health conditions from the "Available Dishes" list above. You can only reply with the name of the dish, no need to reply with other.
-Each dish name MUST be individually enclosed in [], like this: [Lasagna Rolls], [Vegan Sandwich], [Cheese Pasta]. Do not combine multiple dish names within a single set of [].`;
+Please recommend the three most suitable dishes based on the customer's dietary restrictions and health conditions from the "Available Dishes" list above. Reply with dish names enclosed in [], e.g., [Lasagna Rolls], [Vegan Sandwich], [Cheese Pasta].`;
 }
 
 // Get AI recommendation
 async function getAIRecommendation(prompt) {
     try {
-      /*    const apiKey = 'ragflow-E5YWRkNGE2MjVhNzExZjBiYTJhMDI0Mm';
-        const chatID = 'abf05ad82fa511f0a61d0242ac150006';
-        const address = '192.168.0.179'; */
-
         const apiKey = 'ragflow-NjYjg3ZTU4MzE4ZTExZjBhN2RmMDI0Mm';
         const chatID = '5f9b44c2318f11f0a41b0242ac120006';
         const address = '34.234.143.101'; 
-
 
         const requestUrl = `http://${address}/api/v1/chats_openai/${chatID}/chat/completions`;
         const requestBody = {
@@ -64,19 +58,63 @@ async function getAIRecommendation(prompt) {
             'Authorization': `Bearer ${apiKey}`
         };
 
-        console.log('Request URL:', requestUrl);
-        console.log('Request Headers:', requestHeaders);
-        console.log('Request Body:', requestBody);
-
-        const response = await axios.post(requestUrl, requestBody, {
-            headers: requestHeaders
-        });
-
+        const response = await axios.post(requestUrl, requestBody, { headers: requestHeaders });
         return response.data.choices[0].message.content;
     } catch (error) {
-        console.error('AI recommendation error:', error.response?.data || error.message);
+        console.error('AI recommendation error:', error.message);
         return null;
     }
+}
+
+// Parse AI response with enhanced logic
+function parseAIResponse(response) {
+    if (!response) return [];
+    
+    response = response.replace(/<RichMediaReference>[\s\S]*?<\/think>/g, '').trim();
+    
+    const bracketedMatches = response.match(/\[([^\]]+)\]/g);
+    if (bracketedMatches && bracketedMatches.length > 0) {
+        return bracketedMatches.map(match => 
+            match.replace(/^\[|\]$/g, '').trim()
+        );
+    }
+    
+    return response.split(/[,\n\s]+/)
+        .map(name => name.trim())
+        .filter(name => name.length > 0);
+}
+
+// Validate recommended dishes with flexible matching
+function validateRecommendedDishes(recommendedDishes, menuItems) {
+    const normalizedMenuMap = new Map();
+    menuItems.forEach(item => {
+        const normalizedName = normalizeDishName(item.name);
+        normalizedMenuMap.set(normalizedName, item.name);
+    });
+    
+    const validDishes = [];
+    recommendedDishes.forEach(dish => {
+        const normalizedDish = normalizeDishName(dish);
+        if (normalizedMenuMap.has(normalizedDish)) {
+            validDishes.push(normalizedMenuMap.get(normalizedDish));
+        }
+    });
+    
+    return validDishes;
+}
+
+// Normalize dish name for comparison
+function normalizeDishName(name) {
+    return name
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .trim();
+}
+
+// Get random dishes from available menu
+function getRandomDishes(menuItems, count = 3) {
+    const shuffled = [...menuItems].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count).map(item => item.name);
 }
 
 export const getRecommendation = async (req, res) => {
@@ -106,66 +144,79 @@ export const getRecommendation = async (req, res) => {
             DietaryPreferences: customerProfile.dietaryPreference
         };
 
-																		
         let filteredDishes = filterMenuForClient(client, menuItems);
         filteredDishes = filteredDishes.filter(dish => dish.category!== 'Deserts');
 
         const prompt = generatePrompt(client, filteredDishes);
-        let recommendation = await getAIRecommendation(prompt);
+        console.log('AI Request Prompt:', prompt);  
 
-        if (recommendation) {
-            recommendation = recommendation.replace(/<think>[\s\S]*?<\/think>/, '').trim();
-        }
+        const aiResponse = await getAIRecommendation(prompt);
+        console.log('AI Raw Response:', aiResponse);
 
-        const recommendedDishes = recommendation? recommendation.split(',').map(dish => {
-            return dish.replace(/^\s*\[\s*|\s*\]\s*$/g, '').trim();
-        }) : [];
-
-        const validRecommendedDishes = recommendedDishes.filter(dish => {
-            return menuItems.some(item => item.name === dish);
-        });
+        const parsedDishes = parseAIResponse(aiResponse);
+        const validDishes = validateRecommendedDishes(parsedDishes, menuItems);
+        
+        console.log('Parsed Dishes:', parsedDishes);
+        console.log('Valid Dishes:', validDishes);
 
         let finalRecommendedDishes = [];
-        if (validRecommendedDishes.length > 0) {
-            await Recommendation.destroy({ where: { customerId: customerProfile.customerId } });
-	    await sequelize.query('ALTER TABLE recommendation AUTO_INCREMENT = 1;');
-            for (const dishName of validRecommendedDishes.slice(0, 3)) {
+        let recommendationSource = 'AI';
+
+        if (validDishes.length >= 3) {
+            await Recommendation.destroy({ where: { customerId } });
+            await sequelize.query('ALTER TABLE recommendation AUTO_INCREMENT = 1;');
+            
+            for (const dishName of validDishes.slice(0, 3)) {
                 const menuItem = await MenuItem.findOne({ where: { name: dishName } });
                 if (menuItem) {
                     await Recommendation.create({
-                        customerId: customerProfile.customerId,
+                        customerId,
                         menuItemId: menuItem.menuItemId
                     });
                     finalRecommendedDishes.push(dishName);
                 }
             }
+            
+            console.log('Using AI recommendation:', finalRecommendedDishes);
         } else {
-            const existingRecommendations = await Recommendation.findAll({
-                where: { customerId: customerProfile.customerId },
-                include: [{
-                    model: MenuItem
-                }]
-            });
-            finalRecommendedDishes = existingRecommendations.map(recommendation => recommendation.MenuItem.name);
+            recommendationSource = 'Random';
+            const randomDishes = getRandomDishes(filteredDishes);
+            
+            await Recommendation.destroy({ where: { customerId } });
+            await sequelize.query('ALTER TABLE recommendation AUTO_INCREMENT = 1;');
+            
+            for (const dishName of randomDishes) {
+                const menuItem = await MenuItem.findOne({ where: { name: dishName } });
+                if (menuItem) {
+                    await Recommendation.create({
+                        customerId,
+                        menuItemId: menuItem.menuItemId
+                    });
+                    finalRecommendedDishes.push(dishName);
+                }
+            }
+            
+            console.log('Using random recommendation:', finalRecommendedDishes);
         }
 
         const responseData = {
-            recommendation: finalRecommendedDishes.slice(0, 3).join(', ') || "AI recommendation service is temporarily unavailable"
+            recommendation: finalRecommendedDishes.join(', ') || "AI recommendation service is temporarily unavailable",
+            recommendationSource,
+            aiOriginalResponse: aiResponse || 'No response from AI service',
+            parsedDishes,
+            validDishes
         };
 
+        console.log('Final recommendation result:', responseData);
+        
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
-        res.send(JSON.stringify(responseData, (key, value) => {
-            return value === undefined? null : value;
-        }, 2) + '\n');
+        res.send(JSON.stringify(responseData, null, 2));
 
     } catch (error) {
         console.error('Server error:', error);
-        if (!res.headersSent) {
-            res.status(500).json({
-                error: 'Internal server error',
-                details: error.message
-            });
-        }
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message
+        });
     }
 };
-
