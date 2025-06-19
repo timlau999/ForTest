@@ -1,4 +1,3 @@
-// frontend/src/components/Order/Order.jsx
 import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 import axios from 'axios';
@@ -24,7 +23,11 @@ const Order = ({ backendUrl }) => {
                     console.log('Order response data:', orderResponse.data);
 
                     if (Array.isArray(orderResponse.data)) {
-                        setOrders(orderResponse.data);
+
+                        const activeOrders = orderResponse.data.filter(
+                            (order) => order.orderStatus !== 'Order Completed'
+                        );
+                        setOrders(activeOrders);
                     } else {
                         setError('API response is not an array');
                     }
@@ -79,7 +82,7 @@ const Order = ({ backendUrl }) => {
                     })}
                 </div>
             ) : (
-                <p style={{ fontSize: '18px', color: '#747474' }}>No order now</p>
+                <p style={{ fontSize: '18px', color: '#747474' }}>No orders now</p>
             )}
         </div>
     );

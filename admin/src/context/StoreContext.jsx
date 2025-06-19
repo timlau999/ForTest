@@ -2,8 +2,11 @@ import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import {io} from 'socket.io-client';
 
 export const StoreContext = createContext(null);
+
+const socket = io('http://localhost:4000', {query: {role: 'admin'}});
 
 const StoreContextProvider = (props) => {
   const [token, setToken] = useState("");
@@ -12,6 +15,7 @@ const StoreContextProvider = (props) => {
   const [username, setUsername] = useState("");
   const [table_list, setTableList] = useState([]);
   const {url} = props;
+  const [reservation_list, setReservation_list]= useState([]);
 
   useEffect(() => {
     async function loadData() {
@@ -50,6 +54,31 @@ const StoreContextProvider = (props) => {
     fetchtable();
   }, [/*table_list*/]);
 
+  const fetchReservation = async (inputuserId, selectedDate) => {
+          const response = await axios.post(`${url}/api/table/getReservationA`,{
+            ...(inputuserId && { inputuserId }),
+            ...(selectedDate && { selectedDate })
+          });
+          if (response.data.success) {
+            setReservation_list(response.data.data);
+            toast.success(response.data.message);
+          } else {
+            toast.error(response.data.message);
+          }
+        };
+
+  const modifyReservationStatus = (reservationId, reservationStatus) => {
+      toast.info((t) => ( 
+      <div>Modify the reserveration?
+      <button onClick={() => {
+      toast.dismiss(t.id);
+      updateReservation(reservationId, reservationStatus);
+      }}>Yes</button>
+      <button onClick={() => toast.dismiss(t.id)}>No</button>
+      </div>
+      ),{autoClose: false, position: "bottom-center",});
+    }
+
   const updateTableState = async (tableId, state) => {
         try {
             const response = await axios.post(`${url}/api/table/updateTableState`, {
@@ -87,6 +116,16 @@ const StoreContextProvider = (props) => {
             toast.error(error);
         }
     };
+    
+    useEffect(() => {
+            socket.on('connect', () => {
+            console.log('Connected to server:', socket.id);
+            });
+    
+            socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+            });
+        }, []);
 
   const contextValue = {
     token,
@@ -99,7 +138,10 @@ const StoreContextProvider = (props) => {
     setUsername,
     table_list,
     updateTableState,
-    updateReservation
+    updateReservation,
+    fetchReservation,
+    modifyReservationStatus,
+    reservation_list
   };
 
   return (

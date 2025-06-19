@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './UserAvatar.css'; 
 import ProfilePopup from '../ProfilePopup/ProfilePopup';
 import UserInfoPopup from '../UserInfoPopup/UserInfoPopup'; 
+import { toast } from "react-toastify";
 
 const UserAvatar = ({ onLogout, backendUrl }) => {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ const UserAvatar = ({ onLogout, backendUrl }) => {
         localStorage.removeItem('username');
         localStorage.removeItem('userId');
         localStorage.removeItem('customerId');
+        toast.success("Log out Successfully");
         navigate('/');
         if (onLogout) {
             onLogout();
@@ -41,7 +43,8 @@ const UserAvatar = ({ onLogout, backendUrl }) => {
     };
 
     const handleOrderHistoryClick = () => {
-    
+        setIsDropdownOpen(false);
+        navigate('/order-history');
     };
 
     const toggleDropdown = () => {

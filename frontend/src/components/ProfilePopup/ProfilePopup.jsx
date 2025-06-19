@@ -1,4 +1,3 @@
-// ForTest/frontend/src/components/ProfilePopup/ProfilePopup.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ProfilePopup.css';
@@ -12,6 +11,7 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
   const [allergyOptions, setAllergyOptions] = useState([]);
   const [medicalConditionOptions, setMedicalConditionOptions] = useState([]);
   const [dietaryPreferenceOptions, setDietaryPreferenceOptions] = useState([]);
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
   useEffect(() => {
     const fetchAllergyOptions = async () => {
@@ -144,6 +144,22 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
     });
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowHeight(window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const getDropdownMaxHeight = (dropdownTop) => {
+    return windowHeight - dropdownTop - 20; 
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -202,7 +218,10 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
                     <i className="fa fa-chevron-down"></i>
                   </div>
                   {dropdownOpen.allergy && (
-                    <div className="dropdown-options">
+                    <div 
+                      className="dropdown-options"
+                      style={{ maxHeight: getDropdownMaxHeight(document.querySelector('.multi-select-dropdown').getBoundingClientRect().top) }}
+                    >
                       {allergyOptions.map(option => (
                         <div 
                           key={option} 
@@ -238,7 +257,10 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
                     <i className="fa fa-chevron-down"></i>
                   </div>
                   {dropdownOpen.medicalConditions && (
-                    <div className="dropdown-options">
+                    <div 
+                      className="dropdown-options"
+                      style={{ maxHeight: getDropdownMaxHeight(document.querySelector('.multi-select-dropdown').getBoundingClientRect().top) }}
+                    >
                       {medicalConditionOptions.map(option => (
                         <div 
                           key={option} 
@@ -274,7 +296,10 @@ const ProfilePopup = ({ isOpen, onClose, customerId, backendUrl }) => {
                     <i className="fa fa-chevron-down"></i>
                   </div>
                   {dropdownOpen.dietaryPreference && (
-                    <div className="dropdown-options">
+                    <div 
+                      className="dropdown-options"
+                      style={{ maxHeight: getDropdownMaxHeight(document.querySelector('.multi-select-dropdown').getBoundingClientRect().top) }}
+                    >
                       {dietaryPreferenceOptions.map(option => (
                         <div 
                           key={option} 

@@ -3,6 +3,7 @@ import react from "react";
 import { useState } from "react";
 import {assets} from "../../assets/assets";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Foodwiki = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -21,16 +22,16 @@ const Foodwiki = () => {
       const response = await axios.post(`http://localhost:4000/api/openfooddata/getOpenFoodData`,
         {term}
       );
-        if (response.data.success) {
+        if (response.data.data.length > 0) {
           setResult(response.data.data);
           console.log('get open food data successfully');}
         else {
-          console.log('Failed to fetch open food data');
-          alert('Failed to fetch open food data');
+            console.log('No such open food data');
+            toast.warning('No such open food data');
         }
     } catch (err) {
       console.error(err);
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -50,6 +51,8 @@ const Foodwiki = () => {
     }
   };
 
+  const imgurl = "https://spoonacular.com/cdn/ingredients_250x250/";
+
     
     return (
         <div className="foodwiki-logo">
@@ -64,7 +67,7 @@ const Foodwiki = () => {
                 <div className="openfood-result">
                     {result.map((item, index) => (
                         <div className="openfood-item" key={index}>
-                          <p><img className="openfood-item-image" src={`https://spoonacular.com/cdn/ingredients_250x250/${item.image}`} alt={item.name} /></p>
+                          <p><img className="openfood-item-image" src={`${imgurl}${item.image}`} alt={item.name} /></p>
                           <p>{item.name}</p>
                           <p><button className="openfood-item-button" onClick={()=>showFoodDetail(item.id)}>Choose</button></p>
                         </div>

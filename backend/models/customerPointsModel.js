@@ -1,3 +1,4 @@
+// ForTest/backend/models/customerPointsModel.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
@@ -5,7 +6,7 @@ const CustomerPoints = sequelize.define('customer_points', {
     pointsId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        allowNull: false,
     },
     customerId: {
         type: DataTypes.INTEGER,
@@ -13,6 +14,10 @@ const CustomerPoints = sequelize.define('customer_points', {
         references: {
             model: 'customer',
             key: 'customerId'
+        },
+        set(value) {
+            this.setDataValue('customerId', value);
+            this.setDataValue('pointsId', value);
         }
     },
     points: {

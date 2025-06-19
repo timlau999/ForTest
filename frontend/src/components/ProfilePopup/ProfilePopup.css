@@ -18,6 +18,9 @@
     width: 800px;
     max-width: 95%;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    position: relative;  
+    max-height: 90vh; 
+    overflow-y: auto; 
 }
 
 .profile-popup-title {
@@ -145,6 +148,10 @@
     flex-wrap: wrap; 
     gap: 8px; 
     padding: 8px; 
+    max-height: calc(90vh - (top of dropdown-header)); 
+    bottom: auto;
+    top: 100%;
+    overflow-y: auto;
 }
 
 .option {
@@ -175,4 +182,22 @@
 
 .option:hover {
     background-color: #f9f9f9;
+}
+
+.dropdown-options::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dropdown-options::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.dropdown-options::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.dropdown-options::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
 }

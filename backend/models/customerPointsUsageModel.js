@@ -5,8 +5,7 @@ import sequelize from '../config/db.js';
 const CustomerPointsUsage = sequelize.define('customer_points_usage', {
     usageId: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+        primaryKey: true
     },
     orderId: {
         type: Sequelize.INTEGER,

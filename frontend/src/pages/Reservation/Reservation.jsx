@@ -7,10 +7,11 @@ import { use } from "react";
 import { BsXLg } from "react-icons/bs";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { io } from 'socket.io-client';
 
     const Reservation = ({ backendUrl }) => {
     const naivigate = useNavigate();
-    const { table_list, updateReservation, reservationF_list } = useContext(StoreContext);
+    const { table_list, updateReservation, reservationF_list, getReservationF } = useContext(StoreContext);
     const userId = localStorage.getItem("userId");
 
     
@@ -27,6 +28,7 @@ import { toast } from "react-toastify";
                     <button onClick={() => {
                     toast.dismiss(t.id);
                     updateReservation(userId, "cancelled");
+                    //getReservationF();
                     }}>Yes</button>
                     <button onClick={() => toast.dismiss(t.id)}>No</button>
                     </div>

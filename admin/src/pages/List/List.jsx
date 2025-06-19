@@ -10,11 +10,22 @@ const List = ({ url }) => {
   const navigate = useNavigate();
   const { token,admin } = useContext(StoreContext);
   const [list, setList] = useState([]);
+  const [menuItem, setMenuItem] = useState([]);
+  const [category, setCategory] = useState();
 
   const fetchList = async () => {
-    const response = await axios.get(`${url}/api/food/list`);
+    const response = await axios.get(`${url}/api/menus`);
     if (response.data.success) {
       setList(response.data.data);
+    } else {
+      toast.error("Error");
+    }
+  };
+
+  const fetchMenuItem= async () => {
+    const response = await axios.get(`${url}/api/menuItem`);
+    if (response.data.success) {
+      setMenuItem(response.data.data);
     } else {
       toast.error("Error");
     }
@@ -33,39 +44,57 @@ const List = ({ url }) => {
       toast.error("Error");
     }
   };
+
   useEffect(() => {
     if (!sessionStorage.getItem("admin") && !sessionStorage.getItem("token")) {
       toast.error("Please Login First");
       navigate("/");
     }
     fetchList();
+    fetchMenuItem();
   }, []);
 
   return (
     <div className="list add flex-col">
-      <p>All Food List</p>
+      <p>All Food List {category? category: ""}</p>
+
       <div className="list-table">
-        <div className="list-table-format title">
+        {list.map((item, index) => {
+          return (
+            <div key={index}>
+              <button className="list-button" onClick={()=>setCategory(item.description)}>
+                {item.menuId}{item.description}
+              </button>
+            </div>
+            );
+        })}
+      </div>
+
+      <div className="list-table-format title">
           <b>Image</b>
           <b>Name</b>
           <b>Category</b>
           <b>Price</b>
           <b>Action</b>
-        </div>
-        {list.map((item, index) => {
-          return (
+      </div>
+
+        {menuItem.map((item, index) => {
+          if (category === item.category){
+            return (
             <div key={index} className="list-table-format">
-              <img src={`${url}/images/` + item.image} alt="" />
+              <img /* src={`${url}/images/` + item.image} */ alt="" />
               <p>{item.name}</p>
               <p>{item.category}</p>
               <p>${item.price}</p>
-              <p onClick={() => removeFood(item._id)} className="cursor">
+              <p /*onClick={() => removeFood(item._id)}*/ className="cursor">
                 X
               </p>
             </div>
           );
+          }
+          return null;
         })}
-      </div>
+
     </div>
   );
 };

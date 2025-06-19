@@ -2,8 +2,11 @@ import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
 import { use } from "react";
 import { toast } from "react-toastify";
+import {io} from 'socket.io-client';
 
 export const StoreContext = createContext(null);
+
+const socket = io('http://localhost:4000', {query: {role: 'client'}});
 
 const StoreContextProvider = (props) => {
     const { backendUrl } = props;
@@ -16,13 +19,13 @@ const StoreContextProvider = (props) => {
     const [userId, setUserId] = useState(null);
     const [username, setUsername] = useState(null);
     const [reservationF_list, setReservationF_list] = useState();
+    const [reservationFtable_list, setReservationFtable_list] = useState();
     
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
             setToken(storedToken);
         }
-
 
         const fetchMenuItems = async () => {
             try {
@@ -78,6 +81,14 @@ const StoreContextProvider = (props) => {
         };
     useEffect(() => {
         fetchtable();
+    }, []);
+    useEffect(() => {
+        socket.on('TableState_updated', () => {
+            fetchtable();
+        });
+        return () => {
+        socket.off('TableState_updated');
+        };
     }, []);
 
     const addToCart = (itemId) => {
@@ -166,6 +177,25 @@ const StoreContextProvider = (props) => {
         }
     };
 
+    useEffect(() => {
+        socket.on('connect', () => {
+        console.log('Connected to server:', socket.id);
+        });
+
+        socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+        });
+    }, []);
+
+    useEffect(() => {
+        socket.on('reservation_created', () => {
+            getReservationF();
+        });
+        return () => {
+        socket.off('reservation_created');
+        };
+    }, []);
+
     const updateTableState = async (tableId) => {
         try {
             const response = await axios.post(`${backendUrl}/api/table/updateTableState`, {
@@ -203,6 +233,15 @@ const StoreContextProvider = (props) => {
         }
     };
 
+    useEffect(() => {
+        socket.on('reservation_updated', () => {
+            getReservationF();
+        });
+        return () => {
+        socket.off('reservation_updated');
+        };
+    }, []);
+
     const getReservationF = async () => {
         const userId = localStorage.getItem('userId');
         try{
@@ -210,9 +249,11 @@ const StoreContextProvider = (props) => {
                 userId
             });
             if (response.data.success) {
-              setReservationF_list(response.data.data);
+                console.log("test");
+                console.log(response.data.data);
+                setReservationF_list(response.data.data[0]);
             } else {
-              console.log(response.data.data);
+                console.log(response.data.data);
             }
         }catch(error){
             console.error(error);
@@ -222,6 +263,22 @@ const StoreContextProvider = (props) => {
     useEffect(() => {
         getReservationF();
     }, []);
+
+    const getReservationFtable = async (tableId) => {
+        
+        try{
+            const response = await axios.post(`${backendUrl}/api/table/getReservationF`,{
+                tableId
+            });
+            if (response.data.success) {
+              setReservationFtable_list(response.data.data);
+            } else {
+              console.log(response.data.data);
+            }
+        }catch(error){
+            console.error(error);
+        }
+    };
 
     const contextValue = {
         menuItem_list,

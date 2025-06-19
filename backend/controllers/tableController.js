@@ -54,16 +54,27 @@ const getReservationA = async (req, res) => {
 }
 
 const getReservationF = async (req, res) => {
-    const {userId} = req.body;
+    const {userId, tableId} = req.body;
     try {
-        const response = await reservationModel.findOne({
-            where: {
-                userId: userId,
-                reservationStatus: 'pending',
-            },
+            const conditions = {
+                [Op.or]: []
+            };
+            if(userId){
+                conditions[Op.or].push({ userId : userId, reservationStatus: 'pending' });
+            }
+            if(tableId){
+                conditions[Op.or].push({ tableId : tableId, timeslot : where(fn('DATE', col('timeslot')), new Date().toLocaleDateString()) });
+            }
+            if (conditions[Op.or].length === 0) {
+            return res.json({ success: false, message: 'Please provide userId or tableId.' });
+            }
+
+        const response = await reservationModel.findAll({
+            where: conditions
         });
         if (response){
             res.json({ success: true, data: response });
+            //console.log(response)
         }else{
             res.json({ success: false, data: response });
         }
@@ -112,12 +123,16 @@ const addReservation = async (req, res) => {
                     return res.json({ success: false, message: 'Table is not available' });
                 }else{
                     const response = await reservationModel.create({
-            userId: userId,
-            tableId: tableId,
-            timeslot: `${currentYear}-${currentMonth}-${currentDate} ${timeslot}:00:00`,
-            });
-            res.json({ success: true, data: response });
-            }
+                        userId: userId,
+                        tableId: tableId,
+                        timeslot: `${currentYear}-${currentMonth}-${currentDate} ${timeslot}:00:00`,
+                    });
+
+                    const io = req.app.get('io');
+                    io.emit('reservation_created', response )
+
+                    res.json({ success: true, data: response });
+                }
             }
         }
 
@@ -135,7 +150,11 @@ const updateTableState = async (req, res) => {
             { tablestates: state },
             { where: { tableId: tableId } }
         );
-        res.json({ success: true, data: response });
+        if (response == 1){
+            const io = req.app.get('io');
+            io.emit('TableState_updated', response );
+            res.json({ success: true, data: response });
+        }
     } catch (error) {
         console.error('Error updating table state:', error);
         res.json({ success: false, message: 'Server error' });
@@ -165,6 +184,9 @@ const updateReservation = async (req, res) =>{
             }
         ); 
         if (response == 1){
+            const io = req.app.get('io');
+            io.emit('reservation_updated', response )
+
             res.json({ success: true, data: response });
         }else{
             res.json({ success: false, message: "You have no reservation to cancel" });

@@ -8,98 +8,136 @@ import CustomerPoints from '../models/customerPointsModel.js';
 import CustomerPointsUsage from '../models/customerPointsUsageModel.js';
 
 const placeOrder = async (req, res) => {
-  try {
-    const { customerId, items, amount, pointsToUse, paymentMethodId } = req.body;
+    try {
+        const { customerId, items, amount, pointsToUse, paymentMethodId } = req.body;
 
-    const customer = await Customer.findOne({ where: { customerId } });
-    if (!customer) {
-      return res.json({ success: false, message: 'Customer not found' });
-    }
+        const customer = await Customer.findOne({ where: { customerId } });
+        if (!customer) {
+            return res.json({ success: false, message: 'Customer not found' });
+        }
 
-    // 查询最后一个订单以生成新的orderId
-    const lastOrder = await Order.findOne({
-      where: { customerId },
-      attributes: ['orderId'],
-      order: [['orderId', 'DESC']]
-    });
-
-    let nextSequence = 1;
-    if (lastOrder) {
-      const lastOrderId = lastOrder.orderId;
-      console.log('lastOrderId:', lastOrderId, 'type:', typeof lastOrderId);
-      
-      // 确保lastOrderId是字符串
-      const lastOrderIdStr = String(lastOrderId);
-      const lastSequence = parseInt(lastOrderIdStr.slice(-5), 10);
-      nextSequence = lastSequence + 1;
-      
-      if (nextSequence > 99999) {
-        return res.json({ success: false, message: 'Order sequence limit reached for this customer' });
-      }
-    }
-
-    const sequenceStr = nextSequence.toString().padStart(5, '0');
-    const orderId = `${customerId}${sequenceStr}`;
-    console.log('Generated orderId:', orderId, 'type:', typeof orderId);
-
-    const newOrder = await Order.create({
-      orderId,
-      customerId,
-      orderDate: new Date(),
-      orderStatus: 'MenuItem Processing',
-      totalAmount: amount,
-      paymentStatus: 'Pending'
-    });
-
-    console.log('New order created:', newOrder.toJSON());
-
-    for (const item of items) {
-      // 生成 orderItemId
-      const orderItemId = `${orderId}${item.menuItemId}`;
-
-      await OrderItem.create({
-        orderItemId,
-        orderId,
-        menuItemId: item.menuItemId,
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
-        totalPrice: item.totalPrice
-      });
-    }
-
-    if (paymentMethodId !== 1) { 
-      await newOrder.update({ paymentStatus: 'Paid' });
-      await Payment.create({
-        paymentId: orderId, // 使用orderId作为paymentId
-        orderId,
-        paymentMethodId,
-        paymentDate: new Date()
-      });
-    }
-
-    if (pointsToUse > 0) {
-      const pointsRecord = await CustomerPoints.findOne({
-        where: { customerId }
-      });
-
-      if (pointsRecord) {
-        await CustomerPointsUsage.create({
-          orderId,
-          pointsId: pointsRecord.pointsId,
-          usageDate: new Date(),
-          usedPoints: pointsToUse
+        const lastOrder = await Order.findOne({
+            where: { customerId },
+            attributes: ['orderId'],
+            order: [['orderId', 'DESC']]
         });
 
-        pointsRecord.points -= pointsToUse;
-        await pointsRecord.save();
-      }
-    }
+        let nextSequence = 1;
+        if (lastOrder) {
+            const lastOrderId = lastOrder.orderId;
+            console.log('lastOrderId:', lastOrderId, 'type:', typeof lastOrderId);
 
-    res.json({ success: true, message: 'Order placed successfully', orderId });
-  } catch (error) {
-    console.error('Error in placeOrder:', error);
-    res.json({ success: false, message: 'Error placing order' });
-  }
+            const lastOrderIdStr = String(lastOrderId);
+            const lastSequence = parseInt(lastOrderIdStr.slice(-5), 10);
+            nextSequence = lastSequence + 1;
+
+            if (nextSequence > 99999) {
+                return res.json({ success: false, message: 'Order sequence limit reached for this customer' });
+            }
+        }
+
+        const sequenceStr = nextSequence.toString().padStart(5, '0');
+        const orderId = `${customerId}${sequenceStr}`;
+        console.log('Generated orderId:', orderId, 'type:', typeof orderId);
+
+        const newOrder = await Order.create({
+            orderId,
+            customerId,
+            orderDate: new Date(),
+            orderStatus: 'MenuItem Processing',
+            totalAmount: amount,
+            paymentStatus: 'Pending'
+        });
+
+        console.log('New order created:', newOrder.toJSON());
+
+        for (const item of items) {
+            const orderItemId = `${orderId}${item.menuItemId}`;
+
+            await OrderItem.create({
+                orderItemId,
+                orderId,
+                menuItemId: item.menuItemId,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice,
+                totalPrice: item.totalPrice
+            });
+        }
+
+        if (paymentMethodId!== 1) { 
+            await newOrder.update({ paymentStatus: 'Paid' });
+            await Payment.create({
+                paymentId: orderId, 
+                orderId,
+                paymentMethodId,
+                paymentDate: new Date()
+            });
+        }
+
+        if (pointsToUse > 0) {
+            let pointsRecord = await CustomerPoints.findOne({
+                where: { customerId }
+            });
+
+            if (!pointsRecord) {
+                pointsRecord = await CustomerPoints.create({
+                    customerId,
+                    points: 0
+                });
+            }
+
+            if (pointsRecord.points < pointsToUse) {
+                return res.json({ success: false, message: 'Insufficient points' });
+            }
+
+            // Get the last usage record for the pointsId
+            const lastUsage = await CustomerPointsUsage.findOne({
+                where: { pointsId: pointsRecord.pointsId },
+                attributes: ['usageId'],
+                order: [['usageId', 'DESC']]
+            });
+
+            let usageSequence = 1;
+            if (lastUsage) {
+                const lastUsageId = lastUsage.usageId;
+                const lastUsageSequence = parseInt(lastUsageId.toString().slice(String(pointsRecord.pointsId).length), 10);
+                usageSequence = lastUsageSequence + 1;
+            }
+
+            const usageId = `${pointsRecord.pointsId}${usageSequence}`;
+
+            await CustomerPointsUsage.create({
+                usageId,
+                orderId,
+                pointsId: pointsRecord.pointsId,
+                usageDate: new Date(),
+                usedPoints: pointsToUse
+            });
+
+            pointsRecord.points -= pointsToUse;
+            await pointsRecord.save();
+        }
+
+        const newPoints = Math.floor(amount / 10);
+        let pointsRecord = await CustomerPoints.findOne({
+            where: { customerId }
+        });
+
+        if (!pointsRecord) {
+            pointsRecord = await CustomerPoints.create({
+                customerId,
+                points: newPoints
+            });
+        } else {
+            pointsRecord.points += newPoints;
+            await pointsRecord.save();
+        }
+
+        res.json({ success: true, message: 'Order placed successfully', orderId });
+    } catch (error) {
+        console.error('Error in placeOrder:', error);
+        res.json({ success: false, message: 'Error placing order' });
+    }
 };
 
 const getOrdersByCustomerId = async (req, res) => {
@@ -161,18 +199,18 @@ const getAllOrders = async (req, res) => {
 };
 
 const updateOrderStatus = async (req, res) => {
-  try {
-    const { orderId, status } = req.query;
-    const order = await Order.findOne({ where: { orderId } });
-    if (!order) {
-      return res.json({ success: false, message: 'Order not found' });
+    try {
+        const { orderId, status } = req.query;
+        const order = await Order.findOne({ where: { orderId } });
+        if (!order) {
+            return res.json({ success: false, message: 'Order not found' });
+        }
+        await order.update({ orderStatus: status });
+        res.json({ success: true, message: 'Order status updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.json({ success: false, message: 'Error updating order status' });
     }
-    await order.update({ orderStatus: status });
-    res.json({ success: true, message: 'Order status updated successfully' });
-  } catch (error) {
-    console.error(error);
-    res.json({ success: false, message: 'Error updating order status' });
-  }
 };
 
 export { placeOrder, getOrdersByCustomerId, getAllOrders, updateOrderStatus };

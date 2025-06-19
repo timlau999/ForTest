@@ -21,12 +21,30 @@ import pointsRouter from "./routes/pointsRoute.js";
 import CustomerPoints from "./models/customerPointsModel.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import optionRouter  from "./routes/optionRoute.js";
+import http from "http";
+import {Server} from "socket.io";
 
 const app = express();
 const port = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(cors());
+
+const server = http.createServer(app);
+const io = new Server (server, {
+    cors: {
+        origin: ['http://localhost:5173', 'http://localhost:5174'],
+        methods: ["GET", "POST"],
+    },
+    });
+io.on('connection', (socket) => {
+  const role = socket.handshake.query.role;
+  console.log('Client connected:', role, socket.id);
+  socket.on('disconnect', () => {
+    console.log('Client disconnected:', role, socket.id);
+  });
+});
+app.set('io', io);
 
 connectDB();
 
@@ -58,6 +76,6 @@ app.get("/", (req, res) => {
     res.send("API Working");
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server Started on port: ${port}`);
 });

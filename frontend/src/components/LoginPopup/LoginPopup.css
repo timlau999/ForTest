@@ -10,6 +10,7 @@
     place-items: center;
     backdrop-filter: blur(2px);
     animation: fadeIn 0.3s ease-out forwards;
+    overflow-y: auto;
 }
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -26,6 +27,8 @@
     flex-direction: column;
     gap: 25px;
     animation: slideUp 0.4s ease-out forwards;
+    max-height: 90vh; 
+    overflow-y: auto;
 }
 @keyframes slideUp {
     from { transform: translateY(20px); opacity: 0; }
@@ -217,17 +220,25 @@
     background-color: #f9f9f9;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 768px) {
     .input-grid {
         grid-template-columns: 1fr;
     }
     
     .login-popup-container {
         padding: 25px 20px;
-        width: 90vw;
+        width: 95vw; 
     }
     
     .login-popup-title h2 {
         font-size: 1.5rem;
+    }
+    
+    .multi-select-dropdown {
+        font-size: 16px;
+    }
+    
+    .option {
+        min-width: 150px; 
     }
 }

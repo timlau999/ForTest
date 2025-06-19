@@ -129,3 +129,27 @@
         width: 40px;
     }
 }
+
+.completed-orders-button {
+  background-color: #ff6347; 
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 8px; 
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin: 20px 0;
+}
+
+.completed-orders-button:hover {
+  background-color: #ff6347;
+  transform: translateY(-2px); 
+}
+
+.completed-orders-button:active {
+  transform: translateY(0); 
+}

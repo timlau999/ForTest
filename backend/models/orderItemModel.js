@@ -4,12 +4,12 @@ import sequelize from '../config/db.js';
 import MenuItem from './menuItemModel.js';
 
 const OrderItem = sequelize.define('orderitem', {
-orderItemId: {
-  type: DataTypes.STRING(255), 
-  primaryKey: true
-},
+  orderItemId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true
+  },
   orderId: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: 'order',

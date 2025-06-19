@@ -18,9 +18,6 @@ const TableState = ({tableNumber,tableCapacity,tablestates }) => {
             <h3>Table {tableNumber}</h3>
             <p>Capacity: {tableCapacity}</p>
             <p className="table-container-state">Status: {tablestates}</p>
-            {/*tablestates === "available" && !isReserved && (
-            <></>
-            )*/}
             <p>Customer:</p>
             <p>
             <button className="TableSteteButton" onClick={()=>updateTableState(tableNumber, "available")} >Enable</button>

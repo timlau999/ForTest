@@ -10,51 +10,41 @@ import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import TableState from "../../components/TableState/TableState";
 import { BsSearch } from "react-icons/bs";
+import {io} from 'socket.io-client';
+
+const socket = io('http://localhost:4000', {query: {role: 'admin'}});
 
 const Reservation = ({ url }) => {
     const navigate=useNavigate();
     const {token,admin} = useContext(StoreContext);
-    const { table_list, updateReservation } = useContext(StoreContext);
-    const [reservation_list, setReservation_list]= useState([]);
-    const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString());
+    const { table_list, updateReservation, fetchReservation, modifyReservationStatus, reservation_list } = useContext(StoreContext);
+    const [selectedDate, setSelectedDate] = useState();
     const [inputuserId, setInputuserId] = useState();
 
-    const fetchReservation = async (inputuserId, selectedDate) => {
-        const response = await axios.post(`${url}/api/table/getReservationA`,{
-          ...(inputuserId && { inputuserId }),
-          ...(selectedDate && { selectedDate })
-        });
-        if (response.data.success) {
-          setReservation_list(response.data.data);
-          toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
-        }
-      };
-      
-      
     useEffect(()=>{
-      if(!sessionStorage.getItem("admin") && !sessionStorage.getItem("token")){
+        if(!sessionStorage.getItem("admin") && !sessionStorage.getItem("token")){
           toast.error("Please Login First");
           navigate("/");
-        }
-      ;
-      },[])
+        };
+        setSelectedDate(new Date().toLocaleDateString());
+        fetchReservation(null, new Date().toLocaleDateString());
+    },[])
+    
+    useEffect(() => {
+          socket.on('reservation_updated', () => {
+            console.log("test")
+              if(selectedDate){
+                fetchReservation(null, selectedDate);
+              }
+              if(inputuserId){
+                fetchReservation(inputuserId, null);
+              }
+          });
+          return () => {
+          socket.off('reservation_updated');
+          };
+        }, []);
 
-    const modifyReservationStatus = (reservationId, reservationStatus) => {
-      toast.info((t) => ( 
-      <div>Modify the reserveration?
-      <button onClick={() => {
-      toast.dismiss(t.id);
-      updateReservation(reservationId, reservationStatus);
-      }}>Yes</button>
-      <button onClick={() => toast.dismiss(t.id)}>No</button>
-      </div>
-      ),{autoClose: false, position: "bottom-center",});
-    }
-
-
-      
 return (
   <div className="reservation-table-container">
     <h3>Reservation</h3>
@@ -85,7 +75,9 @@ return (
         <label >Search Reservation : </label>
         <input className="search-bar" type="text" placeholder=" userID... " value={inputuserId}
           onChange={e => setInputuserId(e.target.value)} />
-        <button className="search-icon" onClick={()=>fetchReservation(inputuserId, null)}><BsSearch /></button>
+        <button className="search-icon" onClick={()=>{
+          fetchReservation(inputuserId, null);
+          setSelectedDate("")}}><BsSearch /></button>
         Or Search by date :
         <input className="search-reservation-bar-datepicker" type="date" value={selectedDate} 
           onChange={e => {setSelectedDate(e.target.value);

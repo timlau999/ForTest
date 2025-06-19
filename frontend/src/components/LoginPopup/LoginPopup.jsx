@@ -3,17 +3,7 @@ import { assets } from '../../assets/assets';
 import './LoginPopup.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-const MEDICAL_CONDITIONS_OPTIONS = [
-  'No Medical issue', 'Diabetes', 'Hypertension', 'Heart Disease', 'Asthma', 'Allergies', 
-  'Arthritis', 'Depression', 'Anxiety', 'High Cholesterol', 'Thyroid Issues',
-  'Celiac Disease', 'Crohn’s Disease', 'Ulcerative Colitis'
-];
-const DIETARY_PREFERENCE_OPTIONS = [
-  'No Dietary Preference', 'Vegetarian', 'Vegan', 'Pescetarian', 'Gluten-Free', 'Dairy-Free', 
-  'Kosher', 'Halal', 'Paleo', 'Ketogenic', 'Low Carb', 'High Protein',
-  'Mediterranean', 'Flexitarian'
-];
+import { toast } from "react-toastify";
 
 export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
   const navigate = useNavigate();
@@ -33,12 +23,16 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
     dietaryPreference: false
   });
   const [allergyOptions, setAllergyOptions] = useState([]);
-  const [isLoadingAllergyOptions, setIsLoadingAllergyOptions] = useState(true); 
+  const [medicalConditionOptions, setMedicalConditionOptions] = useState([]);
+  const [dietaryPreferenceOptions, setDietaryPreferenceOptions] = useState([]);
+  const [isLoadingAllergyOptions, setIsLoadingAllergyOptions] = useState(true);
+  const [isLoadingMedicalConditionOptions, setIsLoadingMedicalConditionOptions] = useState(true);
+  const [isLoadingDietaryPreferenceOptions, setIsLoadingDietaryPreferenceOptions] = useState(true);
 
   useEffect(() => {
     const fetchAllergyOptions = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/ingredients`);
+        const response = await axios.get(`${backendUrl}/api/options/ingredients`);
         const ingredients = response.data.data;
         const options = ingredients.map(ingredient => ingredient.name);
         setAllergyOptions(options);
@@ -49,7 +43,35 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
       }
     };
 
+    const fetchMedicalConditionOptions = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/options/medical-conditions`);
+        const conditions = response.data.data;
+        const options = conditions.map(condition => condition.name);
+        setMedicalConditionOptions(options);
+      } catch (error) {
+        console.error('Error fetching medical condition options:', error);
+      } finally {
+        setIsLoadingMedicalConditionOptions(false);
+      }
+    };
+
+    const fetchDietaryPreferenceOptions = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/api/options/dietary-preferences`);
+        const preferences = response.data.data;
+        const options = preferences.map(preference => preference.name);
+        setDietaryPreferenceOptions(options);
+      } catch (error) {
+        console.error('Error fetching dietary preference options:', error);
+      } finally {
+        setIsLoadingDietaryPreferenceOptions(false);
+      }
+    };
+
     fetchAllergyOptions();
+    fetchMedicalConditionOptions();
+    fetchDietaryPreferenceOptions();
   }, [backendUrl]);
 
   const validateLogin = () => {
@@ -134,7 +156,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
   const onLogin = async (e) => {
     e.preventDefault();
     if (!validateLogin()) return;
-    
+
     try {
       const response = await axios.post(`${backendUrl}/api/user/login`, {
         email: email,
@@ -151,6 +173,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
           localStorage.setItem('customerId', customerResponse.data.customerId);
         }
         console.log('Login successful');
+        toast.success("Login Successfully");
         setShowLogin(false);
         setIsLoggedIn(true);
       } else {
@@ -166,7 +189,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
   const onRegister = async (e) => {
     e.preventDefault();
     if (!validateRegister()) return;
-    
+
     try {
       const response = await axios.post(`${backendUrl}/api/user/register`, {
         username: username,
@@ -200,11 +223,11 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
           <h2>{currState}</h2>
           <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="Close" />
         </div>
-        
+
         {errors.general && (
           <div className="error-message">{errors.general}</div>
         )}
-        
+
         <div className="login-popup-inputs">
           {currState === "Sign Up" && (
             <>
@@ -221,7 +244,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                   />
                   {errors.username && <span className="error-text">{errors.username}</span>}
                 </div>
-                
+
                 <div className="input-group">
                   <label>Email</label>
                   <input
@@ -233,7 +256,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                   />
                   {errors.email && <span className="error-text">{errors.email}</span>}
                 </div>
-                
+
                 <div className="input-group">
                   <label>Password</label>
                   <input
@@ -245,7 +268,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                   />
                   {errors.password && <span className="error-text">{errors.password}</span>}
                 </div>
-                
+
                 <div className="input-group">
                   <label>Phone Number</label>
                   <input
@@ -257,7 +280,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                   />
                   {errors.phoneNumber && <span className="error-text">{errors.phoneNumber}</span>}
                 </div>
-                
+
                 <div className="input-group full-width">
                   <label>Address</label>
                   <input
@@ -270,18 +293,18 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                   {errors.address && <span className="error-text">{errors.address}</span>}
                 </div>
               </div>
-              
+
               <h3 className="section-title">Profile</h3>
               <div className="input-grid">
                 <div className="input-group">
                   <label>Allergy:</label>
                   <div className="multi-select-dropdown">
-                    <div 
+                    <div
                       className="dropdown-header"
                       onClick={() => toggleDropdown('allergy')}
                     >
-                      {allergy.length > 0 
-                        ? allergy.join(', ') 
+                      {allergy.length > 0
+                        ? allergy.join(', ')
                         : 'Select allergies'}
                       <i className="fa fa-chevron-down"></i>
                     </div>
@@ -291,8 +314,8 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                           <p>Loading allergy options...</p>
                         ) : (
                           allergyOptions.map(option => (
-                            <div 
-                              key={option} 
+                            <div
+                              key={option}
                               className="option"
                               onClick={() => {
                                 toggleOption('allergy', option);
@@ -316,34 +339,38 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                 <div className="input-group">
                   <label>Medical Conditions:</label>
                   <div className="multi-select-dropdown">
-                    <div 
+                    <div
                       className="dropdown-header"
                       onClick={() => toggleDropdown('medicalConditions')}
                     >
-                      {medicalConditions.length > 0 
-                        ? medicalConditions.join(', ') 
+                      {medicalConditions.length > 0
+                        ? medicalConditions.join(', ')
                         : 'Select conditions'}
                       <i className="fa fa-chevron-down"></i>
                     </div>
                     {dropdownOpen.medicalConditions && (
                       <div className="dropdown-options">
-                        {MEDICAL_CONDITIONS_OPTIONS.map(option => (
-                          <div 
-                            key={option} 
-                            className="option"
-                            onClick={() => {
-                              toggleOption('medicalConditions', option);
-                              toggleDropdown('medicalConditions');
-                            }}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={medicalConditions.includes(option)}
-                              readOnly
-                            />
-                            <span>{option}</span>
-                          </div>
-                        ))}
+                        {isLoadingMedicalConditionOptions ? (
+                          <p>Loading medical condition options...</p>
+                        ) : (
+                          medicalConditionOptions.map(option => (
+                            <div
+                              key={option}
+                              className="option"
+                              onClick={() => {
+                                toggleOption('medicalConditions', option);
+                                toggleDropdown('medicalConditions');
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={medicalConditions.includes(option)}
+                                readOnly
+                              />
+                              <span>{option}</span>
+                            </div>
+                          ))
+                        )}
                       </div>
                     )}
                   </div>
@@ -352,34 +379,38 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                 <div className="input-group full-width">
                   <label>Dietary Preference:</label>
                   <div className="multi-select-dropdown">
-                    <div 
+                    <div
                       className="dropdown-header"
                       onClick={() => toggleDropdown('dietaryPreference')}
                     >
-                      {dietaryPreference.length > 0 
-                        ? dietaryPreference.join(', ') 
+                      {dietaryPreference.length > 0
+                        ? dietaryPreference.join(', ')
                         : 'Select preferences'}
                       <i className="fa fa-chevron-down"></i>
                     </div>
                     {dropdownOpen.dietaryPreference && (
                       <div className="dropdown-options">
-                        {DIETARY_PREFERENCE_OPTIONS.map(option => (
-                          <div 
-                            key={option} 
-                            className="option"
-                            onClick={() => {
-                              toggleOption('dietaryPreference', option);
-                              toggleDropdown('dietaryPreference');
-                            }}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={dietaryPreference.includes(option)}
-                              readOnly
-                            />
-                            <span>{option}</span>
-                          </div>
-                        ))}
+                        {isLoadingDietaryPreferenceOptions ? (
+                          <p>Loading dietary preference options...</p>
+                        ) : (
+                          dietaryPreferenceOptions.map(option => (
+                            <div
+                              key={option}
+                              className="option"
+                              onClick={() => {
+                                toggleOption('dietaryPreference', option);
+                                toggleDropdown('dietaryPreference');
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={dietaryPreference.includes(option)}
+                                readOnly
+                              />
+                              <span>{option}</span>
+                            </div>
+                          ))
+                        )}
                       </div>
                     )}
                   </div>
@@ -387,7 +418,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
               </div>
             </>
           )}
-          
+
           {currState === "Login" && (
             <div className="input-grid">
               <div className="input-group full-width">
@@ -401,7 +432,7 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
                 />
                 {errors.email && <span className="error-text">{errors.email}</span>}
               </div>
-              
+
               <div className="input-group full-width">
                 <label>Password</label>
                 <input
@@ -416,9 +447,9 @@ export const LoginPopup = ({ setShowLogin, backendUrl, setIsLoggedIn }) => {
             </div>
           )}
         </div>
-        
+
         <button className="submit-button">{currState === "Sign Up" ? "Create account" : "Login"}</button>
-        
+
         <div className="toggle-text">
           {currState === "Login" ? (
             <p>Create a new account? <span onClick={() => setCurrState("Sign Up")}>Click here</span></p>

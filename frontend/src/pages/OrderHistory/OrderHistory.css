@@ -1,0 +1,54 @@
+/* src/pages/OrderHistory/OrderHistory.css */
+.order-history {
+    margin-top: 50px;
+    padding: 20px;
+    border-top: 2px solid #e2e2e2;
+}
+
+.order-history h1 {
+    color: #262626;
+    font-weight: 500;
+}
+
+.order-item {
+    border: 1px solid #e2e2e2;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.order-item p {
+    margin: 5px 0;
+}
+
+.order-item h3 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.order-item-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.order-item-card {
+    border: 1px solid #e2e2e2;
+    border-radius: 10px;
+    width: 400px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.order-item-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.order-item-card .order-item-info {
+    flex: 1;
+}
