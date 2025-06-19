@@ -1,4 +1,3 @@
-// ForTest/frontend/src/pages/OrderHistory/OrderHistory.jsx
 import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 import axios from 'axios';
@@ -18,7 +17,6 @@ const OrderHistory = ({ backendUrl }) => {
                         headers: { token }
                     });
                     if (Array.isArray(orderResponse.data)) {
-
                         const completedOrders = orderResponse.data.filter(
                             (order) => order.orderStatus === 'Order Completed'
                         );
@@ -39,7 +37,7 @@ const OrderHistory = ({ backendUrl }) => {
     }, [token, customerId, backendUrl]);
 
     return (
-        <div className="order-history">
+        <div className="order" id="order">
             <h1 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '20px' }}>Order History</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {orders.length > 0 ? (

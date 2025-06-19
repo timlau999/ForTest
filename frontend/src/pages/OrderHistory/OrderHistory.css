@@ -1,11 +1,11 @@
 /* src/pages/OrderHistory/OrderHistory.css */
-.order-history {
-    margin-top: 50px;
-    padding: 20px;
-    border-top: 2px solid #e2e2e2;
+.order {
+    margin-top: 50px; 
+    padding: 20px; 
+    border-top: 2px solid #e2e2e2; 
 }
 
-.order-history h1 {
+.order h1 {
     color: #262626;
     font-weight: 500;
 }
@@ -27,23 +27,24 @@
 }
 
 .order-item-items {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex; 
+    flex-wrap: wrap; 
     gap: 20px;
 }
 
 .order-item-card {
     border: 1px solid #e2e2e2;
     border-radius: 10px;
-    width: 400px;
+    width: calc(33.33% - 20px); 
     padding: 10px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 15px; 
+    box-sizing: border-box; 
 }
 
 .order-item-card img {
-    width: 120px;
+    width: 120px; 
     height: 120px;
     object-fit: cover;
     border-radius: 10px;
@@ -51,4 +52,41 @@
 
 .order-item-card .order-item-info {
     flex: 1;
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
+}
+
+.order-item-card .order-item-info p {
+    white-space: normal;
+}
+
+@media (max-width: 1200px) {
+    .order-item-card {
+        width: calc(50% - 20px); 
+    }
+}
+
+@media (max-width: 768px) {
+    .order-item-card {
+        width: 100%; 
+        flex-direction: column; 
+        align-items: flex-start; 
+    }
+
+    .order-item-card img {
+        width: 100%; 
+        height: auto; 
+        max-height: 200px;
+        margin-bottom: 10px; 
+    }
+
+    .order-item-card .order-item-info p {
+        font-size: 14px; 
+    }
+}
+
+@media (max-width: 480px) {
+    .order-item-card img {
+        max-height: 150px; 
+    }
 }

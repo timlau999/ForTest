@@ -6,14 +6,6 @@ const Menu = sequelize.define('Menu', {
     type: DataTypes.INTEGER,
     primaryKey: true
   },
-  restaurantId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'restaurant',
-      key: 'restaurantID'
-    }
-  },
   description: {
     type: DataTypes.STRING(255),
     allowNull: false

@@ -7,6 +7,7 @@ import Navbar from './components/Navbar/Navbar';
 import Cart from './pages/Cart/Cart';
 import Home from './pages/Home/Home';
 import Order from './components/Order/Order';
+import OrderHistory from './pages/OrderHistory/OrderHistory';
 import Chatbot from './components/Chatbot/Chatbot';
 import UserAvatar from './components/UserAvatar/UserAvatar'; 
 import StoreContextProvider from './context/StoreContext.jsx';
@@ -45,6 +46,7 @@ const App = () => {
                     <Route path="/" element={<Home backendUrl={backendUrl} />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/order" element={<Order backendUrl={backendUrl} />} />
+                    <Route path="/order-history" element={<OrderHistory backendUrl={backendUrl} />} />
                     <Route path="/reservation" element={<Reservation backendUrl={backendUrl}/>} />
                 </Routes>
             </div>
