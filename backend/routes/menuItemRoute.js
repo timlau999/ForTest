@@ -1,5 +1,5 @@
 import express from "express";
-import { addMenuItem, listMenuItems, removeMenuItem } from "../controllers/menuItemController.js";
+import { addMenuItem, listMenuItems, removeMenuItem, editMenuItem } from "../controllers/menuItemController.js";
 import multer from "multer";
 import authMiddleware from "../middleware/auth.js";
 
@@ -18,5 +18,6 @@ const upload = multer({ storage: storage });
 menuItemRouter.get("/", listMenuItems);
 menuItemRouter.post("/add", upload.single("image"), authMiddleware, addMenuItem);
 menuItemRouter.post("/remove", authMiddleware, removeMenuItem);
+menuItemRouter.post("/edit", upload.single("image"), authMiddleware, editMenuItem); 
 
 export default menuItemRouter;

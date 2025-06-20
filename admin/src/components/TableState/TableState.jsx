@@ -13,21 +13,24 @@ const TableState = ({tableNumber,tableCapacity,tablestates }) => {
     const time = {"timeSlots": ["10","11","12","13","14","15","16","17","18","19","20","21"]};
 
     return (
-        <div className="table-item">
-            <div className="table-container">
-            <h3>Table {tableNumber}</h3>
-            <p>Capacity: {tableCapacity}</p>
-            <p className="table-container-state">Status: {tablestates}</p>
-            <p>Customer:</p>
-            <p>
-            <button className="TableSteteButton" onClick={()=>updateTableState(tableNumber, "available")} >Enable</button>
-            <button className="TableSteteButton" onClick={()=>updateTableState(tableNumber, "unavailable")}>Disable</button>
-            <button className="TableSteteButton" >Edit</button>
-            </p>
-            <p>
-            <button className="TableSteteButton" >Splite</button>
-            <button className="TableSteteButton" onClick={onClickReserve}>View Detail<BsChevronRight/></button>
-            </p>
+        <section  className="table-item">
+
+            <div class="card">
+                <div class="content">
+                <p class="logo">Table {tableNumber}</p>
+                <div class="h6">Status: {tablestates} Capacity: {tableCapacity} &amp; Customer:</div>
+                <div class="hover_content">
+                    <p>
+                    <button className="TableSteteButton" onClick={()=>updateTableState(tableNumber, "available")} >Enable</button>
+                    <button className="TableSteteButton" onClick={()=>updateTableState(tableNumber, "unavailable")}>Disable</button>
+                    <button className="TableSteteButton" >Edit</button>
+                    </p>
+                    <p>
+                    <button className="TableSteteButton" >Splite</button>
+                    <button className="TableSteteButton" onClick={onClickReserve}>View Detail<BsChevronRight/></button>
+                    </p>
+                </div>
+                </div>
             </div>
 
             <div className={`table-timeslot ${isOpenTimeSlot ? 'show' : ''}`}>
@@ -43,7 +46,7 @@ const TableState = ({tableNumber,tableCapacity,tablestates }) => {
                     );
                 })}
             </div>
-        </div>
+        </section >
     );
 };
 

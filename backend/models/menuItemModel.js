@@ -5,7 +5,8 @@ import sequelize from '../config/db.js';
 const MenuItem = sequelize.define('MenuItem', {
     menuItemId: {
         type: DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
     },
     menuID: {
         type: DataTypes.INTEGER,

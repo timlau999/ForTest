@@ -9,6 +9,9 @@ import { assets } from "../../assets/assets";
 import { BsChevronRight } from "react-icons/bs";
 import { BsChevronLeft } from "react-icons/bs";
 import { BsSearch } from "react-icons/bs";
+import { BsPencil } from "react-icons/bs";
+import { BsX } from "react-icons/bs";
+import { BsCheck } from "react-icons/bs";
 
 const Account = ({ url }) => {
     const navigate = useNavigate();
@@ -290,36 +293,53 @@ const Account = ({ url }) => {
                     const user = item.User || item;
                     
                     return (
-                        <div className="Account-container" key={index}>
-                            <div className="Account-container-info">
-                                <p className="Account-container-info-item">UserID : {user.userId}</p>
-                                <p className="Account-container-info-item">Username : {user.username}</p>
-                                <p className="Account-container-info-item">Email : {user.email}</p>
-                                <p className="Account-container-info-item">Address : {user.address}</p>
-                                <p className="Account-container-info-item">Phone Number : {user.phoneNumber}</p>
-
-                                {activeTab === "customer" && item.CustomerProfile && (
+                        <div class="profile-card">
+                        <div class="profile-image">
+                        </div>
+                        <div class="profile-info">
+                        <p class="profile-name">Name: {user.username}</p>
+                        <div class="profile-title">@ {user.userId}</div>
+                        <div class="profile-bio">
+                        profile-bio... Email : {user.email} Address : {user.address} Phone Number : {user.phoneNumber}
+                        {activeTab === "customer" && item.CustomerProfile && (
                                     <>
                                         <p className="Account-container-info-item">Height : {item.CustomerProfile.height || "N/A"}</p>
                                         <p className="Account-container-info-item">Weight : {item.CustomerProfile.weight || "N/A"}</p>
                                     </>
                                 )}
+                        </div>
+                        </div>
+                        <div class="social-links">
+                            <button class="social-btn A">
+                                <BsPencil />
+                            </button>
+                            <button class="social-btn B">
+                                <BsCheck />
+                            </button>
+                            <button class="social-btn C">
+                                <BsX />
+                            </button>
+                            <button class="social-btn D">
+                                            
+                             </button>
+                        </div>
+                        <button class="cta-button">Message</button>
+                        <div class="stats">
+                            <div class="stat-item">
+                            <div class="stat-value">~</div>
+                            <div class="stat-label">Point</div>
                             </div>
-                            <div className="Account-container-Button">
-                                <button className="Account-Button">
-                                    <img className="account-pencil" src={assets.pencil} /> Edit
-                                </button>
-
-                                {activeTab === "admin" || activeTab === "staff" ? (
-                                    <>
-                                        <button className="Account-Button">Activate</button>
-                                        <button className="Account-Button">Inactivate</button>
-                                    </>
-                                ) : (
-                                    <button className="Account-Button">View Details</button>
-                                )}
+                            <div class="stat-item">
+                            <div class="stat-value">~</div>
+                            <div class="stat-label">Review</div>
+                            </div>
+                            <div class="stat-item">
+                            <div class="stat-value">~</div>
+                            <div class="stat-label">Rating</div>
                             </div>
                         </div>
+                        </div>
+                        
                     );
                 })}
 

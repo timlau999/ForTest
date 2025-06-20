@@ -10,19 +10,32 @@ import {useNavigate } from "react-router-dom";
 
 const Add = ({url}) => {
   const navigate=useNavigate();
-  const {token,admin} = useContext(StoreContext);
+  const {token,admin, userId} = useContext(StoreContext);
   const [image, setImage] = useState(false);
   const [data, setData] = useState({
     name: "",
     description: "",
+    calories: "",
+    category: "Japanese Cuisine",
+    menuId: "1",
     price: "",
-    category: "Salad",
   });
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
+    let menuId = "";
     setData((data) => ({ ...data, [name]: value }));
+    switch (value) {
+    case "Japanese Cuisine":menuId = "1";break;
+    case "Chinese Cuisine":menuId = "2";break;
+    case "Western Cuisine":menuId = "3";break;
+    case "Thai Cuisine":menuId = "4";break;
+    case "Korean Cuisine":menuId = "5";break;
+    case "Deserts":menuId = "6";break;
+    default:menuId = "";
+    }
+    setData((data) => ({ ...data, menuID: menuId }));
   };
 
   const onSubmitHandler = async (event) => {
@@ -30,19 +43,23 @@ const Add = ({url}) => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
-    formData.append("price", Number(data.price));
+    formData.append("calories", data.calories);
     formData.append("category", data.category);
-    formData.append("image", image);
+    formData.append("menuID", data.menuId);
+    formData.append("price", Number(data.price));
+    //formData.append("image", image);
 
-    const response = await axios.post(`${url}/api/food/add`, formData,{headers:{token}});
+    const response = await axios.post(`${url}/api/menuItem/add`, formData,{headers:{token}});
     if (response.data.success) {
       setData({
         name: "",
         description: "",
+        calories: "",
+        category: "Japanese Cuisine",
+        menuId: "1",
         price: "",
-        category: "Salad",
       });
-      setImage(false);
+      //setImage(false);
       toast.success(response.data.message);
     } else {
       toast.error(response.data.message);
@@ -66,11 +83,11 @@ const Add = ({url}) => {
             />
           </label>
           <input
-            onChange={(e) => setImage(e.target.files[0])}
-            type="file"
-            id="image"
+            //onChange={(e) => setImage(e.target.files[0])}
+            //type="file"
+            //id="image"
             hidden
-            required
+            //required
           />
         </div>
         <div className="add-product-name flex-col">
@@ -96,6 +113,17 @@ const Add = ({url}) => {
           ></textarea>
         </div>
         <div className="add-category-price">
+          <div className="add-price flex-col">
+            <p>Calories</p>
+            <input
+              onChange={onChangeHandler}
+              value={data.calories}
+              type="Number"
+              name="calories"
+              placeholder="cal"
+              required
+            />
+          </div>
           <div className="add-category flex-col">
             <p>Product category</p>
             <select
@@ -104,14 +132,12 @@ const Add = ({url}) => {
               onChange={onChangeHandler}
               value={data.category}
             >
-              <option value="Salad">Salad</option>
-              <option value="Rolls">Rolls</option>
+              <option value="Japanese Cuisine">Japanese Cuisine</option>
+              <option value="Chinese Cuisine">Chinese Cuisine</option>
+              <option value="Western Cuisine">Western Cuisine</option>
+              <option value="Thai Cuisine">Thai Cuisine</option>
+              <option value="Korean Cuisine">Korean Cuisine</option>
               <option value="Deserts">Deserts</option>
-              <option value="Sandwich">Sandwich</option>
-              <option value="Cake">Cake</option>
-              <option value="Pure Veg">Pure Veg</option>
-              <option value="Pasta">Pasta</option>
-              <option value="Noodles">Noodles</option>
             </select>
           </div>
           <div className="add-price flex-col">
@@ -121,7 +147,7 @@ const Add = ({url}) => {
               value={data.price}
               type="Number"
               name="price"
-              placeholder="$20"
+              placeholder="$"
               required
             />
           </div>

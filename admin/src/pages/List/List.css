@@ -1,6 +1,6 @@
 .list-table-format{
     display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1fr 0.5fr;
+    grid-template-columns: 0.5fr 1fr 0.5fr 1fr 0.5fr 0.5fr;
     align-items: center;
     gap: 10px;
     padding: 12px 15px;
@@ -26,4 +26,68 @@
     .list-table-format.title{
         display: none;
     }
+}
+
+
+.edit-menuitem-container{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 10px;
+    width: fit-content;
+    margin-left: max(5vw,25px);
+    margin-top: 50px;
+    color: #6d6d6d;
+    font-size: 16px;
+    
+    border: black solid 1px;
+    background-color: white;
+}
+.edit-menuitem-container form{
+    gap: 20px;
+}
+.edit-img-upload img{
+    width: 120px;
+}
+.edit-product-name, .edit-product-description{
+    width: max(40%,280px);
+}
+.edit-product-name input, .edit-product-description textarea{
+    padding: 10px;
+}
+.edit-category-price{
+    display: flex;
+    gap: 30px;
+}
+.edit-price select, .edit-price input{
+    max-width: 120px;
+    padding: 10px;
+}
+.edit-category select, .edit-category input{
+    max-width: fit-content;
+    padding: 10px;
+}
+.edit-btn{
+    max-width: 120px;
+    border: none;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+@media (max-width:400px) {
+    .edit{
+        margin-left: 15px;
+    }
+    .edit-product-name, .edit-product-description{
+        width: max(40%,220px);
+    }
+}
+
+.cursor{
+    border: none solid 1px;
+    justify-content: space-around;
+    align-items: center;
+    display: flex;
 }

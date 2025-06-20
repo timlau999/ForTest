@@ -2,9 +2,29 @@ import React, { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 import './MenuItem.css';
 
-const MenuItem = ({ id, name, price, description, image }) => {
+const MenuItem = ({ id, name, price, description, image, rating }) => {
     const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
     const imgPath = `/${image}`; 
+
+    // Generate star rating component (display only, non-interactive)
+    const renderRatingStars = (ratingValue) => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            stars.push(
+                <span
+                    key={i}
+                    style={{ 
+                        color: i <= ratingValue ? '#ffc107' : '#ddd',
+                        fontSize: '18px',
+                        marginRight: '2px'
+                    }}
+                >
+                    ★
+                </span>
+            );
+        }
+        return stars;
+    };
 
     return (
         <div className='menuItem-item'>
@@ -23,7 +43,11 @@ const MenuItem = ({ id, name, price, description, image }) => {
             <div className="menuItem-item-info">
                 <div className="menuItem-item-name-rating">
                     <p>{name}</p>
-                    <img src="/rating_starts.png" alt="Rating stars" />
+                    <div className="menuItem-rating-stars">
+                        {renderRatingStars(rating || 0)}
+                        <span style={{ marginLeft: '5px', fontSize: '14px' }}>
+                        </span>
+                    </div>
                 </div>
                 <p className="menuItem-item-desc">
                     {description}

@@ -9,7 +9,7 @@
     margin: 5px 0px;
 }
 .table-list-container {
-    display: flex;
+    display:flex;
     justify-content: normal;
     align-items: center;
     text-align: center;

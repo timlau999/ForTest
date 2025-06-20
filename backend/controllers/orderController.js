@@ -6,6 +6,7 @@ import MenuItem from '../models/menuItemModel.js';
 import Payment from '../models/paymentModel.js';
 import CustomerPoints from '../models/customerPointsModel.js';
 import CustomerPointsUsage from '../models/customerPointsUsageModel.js';
+import Review from '../models/reviewModel.js';
 
 const placeOrder = async (req, res) => {
     try {
@@ -213,4 +214,62 @@ const updateOrderStatus = async (req, res) => {
     }
 };
 
-export { placeOrder, getOrdersByCustomerId, getAllOrders, updateOrderStatus };
+const addReview = async (req, res) => {
+    try {
+        const { customerId, orderId, menuItemId, content, rating } = req.body;
+
+        const order = await Order.findOne({
+            where: { 
+                orderId,
+                customerId
+            }
+        });
+        
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'Order not found or does not belong to this customer' });
+        }
+
+        if (order.orderStatus !== 'Order Completed') {
+            return res.status(400).json({ success: false, message: 'Cannot review incomplete order' });
+        }
+
+        const orderItem = await OrderItem.findOne({
+            where: {
+                orderId,
+                menuItemId
+            }
+        });
+        
+        if (!orderItem) {
+            return res.status(404).json({ success: false, message: 'Order item not found' });
+        }
+
+        const existingReview = await Review.findOne({
+            where: {
+                customerId,
+                orderId,
+                menuItemId
+            }
+        });
+        
+        if (existingReview) {
+            return res.status(400).json({ success: false, message: 'You have already reviewed this item' });
+        }
+        
+        const newReview = await Review.create({
+            customerId,
+            orderId,
+            menuItemId,
+            content,
+            rating
+        });
+        
+        res.status(201).json({ success: true, message: 'Review added successfully', review: newReview });
+    } catch (error) {
+        console.error('Error in addReview:', error);
+        res.status(500).json({ success: false, message: 'Error adding review' });
+    }
+};
+
+
+export { placeOrder, getOrdersByCustomerId, getAllOrders, updateOrderStatus, addReview };
