@@ -271,5 +271,17 @@ const addReview = async (req, res) => {
     }
 };
 
+const getReviewsByCustomerId = async (req, res) => {
+    try {
+        const customerId = req.params.customerId;
+        const reviews = await Review.findAll({
+            where: { customerId }
+        });
+        res.json(reviews);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error fetching reviews' });
+    }
+};
 
-export { placeOrder, getOrdersByCustomerId, getAllOrders, updateOrderStatus, addReview };
+export { placeOrder, getOrdersByCustomerId, getAllOrders, updateOrderStatus, addReview, getReviewsByCustomerId };

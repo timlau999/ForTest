@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './Menu.css';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'; // 引入箭頭圖標
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'; 
 
 const Menu = ({ category, setCategory, backendUrl }) => {
   const [menuList, setMenuList] = useState([]);
@@ -25,21 +25,19 @@ const Menu = ({ category, setCategory, backendUrl }) => {
     fetchMenus();
   }, [backendUrl]);
 
-  // 向左滾動
   const scrollLeft = () => {
     if (menuContainerRef.current) {
       menuContainerRef.current.scrollBy({
-        left: -300, // 每次滾動300px
+        left: -300, 
         behavior: 'smooth'
       });
     }
   };
 
-  // 向右滾動
   const scrollRight = () => {
     if (menuContainerRef.current) {
       menuContainerRef.current.scrollBy({
-        left: 300, // 每次滾動300px
+        left: 300, 
         behavior: 'smooth'
       });
     }

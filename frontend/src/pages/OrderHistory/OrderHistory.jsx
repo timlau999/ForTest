@@ -10,7 +10,7 @@ const OrderHistory = ({ backendUrl }) => {
     const [error, setError] = useState(null);
     const [reviewFormData, setReviewFormData] = useState({});
     const [submittingReview, setSubmittingReview] = useState(false);
-    const [reviewSubmitted, setReviewSubmitted] = useState({});
+    const [reviews, setReviews] = useState({});
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -24,6 +24,16 @@ const OrderHistory = ({ backendUrl }) => {
                             (order) => order.orderStatus === 'Order Completed'
                         );
                         setOrders(completedOrders);
+
+                        const reviewResponse = await axios.get(`${backendUrl}/api/order/reviews/${customerId}`, {
+                            headers: { token }
+                        });
+                        const reviewData = reviewResponse.data.reduce((acc, review) => {
+                            const formKey = `${review.orderId}-${review.menuItemId}`;
+                            acc[formKey] = review;
+                            return acc;
+                        }, {});
+                        setReviews(reviewData);
                     } else {
                         setError('API response is not an array');
                     }
@@ -57,24 +67,24 @@ const OrderHistory = ({ backendUrl }) => {
     const handleSubmitReview = async (orderId, menuItemId) => {
         const formKey = `${orderId}-${menuItemId}`;
         const reviewData = reviewFormData[formKey];
-        
+
         if (!reviewData || !reviewData.rating || !reviewData.content) {
             alert('Please fill in both rating and review content');
             return;
         }
 
         setSubmittingReview(true);
-        
+
         try {
             await axios.post(`${backendUrl}/api/order/review`, reviewData, {
                 headers: { token }
             });
-            
-            setReviewSubmitted(prev => ({
-                ...prev,
-                [formKey]: true
+
+            setReviews(prevReviews => ({
+                ...prevReviews,
+                [formKey]: reviewData
             }));
-            
+
             // Update order data to mark item as reviewed
             setOrders(prevOrders => prevOrders.map(order => {
                 if (order.orderId === orderId) {
@@ -90,7 +100,7 @@ const OrderHistory = ({ backendUrl }) => {
                 }
                 return order;
             }));
-            
+
             alert('Review submitted successfully!');
         } catch (error) {
             console.error('Error submitting review:', error);
@@ -101,15 +111,15 @@ const OrderHistory = ({ backendUrl }) => {
     };
 
     // Render star rating component
-    const renderRatingStars = (rating, onChange) => {
+    const renderRatingStars = (rating, onChange, isReviewed) => {
         const stars = [];
         for (let i = 1; i <= 5; i++) {
             stars.push(
                 <span
                     key={i}
-                    onClick={() => onChange(i)}
-                    style={{ 
-                        cursor: 'pointer', 
+                    onClick={isReviewed ? null : () => onChange(i)}
+                    style={{
+                        cursor: isReviewed ? 'default' : 'pointer',
                         color: i <= rating ? '#ffc107' : '#ddd',
                         fontSize: '24px'
                     }}
@@ -142,8 +152,9 @@ const OrderHistory = ({ backendUrl }) => {
                                     {order.orderItems && order.orderItems.length > 0 ? (
                                         order.orderItems.map((item) => {
                                             const formKey = `${order.orderId}-${item.menuItemId}`;
-                                            const hasReviewed = reviewSubmitted[formKey] || item.hasReviewed;
-                                            
+                                            const review = reviews[formKey];
+                                            const isReviewed = !!review;
+
                                             return (
                                                 <div key={item.orderItemId} className="order-item-card">
                                                     <img src={`/menuItem_${item.menuItemId}.png`} alt={item.MenuItem?.name || 'unknown'} />
@@ -151,17 +162,22 @@ const OrderHistory = ({ backendUrl }) => {
                                                         <p>Item Name: {item.MenuItem?.name || 'unknown'}</p>
                                                         <p>Quantity: {item.quantity}</p>
                                                         <p>Total Price: ${item.totalPrice}</p>
-                                                        
-                                                        {hasReviewed ? (
+
+                                                        {isReviewed ? (
                                                             <div className="review-success">
-                                                                <p style={{ color: 'green', fontWeight: 'bold' }}>✓ Reviewed</p>
+                                                                <p style={{ color: 'green', fontWeight: 'bold' }}>Your Review:</p>
+                                                                <div className="rating-stars">
+                                                                    {renderRatingStars(review.rating, null, true)}
+                                                                </div>
+                                                                <p>{review.content}</p>
                                                             </div>
                                                         ) : (
                                                             <div className="review-form">
                                                                 <div className="rating-stars">
                                                                     {renderRatingStars(
                                                                         reviewFormData[formKey]?.rating || 0,
-                                                                        (rating) => handleReviewChange(order.orderId, item.menuItemId, 'rating', rating)
+                                                                        (rating) => handleReviewChange(order.orderId, item.menuItemId, 'rating', rating),
+                                                                        false
                                                                     )}
                                                                 </div>
                                                                 <textarea
