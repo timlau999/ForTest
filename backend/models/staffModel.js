@@ -7,7 +7,8 @@ const Staff = sequelize.define('Staff', {
   staffId: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   userId: {
     type: DataTypes.INTEGER,

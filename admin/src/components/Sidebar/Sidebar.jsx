@@ -2,6 +2,7 @@ import React from 'react'
 import './Sidebar.css'
 import { assets } from '../../assets/assets'
 import { NavLink } from 'react-router-dom'
+import { BsBug } from "react-icons/bs"
 
 const Sidebar = () => {
   return (
@@ -26,6 +27,10 @@ const Sidebar = () => {
         <NavLink to='Account' className="sidebar-option">
           <img className="sidebar-img" src={assets.user} alt="" />
           <p>Account</p>
+        </NavLink>
+        <NavLink to='Test' className="sidebar-option">
+          <BsBug className="sidebar-img"/>
+          <p>Test</p>
         </NavLink>
       </div>
     </div>

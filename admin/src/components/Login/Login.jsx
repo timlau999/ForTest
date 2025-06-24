@@ -8,7 +8,7 @@ import {useNavigate } from "react-router-dom";
 
 const Login = ({ url }) => {
   const navigate=useNavigate();
-  const {admin,setAdmin,token, setToken,username,setUsername,userID,setUserId} = useContext(StoreContext);
+  const {admin,setAdmin, staff, setStaff, token, setToken,username,setUsername,userID,setUserId} = useContext(StoreContext);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -22,13 +22,13 @@ const Login = ({ url }) => {
     event.preventDefault();
     const response = await axios.post(url + "/api/user/login", data);
     if (response.data.success) {
-      if (response.data.role === "admin") {
+      if (response.data.role === "admin" || response.data.role === "staff" ) {
         setToken(response.data.token);
-        setAdmin(true);
         setUsername(response.data.username);
         setUserId(response.data.id);
         sessionStorage.setItem("token", response.data.token);
-        sessionStorage.setItem("admin", true);
+        if(response.data.role === "admin"){sessionStorage.setItem("admin", true);setAdmin(true);};
+        if(response.data.role === "staff"){sessionStorage.setItem("staff", true);setStaff(true);};
         sessionStorage.setItem("username", response.data.username);
         sessionStorage.setItem("userId", response.data.id);
         toast.success("Login Successfully");
@@ -42,7 +42,7 @@ const Login = ({ url }) => {
   };
   useEffect(()=>{
     if(sessionStorage.getItem("admin") && sessionStorage.getItem("token")){
-       navigate("/add");
+       navigate("/orders");
     }
   },[])
   return (

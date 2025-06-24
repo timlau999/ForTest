@@ -7,7 +7,8 @@ const Admin = sequelize.define('Admin', {
   adminId: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   userId: {
     type: DataTypes.INTEGER,

@@ -11,6 +11,7 @@ import Login from "./components/Login/Login";
 import Reservation from "./pages/Reservation/Reservation";
 import Account from "./pages/Account/Account";
 import StoreContextProvider from './context/StoreContext.jsx';
+import Test from "./pages/Test/Test";
 
 const App = () => {
   const url = "http://localhost:4000";
@@ -19,7 +20,7 @@ const App = () => {
     <StoreContextProvider url={url}>
     <div>
       <ToastContainer />
-      <Navbar />
+      <Navbar url={url}/>
       <hr />
       <div className="app-content">
         <Sidebar />
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/orders" element={<Orders url={url}/>} />
           <Route path="/Reservation" element={<Reservation url={url}/>} />
           <Route path="/Account" element={<Account url={url}/>} />
+          <Route path="/Test" element={<Test url={url}/>} />
         </Routes>
       </div>
     </div>

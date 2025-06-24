@@ -11,6 +11,7 @@ const socket = io('http://localhost:4000', {query: {role: 'admin'}});
 const StoreContextProvider = (props) => {
   const [token, setToken] = useState("");
   const [admin, setAdmin] = useState(false);
+  const [staff, setStaff] = useState(false);
   const [userId, setUserId] = useState("");
   const [username, setUsername] = useState("");
   const [table_list, setTableList] = useState([]);
@@ -132,6 +133,8 @@ const StoreContextProvider = (props) => {
     setToken,
     admin,
     setAdmin,
+    staff,
+    setStaff,
     userId,
     setUserId,
     username,

@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Add.css";
 import { assets } from "../../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useContext } from "react";
 import { StoreContext } from "../../context/StoreContext";
-import { useEffect } from "react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Add = ({url}) => {
-  const navigate=useNavigate();
-  const {token,admin, userId} = useContext(StoreContext);
+const Add = ({ url }) => {
+  const navigate = useNavigate();
+  const { token, admin, userId } = useContext(StoreContext);
   const [image, setImage] = useState(false);
   const [data, setData] = useState({
     name: "",
@@ -20,6 +19,20 @@ const Add = ({url}) => {
     menuId: "1",
     price: "",
   });
+  const [ingredients, setIngredients] = useState([]);
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
+
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      try {
+        const response = await axios.get(`${url}/api/menuItem/ingredients`);
+        setIngredients(response.data.data);
+      } catch (error) {
+        console.error("Error fetching ingredients:", error);
+      }
+    };
+    fetchIngredients();
+  }, [url]);
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -27,15 +40,36 @@ const Add = ({url}) => {
     let menuId = "";
     setData((data) => ({ ...data, [name]: value }));
     switch (value) {
-    case "Japanese Cuisine":menuId = "1";break;
-    case "Chinese Cuisine":menuId = "2";break;
-    case "Western Cuisine":menuId = "3";break;
-    case "Thai Cuisine":menuId = "4";break;
-    case "Korean Cuisine":menuId = "5";break;
-    case "Deserts":menuId = "6";break;
-    default:menuId = "";
+      case "Japanese Cuisine":
+        menuId = "1";
+        break;
+      case "Chinese Cuisine":
+        menuId = "2";
+        break;
+      case "Western Cuisine":
+        menuId = "3";
+        break;
+      case "Thai Cuisine":
+        menuId = "4";
+        break;
+      case "Korean Cuisine":
+        menuId = "5";
+        break;
+      case "Deserts":
+        menuId = "6";
+        break;
+      default:
+        menuId = "";
     }
     setData((data) => ({ ...data, menuID: menuId }));
+  };
+
+  const onIngredientChange = (ingredientId) => {
+    if (selectedIngredients.includes(ingredientId)) {
+      setSelectedIngredients(selectedIngredients.filter(id => id !== ingredientId));
+    } else {
+      setSelectedIngredients([...selectedIngredients, ingredientId]);
+    }
   };
 
   const onSubmitHandler = async (event) => {
@@ -47,9 +81,15 @@ const Add = ({url}) => {
     formData.append("category", data.category);
     formData.append("menuID", data.menuId);
     formData.append("price", Number(data.price));
-    //formData.append("image", image);
+    selectedIngredients.forEach((ingredientId) => {
+      formData.append("ingredients", ingredientId);
+    });
 
-    const response = await axios.post(`${url}/api/menuItem/add`, formData,{headers:{token}});
+    const response = await axios.post(
+      `${url}/api/menuItem/add`,
+      formData,
+      { headers: { token } }
+    );
     if (response.data.success) {
       setData({
         name: "",
@@ -59,18 +99,24 @@ const Add = ({url}) => {
         menuId: "1",
         price: "",
       });
-      //setImage(false);
+      setSelectedIngredients([]);
+      // setImage(false);
       toast.success(response.data.message);
     } else {
       toast.error(response.data.message);
     }
   };
-  useEffect(()=>{
-    if(!sessionStorage.getItem("admin") && !sessionStorage.getItem("token")){
-      toast.error("Please Login First");
-       navigate("/");
-    }
-  },[])
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("token")) {
+                toast.error("Please Login First");
+                navigate("/");
+            }else if (!sessionStorage.getItem("admin")) {
+                toast.error("You are not an admin");
+                navigate("/orders");
+            }
+  }, []);
+
   return (
     <div className="add">
       <form onSubmit={onSubmitHandler} className="flex-col">
@@ -150,6 +196,24 @@ const Add = ({url}) => {
               placeholder="$"
               required
             />
+          </div>
+        </div>
+        <div className="add-ingredients flex-col">
+          <p>Potential Allergens</p>
+          <div className="ingredients-container"> 
+            <div className="ingredients-grid">
+              {ingredients.map((ingredient) => (
+                <div key={ingredient.ingredientId} className="ingredient-checkbox">
+                  <input
+                    type="checkbox"
+                    id={ingredient.ingredientId}
+                    checked={selectedIngredients.includes(ingredient.ingredientId)}
+                    onChange={() => onIngredientChange(ingredient.ingredientId)}
+                  />
+                  <label htmlFor={ingredient.ingredientId}>{ingredient.name}</label>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         <button type="submit" className="add-btn">

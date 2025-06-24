@@ -20,14 +20,15 @@ const Reservation = ({ url }) => {
     const { table_list, updateReservation, fetchReservation, modifyReservationStatus, reservation_list } = useContext(StoreContext);
     const [selectedDate, setSelectedDate] = useState();
     const [inputuserId, setInputuserId] = useState();
+    const [inputTableId, setInputTableId] = useState();
 
     useEffect(()=>{
-        if(!sessionStorage.getItem("admin") && !sessionStorage.getItem("token")){
-          toast.error("Please Login First");
-          navigate("/");
-        };
-        setSelectedDate(new Date().toLocaleDateString());
-        fetchReservation(null, new Date().toLocaleDateString());
+        if (!sessionStorage.getItem("token")) {
+              toast.error("Please Login First");
+              navigate("/");
+        }else if (sessionStorage.getItem("admin") || sessionStorage.getItem("staff")) {
+              setSelectedDate(new Date().toLocaleDateString());
+              fetchReservation(null, new Date().toLocaleDateString());}
     },[])
     
     useEffect(() => {
@@ -53,20 +54,29 @@ return (
       
       <div className="table-list">
         <h3>Real-time Tables States</h3>
-        <p><label >No. of Available Table:</label></p>
-        <label >Search Reservation: </label>
-        <input className="search-bar" type="text" placeholder="Table no." />
-        <button className="search-icon"><BsSearch /></button>
+        <label >Search Table<BsSearch /></label>
+        <input className="search-bar" type="text" placeholder="Table no." value={inputTableId} onChange={e => setInputTableId(e.target.value)} />
         <div className="table-list-container">
-          {table_list.map((item, index) => {
-          return(
-          <TableState
-          key={index}
-          tableNumber={item.tableNumber}
-          tableCapacity={item.tableCapacity}
-          tablestates={item.tablestates} 
-          />
-          )})}
+          {!inputTableId &&
+            table_list.map((item, index) => (
+              <TableState
+                key={index}
+                tableNumber={item.tableNumber}
+                tableCapacity={item.tableCapacity}
+                tablestates={item.tablestates}
+              />
+            ))
+          }
+          {inputTableId &&
+            table_list.filter(item => item.tableNumber.toString() === (inputTableId)).map((item, index) => (
+              <TableState
+                key={index}
+                tableNumber={item.tableNumber}
+                tableCapacity={item.tableCapacity}
+                tablestates={item.tablestates}
+              />
+            ))
+          }
         </div>
       </div>
       <hr></hr>

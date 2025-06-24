@@ -21,6 +21,7 @@ export const MenuItemDisplay = ({ category }) => {
                                 description={item.description}
                                 price={item.price}
                                 image={item.image}
+                                rating={item.rating} 
                             />
                         );
                     }

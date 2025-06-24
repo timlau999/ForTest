@@ -10,10 +10,11 @@ import jwt from 'jsonwebtoken';
 // Register a new user
 const registerUser = async (req, res) => {
     try {
-        const { username, password, email, address, phoneNumber, permissionId, height, weight, allergy, medicalConditions, dietaryPreference } = req.body;
-
+        const { username, password, email, address, phoneNumber, permissionId, 
+        height, weight, allergy, medicalConditions, dietaryPreference, accountType } = req.body;
+   
         // Check if the user already exists
-        const existingUser = await User.findOne({ where: { username } });
+        const existingUser = await User.findOne({ where: { username: username } });
         if (existingUser) {
             return res.json({ success: false, message: 'Username already exists' });
         }
@@ -28,7 +29,24 @@ const registerUser = async (req, res) => {
             permissionId
         });
 
-        // Create a new customer record
+        if (accountType){
+            if (accountType === "admin"){
+                const newAdmin =await Admin.create({
+                userId: newUser.userId
+            });
+            console.log(newAdmin);
+            return res.json({ success: true, message: 'New admin created'});
+            }
+                if (accountType === "staff"){
+                const newStaff =await Staff.create({
+                userId: newUser.userId
+                });
+                console.log(newStaff);
+                return res.json({ success: true, message: 'New staff created'});
+                }
+        }else{
+
+                // Create a new customer record
         const newCustomer = await Customer.create({
             customerId: newUser.userId, 
             userId: newUser.userId
@@ -45,6 +63,8 @@ const registerUser = async (req, res) => {
         });
 
         res.json({ success: true, message: 'User registered successfully' });
+
+        }
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: 'Error registering user' });
@@ -285,4 +305,48 @@ const getAllStaff = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer, getAllAdmin, getAllStaff };
+const getuserinfoA = async (req, res) => {
+    try {
+        const userId = req.body.userId;
+        const user = await User.findOne({ where: { userId } });
+        if (!user) {
+            return res.json({ success: false, message: 'User not found' });
+        }
+        const userInfo = {
+            username: user.username,
+            email: user.email,
+            password: user.password,
+            phoneNumber: user.phoneNumber,
+            address: user.address
+        };
+        res.json({ success: true, data: userInfo });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error fetching user info' });
+    }
+};
+
+const updateuserinfoA = async (req, res) => {
+    try {
+        const { userId, username, email, password, phoneNumber, address } = req.body;
+
+        const user = await User.findOne({ where: { userId } });
+        if (!user) {
+            return res.json({ success: false, message: 'User not found' });
+        }
+
+        user.username = username;
+        user.email = email;
+        user.password = password;
+        user.phoneNumber = phoneNumber;
+        user.address = address;
+
+        await user.save();
+        res.json({ success: true, message: 'User info updated successfully' });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error updating user info' });
+    }
+};
+
+export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer, getAllAdmin, getAllStaff, getuserinfoA, updateuserinfoA };

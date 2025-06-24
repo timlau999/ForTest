@@ -22,13 +22,16 @@
 }
 
 
-.Account-table{
-    display: flex;
-    flex-wrap: wrap;
+.Account-panel{
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     padding: 2px 2px;
     margin: 5px 5px;
+}
+
+.Account-table{
+    display: flex;
+    flex-wrap: wrap;
 }
 
 
@@ -209,4 +212,69 @@
 .stat-label {
   font-size: 0.8rem;
   color: #666;
+}
+
+
+/*creatac copy*/
+.edit-menuitem-container{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 10px;
+    width:fit-content;
+    margin-left: max(5vw,25px);
+    margin-top: 50px;
+    color: #6d6d6d;
+    font-size: 16px;
+    z-index: 1000;
+    border: black solid 1px;
+    background-color: white;
+}
+.edit-menuitem-container form{
+    gap: 20px;
+}
+.edit-img-upload img{
+    width: 120px;
+}
+.edit-product-name, .edit-product-description{
+    width: 400px;
+}
+.edit-product-name input, .edit-product-description textarea{
+    padding: 10px;
+}
+.edit-category-price{
+    display: flex;
+    gap: 30px;
+}
+.edit-price select, .edit-price input{
+    max-width: 120px;
+    padding: 10px;
+}
+.edit-category select, .edit-category input{
+    max-width: fit-content;
+    padding: 10px;
+}
+.edit-btn{
+    max-width: 120px;
+    border: none;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+@media (max-width:400px) {
+    .edit{
+        margin-left: 15px;
+    }
+    .edit-product-name, .edit-product-description{
+        width: max(40%,220px);
+    }
+}
+
+.cursor{
+    border: none solid 1px;
+    justify-content: space-around;
+    align-items: center;
+    display: flex;
 }

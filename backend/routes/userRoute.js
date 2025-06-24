@@ -1,6 +1,6 @@
 // ForTest/backend/routes/userRoute.js
 import express from 'express';
-import { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer, getAllAdmin, getAllStaff } from '../controllers/userController.js';
+import { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer, getAllAdmin, getAllStaff, getuserinfoA, updateuserinfoA } from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -23,5 +23,9 @@ router.post('/getCustomer', getAllCustomer);
 router.post('/getAdmin', getAllAdmin);
 
 router.post('/getStaff', getAllStaff);
+
+router.post('/getuserinfoA', getuserinfoA);
+
+router.post('/updateuserinfoA', updateuserinfoA);
 
 export default router;

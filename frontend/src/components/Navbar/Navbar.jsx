@@ -5,22 +5,21 @@ import { StoreContext } from '../../context/StoreContext';
 import { assets } from '../../assets/assets';
 import './Navbar.css';
 import { HashLink } from 'react-router-hash-link';
-
+import { RiMenu4Line } from "react-icons/ri";
 
 const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn, UserAvatar, backendUrl }) => {
     const [menu, setMenu] = useState("home");
     const { getTotalCartAmount } = useContext(StoreContext);
     const [isOpen, setIsOpen] = useState(false);
-    const onClickMB = () => {setIsOpen(!isOpen);}
 
     const menubar = (cn) => {
         return (
             <ul className={cn}>
-                <p><HashLink to="/#header" onClick={() => setMenu("home")} className={menu === "home" ? "active" : ""}>home</HashLink></p>
-                <p><HashLink to="/reservation" onClick={() => setMenu("reservation")} className={menu === "reservation" ? "active" : ""}>Reservation</HashLink></p>
-                <p><HashLink to="/#explore-menu" onClick={() => setMenu("menu")} className={menu === "menu" ? "active" : ""}>menu</HashLink></p>
-                <p><HashLink to="/#order" onClick={() => setMenu("order")} className={menu === "order" ? "active" : ""}>order</HashLink></p>
-                <p><HashLink to="/#footer" onClick={() => setMenu("contact-us")} className={menu === "contact-us" ? "active" : ""}>contact us</HashLink></p>
+                <p><HashLink to="/#header" onClick={() => {setMenu("home");setIsOpen(!isOpen);}} className={menu === "home" ? "active" : ""}>home</HashLink></p>
+                <p><HashLink to="/reservation" onClick={() => {setMenu("reservation");setIsOpen(!isOpen);}} className={menu === "reservation" ? "active" : ""}>Reservation</HashLink></p>
+                <p><HashLink to="/#explore-menu" onClick={() => {setMenu("menu");setIsOpen(!isOpen);}} className={menu === "menu" ? "active" : ""}>menu</HashLink></p>
+                <p><HashLink to="/#order" onClick={() => {setMenu("order");setIsOpen(!isOpen);}} className={menu === "order" ? "active" : ""}>order</HashLink></p>
+                <p><HashLink to="/#footer" onClick={() => {setMenu("contact-us");setIsOpen(!isOpen);}} className={menu === "contact-us" ? "active" : ""}>contact us</HashLink></p>
             </ul>
         );
     }
@@ -29,9 +28,15 @@ const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn, UserAvatar, backendUr
         <div className="navbar">
             <Link to="/" ><img src={assets.logo} alt="" className="log" /></Link>
             
-            {menubar("navbar-menu")}
+            <ul className="navbar-menu">
+                <p><HashLink to="/#header" onClick={() => {setMenu("home");}} className={menu === "home" ? "active" : ""}>home</HashLink></p>
+                <p><HashLink to="/reservation" onClick={() => {setMenu("reservation");}} className={menu === "reservation" ? "active" : ""}>Reservation</HashLink></p>
+                <p><HashLink to="/#explore-menu" onClick={() => {setMenu("menu");}} className={menu === "menu" ? "active" : ""}>menu</HashLink></p>
+                <p><HashLink to="/#order" onClick={() => {setMenu("order");}} className={menu === "order" ? "active" : ""}>order</HashLink></p>
+                <p><HashLink to="/#footer" onClick={() => {setMenu("contact-us");}} className={menu === "contact-us" ? "active" : ""}>contact us</HashLink></p>
+            </ul>
 
-            <img className="navbar-menu-logo-img" src={assets.menu_burger} onClick={onClickMB}></img>
+            <RiMenu4Line className="navbar-menu-logo-img" onClick={() => setIsOpen(!isOpen)}/>
             <div className={`showmenubar ${isOpen ? 'show' : ''}`}>{menubar()}</div>
 
             <div className="navbar-right">

@@ -50,11 +50,11 @@ const Orders = ({ url }) => {
   };
 
   useEffect(() => {
-    if (!sessionStorage.getItem("admin") && !sessionStorage.getItem("token")) {
-      toast.error("Please Login First");
-      navigate("/");
-    }
-    fetchAllOrder();
+    if (!sessionStorage.getItem("token")) {
+        toast.error("Please Login First");
+        navigate("/");
+    }else if (sessionStorage.getItem("admin") || sessionStorage.getItem("staff")) {
+        fetchAllOrder();}
   }, []);
 
   return (

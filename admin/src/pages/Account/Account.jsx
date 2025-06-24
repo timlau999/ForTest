@@ -12,6 +12,9 @@ import { BsSearch } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 import { BsX } from "react-icons/bs";
 import { BsCheck } from "react-icons/bs";
+import { BsPlusCircle } from "react-icons/bs";
+import { BsXCircle } from "react-icons/bs";
+import { BsArrowClockwise } from "react-icons/bs";
 
 const Account = ({ url }) => {
     const navigate = useNavigate();
@@ -34,6 +37,50 @@ const Account = ({ url }) => {
     const [adminSearch, setAdminSearch] = useState("");
     const [staffSearch, setStaffSearch] = useState("");
     const [customerSearch, setCustomerSearch] = useState("");
+
+    const [openCreateAc, setOpenCreateAc] = useState(false);
+    const [data, setData] = useState({
+          username: "",
+          email: "",
+          password: "",
+          phoneNumber: "",
+          address: "",
+          accountType: "admin",
+        });
+
+    const onChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setData((data) => ({ ...data, [name]: value }));
+  };
+
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("username", data.username);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("phoneNumber", data.phoneNumber);
+    formData.append("address", data.address);
+    formData.append("accountType", data.accountType);
+    formData.append("permissionId", 1);
+
+    const response = await axios.post(`${url}/api/user/register`, formData, {headers: {"Content-Type": "application/json"}});
+    if (response.data.success) {
+      setData({
+        username: "",
+        email: "",
+        password: "",
+        phoneNumber: "",
+        address: "",
+        accountType: "",
+      });
+      setOpenCreateAc(!openCreateAc);
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.data.message);
+    }
+  };
 
     const fetchAdmin = async (page, search = "") => {
         try {
@@ -131,11 +178,15 @@ const Account = ({ url }) => {
     };
 
     useEffect(() => {
-        if (!sessionStorage.getItem("admin") && !sessionStorage.getItem("token")) {
+        if (!sessionStorage.getItem("token")) {
             toast.error("Please Login First");
             navigate("/");
+        }else if (!sessionStorage.getItem("admin")) {
+            toast.error("You are not an admin");
+            navigate("/orders");
+        }else{
+            fetchData(1);
         }
-        fetchData(1);
     }, [activeTab, url, navigate]);
 
     const getCurrentData = () => {
@@ -284,11 +335,106 @@ const Account = ({ url }) => {
                         Next<BsChevronRight />
                     </button>
 
-                    {!getCurrentHasMore() && <label className="no-more-label">No more data.</label>}
+                    {/*!getCurrentHasMore() && <label className="no-more-label">No more data.</label>*/}
                 </div>
             </div>
 
-            <div className="Account-table">
+            <div className="Account-panel">
+                {activeTab === "admin" || activeTab === "staff" ? <button className="social-btn" onClick={()=>setOpenCreateAc(!openCreateAc)}><BsPlusCircle/></button> : null}
+                {openCreateAc? 
+                          <div className="edit-menuitem-container">
+                          <BsXCircle onClick={() => setOpenCreateAc(!openCreateAc)}/>
+                            <BsArrowClockwise onClick={() => setData({
+                                username: "",
+                                email: "",
+                                password: "",
+                                phoneNumber: "",
+                                address: "",
+                                accountType: "admin",
+                                })}/>
+                            <form onSubmit={onSubmitHandler} className="flex-col">
+                              Create Account
+                          <div className="edit-product-name flex-col">
+                            <p>Username</p>
+                            <input
+                              onChange={onChangeHandler}
+                              value={data.username}
+                              type="text"
+                              name="username"
+                              placeholder="Type here"
+                              required
+                            />
+                          </div>
+                          <div className="edit-product-name flex-col">
+                            <p>Email</p>
+                            <input
+                              onChange={onChangeHandler}
+                              value={data.email}
+                              type="email"
+                              name="email"
+                              placeholder=""
+                              required
+                            />
+                          </div>
+                          <div className="edit-product-name flex-col">
+                            <p>Password</p>
+                            <input
+                              onChange={onChangeHandler}
+                              value={data.password}
+                              type="password"
+                              name="password"
+                              placeholder="Type here"
+                              required
+                            />
+                          </div>
+                          <div className="edit-product-name flex-col">
+                            <p>Phone Number</p>
+                            <input
+                              onChange={onChangeHandler}
+                              value={data.phoneNumber}
+                              type="tel"
+                              name="phoneNumber"
+                              placeholder="Type here"
+                              pattern="[0-9]*"
+                              inputMode="numeric"
+                              required
+                            />
+                          </div>
+                          <div className="edit-product-name flex-col">
+                            <p>Address</p>
+                            <input
+                              onChange={onChangeHandler}
+                              value={data.address}
+                              type="text"
+                              name="address"
+                              placeholder="Type here"
+                              required
+                            />
+                          </div>
+                          <div className="edit-category-price">
+                            
+                            <div className="edit-category flex-col">
+                              <p>Account Type</p>
+                              <select
+                                name="accountType"
+                                required
+                                onChange={onChangeHandler}
+                                value={data.accountType}>
+                                <option value="admin">Admin</option>
+                                <option value="staff">Staff</option>
+                              </select>
+                            </div>
+                            
+                          </div>
+                          <button type="submit" className="edit-btn">
+                            CREATE
+                          </button>
+                        </form>
+                      </div>
+                
+                : null}
+
+                <div className="Account-table">
                 {getCurrentData().map((item, index) => {
                     const user = item.User || item;
                     
@@ -348,6 +494,7 @@ const Account = ({ url }) => {
                         No {activeTab} accounts found.
                     </div>
                 )}
+                </div>
             </div>
         </div>
     );

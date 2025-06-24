@@ -33,6 +33,27 @@
     color:none;
     font-size: 16px;
 }
+.username:hover{
+    background-color: black;
+    color: white;
+}
+.username:active{
+    background-color: white;
+    color: black;
+}
+
+.login-conditon-login{
+    margin: 5px 10px;
+    border: black solid 1px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    color:none;
+    font-size: 16px;
+}
+.login-conditon-login:hover{
+    background-color: black;
+    color: white;
+}
 
 @media (max-width:750px) {
     .navbar{
@@ -51,4 +72,58 @@
     .logoutButton{
     font-size: 14px;
     }
+}
+
+
+/*editac copy*/
+.edit-menuitem-container{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 10px;
+    width:fit-content;
+    margin-left: max(5vw,25px);
+    margin-top: 50px;
+    color: #6d6d6d;
+    font-size: 16px;
+    z-index: 1000;
+    border: black solid 1px;
+    background-color: white;
+}
+.edit-menuitem-container form{
+    gap: 20px;
+}
+.edit-img-upload img{
+    width: 120px;
+}
+.edit-product-name, .edit-product-description{
+    width: 400px;
+}
+.edit-product-name input, .edit-product-description textarea{
+    padding: 10px;
+}
+
+.edit-btn{
+    max-width: 120px;
+    border: none;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+@media (max-width:400px) {
+    .edit{
+        margin-left: 15px;
+    }
+    .edit-product-name, .edit-product-description{
+        width: max(40%,220px);
+    }
+}
+
+.cursor{
+    border: none solid 1px;
+    justify-content: space-around;
+    align-items: center;
+    display: flex;
 }

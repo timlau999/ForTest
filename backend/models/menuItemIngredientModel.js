@@ -7,7 +7,8 @@ import Ingredient from './ingredientModel.js';
 const MenuItemIngredient = sequelize.define('MenuItemIngredient', {
     menuItemIngredientId: {
         type: DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     menuItemId: {
         type: DataTypes.INTEGER,

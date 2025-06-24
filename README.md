@@ -1,31 +1,7 @@
-# TOMATO - MenuItem Ordering Website
+# Smart Restaurant System
 
-This repository hosts the source code for TOMATO, a dynamic menuItem ordering website built with the MERN Stack. It offers a user-friendly platform for seamless online menuItem ordering.
+This repository hosts the source code for Smart Restaurant System.
 
-## Demo
-
-- User Panel: [https://menuItem-delivery-frontend-s2l9.onrender.com/](https://menuItem-delivery-frontend-s2l9.onrender.com/)
-- Admin Panel: [https://menuItem-delivery-admin-wrme.onrender.com/](https://menuItem-delivery-admin-wrme.onrender.com/)
-
-## Features
-
-- User Panel
-- Admin Panel
-- JWT Authentication
-- Password Hashing with Bcrypt
-- Stripe Payment Integration
-- Login/Signup
-- Logout
-- Add to Cart
-- Place Order
-- Order Management
-- Products Management
-- Filter MenuItem Products
-- Login/Signup
-- Authenticated APIs
-- REST APIs
-- Role-Based Identification
-- Beautiful Alerts
 
 ## Screenshots
 

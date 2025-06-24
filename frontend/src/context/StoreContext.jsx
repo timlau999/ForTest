@@ -38,7 +38,8 @@ const StoreContextProvider = (props) => {
                         description: item.description,
                         price: parseFloat(item.price),
                         image: `menuItem_${item._id}.png`,
-                        category: item.category
+                        category: item.category,
+                        rating: item.rating || 0
                     }));
                     setMenuItemList(formattedMenuItems);
                     console.log('Stored menuItem list in context:', formattedMenuItems); 

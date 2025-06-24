@@ -20,11 +20,6 @@
     flex-wrap: wrap;
 }
 
-.search-icon{
-    border-radius: 15px;
-    padding: 3px 5px;
-}
-
 .ReservationButton {
     background-color:transparent;
     border: transparent 2px solid;
