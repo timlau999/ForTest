@@ -47,24 +47,6 @@ Install dependencies (backend)
     cd backend
     npm install
 ```
-Setup Environment Vaiables
-
-```Make .env file in "backend" folder and store environment Variables
-  JWT_SECRET=YOUR_SECRET_TEXT
-  SALT=YOUR_SALT_VALUE
-  MONGO_URL=YOUR_DATABASE_URL
-  STRIPE_SECRET_KEY=YOUR_KEY
- ```
-
-Setup the Frontend and Backend URL
-   - App.jsx in Admin folder
-      const url = YOUR_BACKEND_URL
-     
-  - StoreContext.js in Frontend folder
-      const url = YOUR_BACKEND_URL
-
-  - orderController in Backend folder
-      const frontend_url = YOUR_FRONTEND_URL 
 
 Start the Backend server
 
@@ -82,25 +64,3 @@ Start the Backend server
 
 ```bash
     npm start
-```
-## Tech Stack
-* [React](https://reactjs.org/)
-* [Node.js](https://nodejs.org/en)
-* [Express.js](https://expressjs.com/)
-* [Mongodb](https://www.mongodb.com/)
-* [Stripe](https://stripe.com/)
-* [JWT-Authentication](https://jwt.io/introduction)
-* [Multer](https://www.npmjs.com/package/multer)
-
-## Deployment
-
-The application is deployed on Render.
-
-## Contributing
-
-Contributions are always welcome!
-Just raise an issue, and we will discuss it.
-
-## Feedback
-
-If you have any feedback, please reach out to me [here](https://www.linkedin.com/in/muhammad-shan-full-stack-developer/)

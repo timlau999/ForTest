@@ -38,6 +38,11 @@ const Account = ({ url }) => {
     const [staffSearch, setStaffSearch] = useState("");
     const [customerSearch, setCustomerSearch] = useState("");
 
+    const [inputSearch, setInputSearch] = useState("");
+
+    const [userPoints, setUserPoints] = useState();
+    const [userReviews, setUserReviews] = useState();
+
     const [openCreateAc, setOpenCreateAc] = useState(false);
     const [data, setData] = useState({
           username: "",
@@ -177,6 +182,42 @@ const Account = ({ url }) => {
         }
     };
 
+    const fetchPoints = async (userId) => {
+            try {
+                const response = await axios.post(`${url}/api/points/getPointsA`, { userId });
+                if(response.data.success) {
+                    setUserPoints((prev) => ({...prev, [userId]: response.data.points}));
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+    useEffect(() => {
+        /*for (let i = 0; i < customerData.length; i++) {
+           fetchPoints(customerData[i].userId);
+        };*/
+        if (!customerData || customerData.length === 0) return;
+        customerData.forEach((customer) => {
+        fetchPoints(customer.userId);
+        fetchReviews(customer.userId);
+        });
+    }, [customerData]);
+
+    const fetchReviews = async (userId) => {
+        try {
+            const response = await axios.post(`${url}/api/menuItem/getReviewsA`, { userId });
+            if (response.data.success) {
+                console.log("Reviews fetched successfully:", response.data.data);
+                setUserReviews((prev) => ({...prev, [userId]: response.data.data}));
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    useEffect(() => {
+        console.log("User Reviews:", userReviews);
+    }, [userReviews]);
+
     useEffect(() => {
         if (!sessionStorage.getItem("token")) {
             toast.error("Please Login First");
@@ -265,19 +306,19 @@ const Account = ({ url }) => {
             <div className="Account-tabs">
                 <button 
                     className={`Account-tab ${activeTab === "admin" ? "active" : ""}`}
-                    onClick={() => setActiveTab("admin")}
+                    onClick={() => {setActiveTab("admin");setInputSearch("");}}
                 >
                     Admin Account
                 </button>
                 <button 
                     className={`Account-tab ${activeTab === "staff" ? "active" : ""}`}
-                    onClick={() => setActiveTab("staff")}
+                    onClick={() => {setActiveTab("staff");setInputSearch("");}}
                 >
                     Staff Account
                 </button>
                 <button 
                     className={`Account-tab ${activeTab === "customer" ? "active" : ""}`}
-                    onClick={() => setActiveTab("customer")}
+                    onClick={() => {setActiveTab("customer");setInputSearch("");}}
                 >
                     Customer Account
                 </button>
@@ -285,21 +326,15 @@ const Account = ({ url }) => {
 
             <div className="Account-list-nav">
                 <div className="Account-list-left">
-                    <form onSubmit={handleSearch}>
-                        <label>Search account: </label>
+                    
+                        <label>Search account: </label><BsSearch />
                         <input 
                             type="text" 
-                            placeholder="ID/Phone.no" 
+                            placeholder="Name/ID/Phone.no" 
                             name="search"
-                            defaultValue={
-                                activeTab === "admin" ? adminSearch : 
-                                activeTab === "staff" ? staffSearch : customerSearch
-                            }
+                            value={inputSearch} 
+                            onChange={e => setInputSearch(e.target.value)}
                         />
-                        <button type="submit" className="search-button">
-                            <BsSearch />
-                        </button>
-                    </form>
                 </div>
                 <div className="Account-list-right">
                     {getCurrentPage() > 1 && (
@@ -340,7 +375,9 @@ const Account = ({ url }) => {
             </div>
 
             <div className="Account-panel">
-                {activeTab === "admin" || activeTab === "staff" ? <button className="social-btn" onClick={()=>setOpenCreateAc(!openCreateAc)}><BsPlusCircle/></button> : null}
+                {activeTab === "admin" || activeTab === "staff" ? 
+                <button className="create-btn" onClick={()=>setOpenCreateAc(!openCreateAc)}>
+                    <BsPlusCircle style={{marginRight: "5px"}}/> Create account</button> : null}
                 {openCreateAc? 
                           <div className="edit-menuitem-container">
                           <BsXCircle onClick={() => setOpenCreateAc(!openCreateAc)}/>
@@ -435,18 +472,18 @@ const Account = ({ url }) => {
                 : null}
 
                 <div className="Account-table">
-                {getCurrentData().map((item, index) => {
+                {!inputSearch && getCurrentData().map((item, index) => {
                     const user = item.User || item;
-                    
                     return (
-                        <div class="profile-card">
-                        <div class="profile-image">
-                        </div>
-                        <div class="profile-info">
-                        <p class="profile-name">Name: {user.username}</p>
-                        <div class="profile-title">@ {user.userId}</div>
-                        <div class="profile-bio">
-                        profile-bio... Email : {user.email} Address : {user.address} Phone Number : {user.phoneNumber}
+                        <div className="profile-card" key={index}>
+                        <div className="profile-image"></div>
+                        <div className="profile-info">
+                        <p className="profile-name">Name: {user.username}</p>
+                        <div className="profile-title">@ {user.userId}</div>
+                        <div className="profile-bio">
+                        <p>Email : {user.email} </p>
+                        <p>Address : {user.address} </p>
+                        <p>Phone Number : {user.phoneNumber}</p>
                         {activeTab === "customer" && item.CustomerProfile && (
                                     <>
                                         <p className="Account-container-info-item">Height : {item.CustomerProfile.height || "N/A"}</p>
@@ -455,37 +492,107 @@ const Account = ({ url }) => {
                                 )}
                         </div>
                         </div>
-                        <div class="social-links">
-                            <button class="social-btn A">
+                        <div className="social-links">
+                            <button className="social-btn A">
                                 <BsPencil />
                             </button>
-                            <button class="social-btn B">
+                            <button className="social-btn B">
                                 <BsCheck />
                             </button>
-                            <button class="social-btn C">
+                            <button className="social-btn C">
                                 <BsX />
                             </button>
-                            <button class="social-btn D">
-                                            
-                             </button>
+                            <button className="social-btn D">
+                                <BsCheck />
+                            </button>
                         </div>
-                        <button class="cta-button">Message</button>
-                        <div class="stats">
-                            <div class="stat-item">
-                            <div class="stat-value">~</div>
-                            <div class="stat-label">Point</div>
+                        {/*<button className="cta-button">Message</button>*/}
+                        <div className="stats">
+                            <div className="stat-item">
+                            <div className="stat-value">
+                                {userPoints && userPoints[user.userId] ? userPoints[user.userId] : "n/a"}
                             </div>
-                            <div class="stat-item">
-                            <div class="stat-value">~</div>
-                            <div class="stat-label">Review</div>
+                            <div className="stat-label">Point</div>
                             </div>
-                            <div class="stat-item">
-                            <div class="stat-value">~</div>
-                            <div class="stat-label">Rating</div>
+                            <div className="stat-item">
+                            <label className="stat-value-review">
+                                {userReviews && userReviews[user.userId] ? userReviews[user.userId].length : "n/a"}
+                            </label>
+                            <div className="stat-label">Review</div>
+                            </div>
+                            <div className="stat-item">
+                            <div className="stat-value">~</div>
+                            <div className="stat-label">Rating</div>
                             </div>
                         </div>
                         </div>
                         
+                    );
+                })}
+                {inputSearch && getCurrentData().filter(item => {
+                    const user = item.User || item;
+                    return (
+                        user.username.toLowerCase().includes(inputSearch.toLowerCase()) ||
+                        user.userId.toString().includes(inputSearch) ||
+                        //user.email.toLowerCase().includes(inputSearch.toLowerCase()) ||
+                        //user.address.toLowerCase().includes(inputSearch.toLowerCase()) ||
+                        user.phoneNumber.includes(inputSearch)
+                    );
+                }).map((item, index) => {
+                    const user = item.User || item;
+                    return (
+                        <div className="profile-card" key={index}>
+                            <div className="profile-image"></div>
+                            <div className="profile-info">
+                                <p className="profile-name">Name: {user.username}</p>
+                                <div className="profile-title">@ {user.userId}</div>
+                                <div className="profile-bio">
+                                    <p>Email : {user.email} </p>
+                                    <p>Address : {user.address} </p>
+                                    <p>Phone Number : {user.phoneNumber}</p>
+                                    {activeTab === "customer" && item.CustomerProfile && (
+                                        <>
+                                            <p className="Account-container-info-item">Height : {item.CustomerProfile.height || "N/A"}</p>
+                                            <p className="Account-container-info-item">Weight : {item.CustomerProfile.weight || "N/A"}</p>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="social-links">
+                                <button className="social-btn A">
+                                    <BsPencil />
+                                </button>
+                                <button className="social-btn B">
+                                    <BsCheck />
+                                </button>
+                                <button className="social-btn C">
+                                    <BsX />
+                                </button>
+                                <button className="social-btn D">
+
+                                </button>
+                            </div>
+                            {/*<button class="cta-button">Message</button>*/}
+                            <div className="stats">
+                                <div className="stat-item">
+                                    <div className="stat-value">
+                                        {userPoints && userPoints[user.userId] ? userPoints[user.userId] : "n/a"}
+                                    </div>
+                                    <div className="stat-label">Point</div>
+                                </div>
+                                <div className="stat-item">
+                                    <label className="stat-value-review">
+                                        {userReviews && userReviews[user.userId] ? userReviews[user.userId].length : "n/a"}
+                                    </label>
+                                    <div className="stat-label">Review</div>
+                                </div>
+                                <div className="stat-item">
+                                    <div className="stat-value">~</div>
+                                    <div className="stat-label">Rating</div>
+                                </div>
+                            </div>
+                        </div>
+
                     );
                 })}
 

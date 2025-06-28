@@ -6,6 +6,7 @@ import Review from '../models/reviewModel.js';
 import { Op } from 'sequelize';
 import MenuItemIngredient from '../models/menuItemIngredientModel.js';
 import Ingredient from '../models/ingredientModel.js';
+import Customer from '../models/customerModel.js';
 
 const getIngredients = async (req, res) => {
     try {
@@ -59,12 +60,14 @@ const addMenuItem = async (req, res) => {
 
 // remove menuItem item
 const removeMenuItem = async (req, res) => {
+    const { menuItemId, userId } = req.query;
     try {
-        let userData = await User.findOne({ where: { id: req.body.userId } });
-        if (userData && userData.role === "admin") {
-            const menuItem = await MenuItem.findOne({ where: { id: req.body.id } });
-            fs.unlink(`uploads/${menuItem.image}`, () => {});
-            await menuItem.destroy();
+        let userData = await Admin.findOne({ where: { userId: userId } });
+        if (userData) {
+            const menuItem = await MenuItem.findOne({ where: { menuItemId: menuItemId } });
+            //fs.unlink(`uploads/${menuItem.image}`, () => {});
+            await MenuItemIngredient.destroy({where: { menuItemId }});
+            await MenuItem.destroy({where: { menuItemId }});
             res.json({ success: true, message: "MenuItem Removed" });
         } else {
             res.json({ success: false, message: "You are not admin" });
@@ -151,12 +154,17 @@ const getMenuItemIngredients = async (req, res) => {
             include: [
                 {
                     model: Ingredient,
-                    attributes: ['name']
+                    attributes: ['ingredientId','name']
                 }
             ]
         });
 
-        const ingredients = menuItemIngredients.map(item => item.Ingredient.name);
+        const ingredients = menuItemIngredients.map(item => 
+            ({
+            ingredientId: item.Ingredient.ingredientId,
+            name: item.Ingredient.name
+            })
+        );
         res.json({ success: true, data: ingredients });
     } catch (error) {
         console.error('Error fetching menu item ingredients:', error);
@@ -179,4 +187,54 @@ const getMenuItemReviews = async (req, res) => {
     }
 };
 
-export { getIngredients, addMenuItem, listMenuItems, removeMenuItem, editMenuItem, getMenuItemIngredients, getMenuItemReviews };
+const editMenuItemIngredients = async (req, res) => {
+    try {
+        const menuItemId = req.body.menuItemId;
+        const ingredients = req.body.ingredientsIds;
+        console.log('Received menuItemId:', menuItemId);
+        console.log('Received ingredients:', ingredients);
+
+        if (!menuItemId || !ingredients) {
+            return res.status(400).json({ success: false, message: 'Menu item ID and ingredients are required' });
+        }
+
+        await MenuItemIngredient.destroy({ where: { menuItemId } });
+
+        const ingredientIds = Array.isArray(ingredients) ? ingredients : [ingredients];
+        const menuItemIngredients = ingredientIds.map(ingredientId => ({
+            menuItemId,
+            ingredientId
+        }));
+
+        await MenuItemIngredient.bulkCreate(menuItemIngredients);
+        res.json({ success: true, message: 'Menu item ingredients updated successfully' });
+        
+    } catch (error) {
+        console.error('Error updating menu item ingredients:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+};
+
+const getReviewsA = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        console.log('Received userId:', userId);
+        const response = await Customer.findOne({
+            where: { userId: userId }
+        });
+        const responseB = await Review.findAll({
+            where: { CustomerId: response.customerId },
+        });
+        console.log('Reviews fetched successfully:', responseB);
+        if (!responseB) {
+            return res.json({ success: false, message: 'No reviews found' });
+        }
+        console.log('Reviews fetched successfully:', responseB);
+        res.json({ success: true, data: responseB });
+    } catch (error) {
+        console.error('Error fetching reviews:', error);
+        res.json({ success: false, message: 'Server error' });
+    }
+};
+
+export { getIngredients, addMenuItem, listMenuItems, removeMenuItem, editMenuItem, getMenuItemIngredients, getMenuItemReviews, editMenuItemIngredients, getReviewsA };

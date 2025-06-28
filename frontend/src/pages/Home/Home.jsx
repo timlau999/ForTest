@@ -7,7 +7,7 @@ import Order from '../../components/Order/Order';
 import './Home.css';
 
 const Home = ({ backendUrl }) => {
-    const [category, setCategory] = useState("All");
+    const [category, setCategory] = useState("Japanese Cuisine");
     return (
         <div>
             <Header backendUrl={backendUrl} />

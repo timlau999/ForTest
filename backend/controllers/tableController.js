@@ -42,7 +42,13 @@ const getReservationA = async (req, res) => {
         }else{
             console.log(conditions);
             if(selectedDate){
-                return res.json({ success: false, message: "No reservation on this day" });
+                console.log("selectedDate: " + selectedDate);
+                console.log("today: " + `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`);
+                if(selectedDate == `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${new Date().getDate()}`){
+                    return res.json({ success: false, message: "No reservation on today" });
+                }else{
+                    return res.json({ success: false, message: "No reservation on this day" });
+                }
             }else{
                 return res.json({ success: false, message: "No reservation of this user" });
             }

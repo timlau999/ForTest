@@ -58,7 +58,7 @@
 
 
 
-
+/* profile card*/
 .profile-card {
   position: relative;
   width: 320px;
@@ -208,6 +208,16 @@
   font-weight: 600;
   color: #1a1a1a;
 }
+.stat-value-review {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.stat-value-review:hover {
+  background-color: rgb(196, 196, 196);
+  border-radius: 50%;
+  padding: 10px 15px;
+  cursor: pointer;
+}
 
 .stat-label {
   font-size: 0.8rem;
@@ -277,4 +287,38 @@
     justify-content: space-around;
     align-items: center;
     display: flex;
+}
+
+
+/* create btn*/
+.create-btn {
+  width: fit-content;
+  height: fit-content;
+  border-radius: 30px;
+  border: none;
+  background: #f0f2f5;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 8px 10px;
+}
+
+.create-btn:hover {
+  background: #e4e6e9;
+  transform: translateY(-6px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.create-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: #1a1a1a;
+  transition: all 0.2s ease;
+}
+
+.create-btn:hover svg {
+  fill: tomato;
 }

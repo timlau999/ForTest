@@ -1,5 +1,5 @@
 import express from "express";
-import { addMenuItem, listMenuItems, removeMenuItem, editMenuItem, getMenuItemIngredients, getIngredients, getMenuItemReviews  } from "../controllers/menuItemController.js";
+import { addMenuItem, listMenuItems, removeMenuItem, editMenuItem, getMenuItemIngredients, getIngredients, getMenuItemReviews, editMenuItemIngredients,getReviewsA  } from "../controllers/menuItemController.js";
 import multer from "multer";
 import authMiddleware from "../middleware/auth.js";
 
@@ -22,5 +22,8 @@ menuItemRouter.post("/edit", upload.single("image"), authMiddleware, editMenuIte
 menuItemRouter.get('/ingredients', getIngredients);
 menuItemRouter.get('/menuItemingredients', getMenuItemIngredients);
 menuItemRouter.get('/reviews', getMenuItemReviews );
+menuItemRouter.post('/editIngredients', authMiddleware, editMenuItemIngredients);
+menuItemRouter.delete('/delete', authMiddleware, removeMenuItem);
+menuItemRouter.post('/getReviewsA', getReviewsA)
 
 export default menuItemRouter;
