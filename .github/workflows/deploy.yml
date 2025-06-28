@@ -1,0 +1,83 @@
+name: Full Stack Deployment with Docker
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  AWS_DEPLOY_PATH: /var/www/html  # 统一部署根目录
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Frontend 测试
+      - name: Frontend - Install & Test
+        working-directory: ./frontend
+        run: |
+          npm ci
+          if grep -q '"test":' package.json; then
+            npm test
+          else
+            echo "No frontend tests configured"
+          fi
+
+      # Backend 测试
+      - name: Backend - Install & Test
+        working-directory: ./backend
+        run: |
+          npm ci
+          if grep -q '"test":' package.json; then
+            npm test
+          else
+            echo "No backend tests configured"
+          fi
+
+      # Admin 测试
+      - name: Admin - Install & Test
+        working-directory: ./admin
+        run: |
+          npm ci
+          if grep -q '"test":' package.json; then
+            npm test
+          else
+            echo "No admin tests configured"
+          fi
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 设置 Node.js 环境
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 构建 Docker 镜像
+      - name: Build Docker images
+        run: |
+          docker build -t backend ./backend
+          docker build -t frontend ./frontend
+          docker build -t admin ./admin
+
+      # SSH 部署到 AWS
+      - name: Deploy to AWS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          port: ${{ secrets.AWS_PORT || 22 }}
+          script: |
+            echo "=== 开始全栈部署 ==="
+            cd ${{ env.AWS_DEPLOY_PATH }}
+            git reset --hard origin/main
+            docker-compose down
+            docker-compose up -d
+            echo "=== 部署完成 ==="
