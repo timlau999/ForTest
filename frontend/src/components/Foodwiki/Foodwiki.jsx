@@ -19,8 +19,9 @@ const Foodwiki = () => {
 
    const search = async (term) => {
     try {
-      const response = await axios.post(`http://localhost:4000/api/openfooddata/getOpenFoodData`,
-        {term}
+//      const response = await axios.post(`http://localhost:4000/api/openfooddata/getOpenFoodData`,
+	const response = await axios.post(`http://smart.restaurant.vtcb02.tech/api/openfooddata/getOpenFoodData`,
+	{term}
       );
         if (response.data.data.length > 0) {
           setResult(response.data.data);
@@ -37,8 +38,9 @@ const Foodwiki = () => {
 
   const showFoodDetail = async (id) => {
     try{
-      const response = await axios.post(`http://localhost:4000/api/openfooddata/getOpenFoodDetail`,
-    {id}
+//      const response = await axios.post(`http://localhost:4000/api/openfooddata/getOpenFoodDetail`,
+	const response = await axios.post(`http://smart.restaurant.vtcb02.tech/api/openfooddata/getOpenFoodDetail`,
+	    {id}
     );
       
         setFoodDetail(response.data.data);

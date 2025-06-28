@@ -6,7 +6,8 @@ import {io} from 'socket.io-client';
 
 export const StoreContext = createContext(null);
 
-const socket = io('http://localhost:4000', {query: {role: 'admin'}});
+//const socket = io('http://localhost:4000', {query: {role: 'admin'}});
+const socket = io('http://smart.restaurant.vtcb02.tech', {query: {role: 'admin'}});
 
 const StoreContextProvider = (props) => {
   const [token, setToken] = useState("");

@@ -6,7 +6,8 @@ import {io} from 'socket.io-client';
 
 export const StoreContext = createContext(null);
 
-const socket = io('http://localhost:4000', {query: {role: 'client'}});
+//const socket = io('http://localhost:4000', {query: {role: 'client'}});
+const socket = io('http://smart.restaurant.vtcb02.tech', {query: {role: 'client'}});
 
 const StoreContextProvider = (props) => {
     const { backendUrl } = props;

@@ -18,7 +18,8 @@ import { ToastContainer } from "react-toastify";
 const App = () => {
     // display popup for login
     const [showLogin, setShowLogin] = useState(false);
-    const backendUrl = 'http://localhost:4000';
+//    const backendUrl = 'http://localhost:4000';
+    const backendUrl = 'http://smart.restaurant.vtcb02.tech';
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); 
     const customerId = localStorage.getItem('customerId');
     

@@ -33,8 +33,9 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server (server, {
     cors: {
-        origin: ['http://localhost:5173', 'http://localhost:5174'],
-        methods: ["GET", "POST"],
+//        origin: ['http://localhost:5173', 'http://localhost:5174'],
+	  origin: ['http://smart.restaurant.vtcb02.tech', 'http://smart.restaurant.vtcb02.tech/admin'],
+	  methods: ["GET", "POST"],
     },
     });
 io.on('connection', (socket) => {

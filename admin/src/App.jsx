@@ -14,7 +14,8 @@ import StoreContextProvider from './context/StoreContext.jsx';
 import Test from "./pages/Test/Test";
 
 const App = () => {
-  const url = "http://localhost:4000";
+//  const url = "http://localhost:4000";
+const url = "http://smart.restaurant.vtcb02.tech";
 
   return (
     <StoreContextProvider url={url}>
