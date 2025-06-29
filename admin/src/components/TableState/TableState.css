@@ -76,6 +76,7 @@
 .table-item {
   height: 100%;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 }
@@ -150,7 +151,7 @@
 }
 
 .card:hover {
-  width: 24em;
+  width: 22em;
   box-shadow: 0 10px 20px 0 rgba(32, 32, 36, 0.12);
 }
 

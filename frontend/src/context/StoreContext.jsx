@@ -6,8 +6,7 @@ import {io} from 'socket.io-client';
 
 export const StoreContext = createContext(null);
 
- const socket = io('http://localhost:4000', {query: {role: 'client'}});
-//const socket = io('http://smart.restaurant.vtcb02.tech', {query: {role: 'client'}});
+
 
 const StoreContextProvider = (props) => {
     const { backendUrl } = props;
@@ -22,6 +21,8 @@ const StoreContextProvider = (props) => {
     const [reservationF_list, setReservationF_list] = useState();
     const [reservationFtable_list, setReservationFtable_list] = useState();
     
+    const socket = io(backendUrl, {query: {role: 'client'}});
+
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {

@@ -222,7 +222,7 @@ const List = ({ url }) => {
 
     return (
         <div className="list add flex-col">
-            <p>All Menuitem List</p>
+            <p>Menuitem List </p>
             <div><input className="search-menuitem-input" type="text" placeholder="Search..." 
             value={inputSearch} onChange={e => {setInputSearch(e.target.value);setCategory("");}}
             /><BsSearch style={{marginLeft: "5px"}}/></div>
@@ -466,7 +466,7 @@ const List = ({ url }) => {
                         </div>
                         <div className="edit-category-price">
                             <div className="edit-price flex-col">
-                                <p>Calories{data.calories}</p>
+                                <p>Calories</p>
                                 <input
                                     onChange={onChangeHandler}
                                     value={data.calories}

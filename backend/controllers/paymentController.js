@@ -1,4 +1,4 @@
-// ForTest/backend/controllers/paymentController.js
+// restaurant_b02/backend/controllers/paymentController.js
 import PaymentMethod from '../models/paymentMethodModel.js';
 
 export const getPaymentMethods = async (req, res) => {

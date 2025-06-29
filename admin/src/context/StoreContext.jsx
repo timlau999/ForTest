@@ -6,9 +6,6 @@ import {io} from 'socket.io-client';
 
 export const StoreContext = createContext(null);
 
- const socket = io('http://localhost:4000', {query: {role: 'admin'}});
-//const socket = io('http://smart.restaurant.vtcb02.tech', {query: {role: 'admin'}});
-
 const StoreContextProvider = (props) => {
   const [token, setToken] = useState("");
   const [admin, setAdmin] = useState(false);
@@ -18,6 +15,8 @@ const StoreContextProvider = (props) => {
   const [table_list, setTableList] = useState([]);
   const {url} = props;
   const [reservation_list, setReservation_list]= useState([]);
+
+  const socket = io(url, {query: {role: 'admin'}});
 
   useEffect(() => {
     async function loadData() {

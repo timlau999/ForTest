@@ -15,6 +15,7 @@ import { BsCheck } from "react-icons/bs";
 import { BsPlusCircle } from "react-icons/bs";
 import { BsXCircle } from "react-icons/bs";
 import { BsArrowClockwise } from "react-icons/bs";
+import { BsPersonPlus } from "react-icons/bs";
 
 const Account = ({ url }) => {
     const navigate = useNavigate();
@@ -301,6 +302,97 @@ const Account = ({ url }) => {
         }
     };
 
+    const profileCard = (item, index) => { 
+        const user = item.User || item;
+        return(
+            <div className="profile-card" key={index}>
+                        <div className="profile-image"></div>
+                        <div className="profile-info">
+                        <p className="profile-name">Name: {user.username}</p>
+                        <div className="profile-title">@ {user.userId}</div>
+                        <div className="profile-bio">
+                        <p>Email : {user.email} </p>
+                        <p>Address : {user.address} </p>
+                        <p>Phone Number : {user.phoneNumber}</p>
+                        {activeTab === "customer" && item.CustomerProfile && (
+                                    <>
+                                        <p className="Account-container-info-item">Height : {item.CustomerProfile.height || "N/A"}</p>
+                                        <p className="Account-container-info-item">Weight : {item.CustomerProfile.weight || "N/A"}</p>
+                                    </>
+                                )}
+                        </div>
+                        </div>
+                        {activeTab === "staff" || activeTab === "customer" ?
+                        <div className="social-links">
+                            <button className="social-btn A"
+                                onClick={() => {
+                                    toast.info((t) => ( 
+                                    <div>Update the user status?
+                                    <button onClick={() => {
+                                    toast.dismiss(t.id);
+                                    updateUserStatus(user.userId, "active");
+                                    }}>Yes</button>
+                                    <button onClick={() => toast.dismiss(t.id)}>No</button>
+                                    </div>
+                                    ),{autoClose: false, position: "bottom-center",});
+                                }}
+                            ><BsCheck />
+                            </button>
+                            <button className="social-btn B" 
+                                onClick= { () => {
+                                    toast.info((t) => ( 
+                                    <div>Update the user status?
+                                    <button onClick={() => {
+                                    toast.dismiss(t.id);
+                                    updateUserStatus(user.userId, "inactive");
+                                    }}>Yes</button>
+                                    <button onClick={() => toast.dismiss(t.id)}>No</button>
+                                    </div>
+                                    ),{autoClose: false, position: "bottom-center",});
+                                }}
+                            ><BsX />
+                            </button>
+                            <button className="social-btn C">
+                                
+                            </button>
+                            <button className="social-btn D">
+                                
+                            </button>
+                        </div> : null}
+                        {/*<button className="cta-button">Message</button>*/}
+                        <div className="stats">
+                            <div className="stat-item">
+                            <div className="stat-value">
+                                {userPoints && userPoints[user.userId] ? userPoints[user.userId] : "n/a"}
+                            </div>
+                            <div className="stat-label">Point</div>
+                            </div>
+                            <div className="stat-item">
+                            <label className="stat-value-review">
+                                {userReviews && userReviews[user.userId] ? userReviews[user.userId].length : "n/a"}
+                            </label>
+                            <div className="stat-label">Review</div>
+                            </div>
+                            <div className="stat-item">
+                            <div className="stat-value">~</div>
+                            <div className="stat-label">Status</div>
+                            </div>
+                        </div>
+                        </div>
+        );
+    };
+
+    const updateUserStatus = async (userId, status) => {
+        try {
+            const response = await axios.post(`${url}/api/user/status`, { userId, status });
+            if (response.data.success) {
+                toast.success("User status updated successfully");
+            }
+        } catch (error) {
+            toast.error("Failed to update user status");
+        }
+    };
+
     return (
         <div className="Account-list">
             <div className="Account-tabs">
@@ -377,7 +469,7 @@ const Account = ({ url }) => {
             <div className="Account-panel">
                 {activeTab === "admin" || activeTab === "staff" ? 
                 <button className="create-btn" onClick={()=>setOpenCreateAc(!openCreateAc)}>
-                    <BsPlusCircle style={{marginRight: "5px"}}/> Create account</button> : null}
+                    <BsPersonPlus style={{marginRight: "5px"}}/> Create account</button> : null}
                 {openCreateAc? 
                           <div className="edit-menuitem-container">
                           <BsXCircle onClick={() => setOpenCreateAc(!openCreateAc)}/>
@@ -472,63 +564,9 @@ const Account = ({ url }) => {
                 : null}
 
                 <div className="Account-table">
-                {!inputSearch && getCurrentData().map((item, index) => {
-                    const user = item.User || item;
-                    return (
-                        <div className="profile-card" key={index}>
-                        <div className="profile-image"></div>
-                        <div className="profile-info">
-                        <p className="profile-name">Name: {user.username}</p>
-                        <div className="profile-title">@ {user.userId}</div>
-                        <div className="profile-bio">
-                        <p>Email : {user.email} </p>
-                        <p>Address : {user.address} </p>
-                        <p>Phone Number : {user.phoneNumber}</p>
-                        {activeTab === "customer" && item.CustomerProfile && (
-                                    <>
-                                        <p className="Account-container-info-item">Height : {item.CustomerProfile.height || "N/A"}</p>
-                                        <p className="Account-container-info-item">Weight : {item.CustomerProfile.weight || "N/A"}</p>
-                                    </>
-                                )}
-                        </div>
-                        </div>
-                        <div className="social-links">
-                            <button className="social-btn A">
-                                <BsPencil />
-                            </button>
-                            <button className="social-btn B">
-                                <BsCheck />
-                            </button>
-                            <button className="social-btn C">
-                                <BsX />
-                            </button>
-                            <button className="social-btn D">
-                                <BsCheck />
-                            </button>
-                        </div>
-                        {/*<button className="cta-button">Message</button>*/}
-                        <div className="stats">
-                            <div className="stat-item">
-                            <div className="stat-value">
-                                {userPoints && userPoints[user.userId] ? userPoints[user.userId] : "n/a"}
-                            </div>
-                            <div className="stat-label">Point</div>
-                            </div>
-                            <div className="stat-item">
-                            <label className="stat-value-review">
-                                {userReviews && userReviews[user.userId] ? userReviews[user.userId].length : "n/a"}
-                            </label>
-                            <div className="stat-label">Review</div>
-                            </div>
-                            <div className="stat-item">
-                            <div className="stat-value">~</div>
-                            <div className="stat-label">Rating</div>
-                            </div>
-                        </div>
-                        </div>
-                        
-                    );
-                })}
+                {!inputSearch && getCurrentData().map((item, index) => (
+                    profileCard(item, index)
+                ))}
                 {inputSearch && getCurrentData().filter(item => {
                     const user = item.User || item;
                     return (
@@ -538,63 +576,9 @@ const Account = ({ url }) => {
                         //user.address.toLowerCase().includes(inputSearch.toLowerCase()) ||
                         user.phoneNumber.includes(inputSearch)
                     );
-                }).map((item, index) => {
-                    const user = item.User || item;
-                    return (
-                        <div className="profile-card" key={index}>
-                            <div className="profile-image"></div>
-                            <div className="profile-info">
-                                <p className="profile-name">Name: {user.username}</p>
-                                <div className="profile-title">@ {user.userId}</div>
-                                <div className="profile-bio">
-                                    <p>Email : {user.email} </p>
-                                    <p>Address : {user.address} </p>
-                                    <p>Phone Number : {user.phoneNumber}</p>
-                                    {activeTab === "customer" && item.CustomerProfile && (
-                                        <>
-                                            <p className="Account-container-info-item">Height : {item.CustomerProfile.height || "N/A"}</p>
-                                            <p className="Account-container-info-item">Weight : {item.CustomerProfile.weight || "N/A"}</p>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="social-links">
-                                <button className="social-btn A">
-                                    <BsPencil />
-                                </button>
-                                <button className="social-btn B">
-                                    <BsCheck />
-                                </button>
-                                <button className="social-btn C">
-                                    <BsX />
-                                </button>
-                                <button className="social-btn D">
-
-                                </button>
-                            </div>
-                            {/*<button class="cta-button">Message</button>*/}
-                            <div className="stats">
-                                <div className="stat-item">
-                                    <div className="stat-value">
-                                        {userPoints && userPoints[user.userId] ? userPoints[user.userId] : "n/a"}
-                                    </div>
-                                    <div className="stat-label">Point</div>
-                                </div>
-                                <div className="stat-item">
-                                    <label className="stat-value-review">
-                                        {userReviews && userReviews[user.userId] ? userReviews[user.userId].length : "n/a"}
-                                    </label>
-                                    <div className="stat-label">Review</div>
-                                </div>
-                                <div className="stat-item">
-                                    <div className="stat-value">~</div>
-                                    <div className="stat-label">Rating</div>
-                                </div>
-                            </div>
-                        </div>
-
-                    );
-                })}
+                }).map((item, index) => (
+                    profileCard(item, index)
+                ))}
 
                 {getCurrentData().length === 0 && (
                     <div className="no-data-message">

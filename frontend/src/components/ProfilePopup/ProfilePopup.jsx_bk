@@ -1,4 +1,4 @@
-// ForTest/frontend/src/components/ProfilePopup/ProfilePopup.jsx
+// restaurant_b02/frontend/src/components/ProfilePopup/ProfilePopup.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ProfilePopup.css';

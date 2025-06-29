@@ -1,6 +1,6 @@
-// ForTest/backend/routes/userRoute.js
+// restaurant_b02/backend/routes/userRoute.js
 import express from 'express';
-import { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer, getAllAdmin, getAllStaff, getuserinfoA, updateuserinfoA } from '../controllers/userController.js';
+import { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer, getAllAdmin, getAllStaff, getuserinfoA, updateuserinfoA, updateUserStatus } from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -27,5 +27,7 @@ router.post('/getStaff', getAllStaff);
 router.post('/getuserinfoA', getuserinfoA);
 
 router.post('/updateuserinfoA', updateuserinfoA);
+
+router.post('/status', updateUserStatus);
 
 export default router;

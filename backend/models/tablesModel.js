@@ -23,7 +23,9 @@ const Tables = sequelize.define(
       defaultValue: "available",
     },
   },
-  
+  {
+    timestamps: true,
+  }
 );
 
 export default Tables;

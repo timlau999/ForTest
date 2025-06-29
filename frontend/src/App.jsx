@@ -1,4 +1,4 @@
-// ForTest/frontend/src/App.jsx
+// restaurant_b02/frontend/src/App.jsx
 import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer/Footer';

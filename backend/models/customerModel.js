@@ -16,6 +16,11 @@ const Customer = sequelize.define('customer', {
       model: User,
       key: 'userId'
     }
+  },
+  status: {
+    type: DataTypes.ENUM('active', 'inactive'),
+    allowNull: false,
+    defaultValue: 'active'
   }
 }, {
   tableName: 'customer', 

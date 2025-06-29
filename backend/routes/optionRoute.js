@@ -1,4 +1,4 @@
-// ForTest/backend/routes/optionRoute.js
+// restaurant_b02/backend/routes/optionRoute.js
 import express from 'express';
 import { getAllIngredients, getAllMedicalConditions, getAllDietaryPreferences } from '../controllers/optionController.js';
 

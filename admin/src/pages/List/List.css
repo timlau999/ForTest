@@ -67,11 +67,11 @@
     transform: translate(-50%, -50%);
     padding: 10px 10px;
     width: fit-content;
-    margin-left: max(5vw,25px);
-    margin-top: 50px;
+    /*margin-left: max(5vw,25px);*/
+    /*margin-top: 50px;*/
     color: #6d6d6d;
     font-size: 16px;
-    border: black solid 1px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     background-color: white;
     z-index: 990;
 }
@@ -173,7 +173,7 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    min-width: 600px; 
+    min-width: 600px;
 }
 
 .tab-header {

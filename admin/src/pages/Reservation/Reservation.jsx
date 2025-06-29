@@ -12,9 +12,6 @@ import TableState from "../../components/TableState/TableState";
 import { BsSearch } from "react-icons/bs";
 import {io} from 'socket.io-client';
 
- const socket = io('http://localhost:4000', {query: {role: 'admin'}});
-//const socket = io('http://smart.restaurant.vtcb02.tech', {query: {role: 'admin'}});
-
 const Reservation = ({ url }) => {
     const navigate=useNavigate();
     const {token,admin} = useContext(StoreContext);
@@ -22,6 +19,7 @@ const Reservation = ({ url }) => {
     const [selectedDate, setSelectedDate] = useState();
     const [inputuserId, setInputuserId] = useState();
     const [inputTableId, setInputTableId] = useState();
+    const socket = io(url, {query: {role: 'admin'}});
 
     useEffect(()=>{
         if (!sessionStorage.getItem("token")) {
@@ -49,12 +47,9 @@ const Reservation = ({ url }) => {
 
 return (
   <div className="reservation-table-container">
-    <h3>Reservation</h3>
-
     <div className="reservation-table-form">
-      
       <div className="table-list">
-        <h3>Real-time Tables States</h3>
+        <p>Real-time Tables States</p>
         <label >Search Table<BsSearch /></label>
         <input className="search-bar" type="text" placeholder="Table no." value={inputTableId} onChange={e => setInputTableId(e.target.value)} />
         <div className="table-list-container">
@@ -82,7 +77,6 @@ return (
       </div>
       <hr></hr>
       <div className="All-Reservation-list">
-        <h3>All Reservation by : </h3>
         <label >Search Reservation : </label>
         <input className="search-bar" type="text" placeholder=" userID... " value={inputuserId}
           onChange={e => setInputuserId(e.target.value)} />

@@ -1,0 +1,188 @@
+/* ForTest/frontend/src/components/AIRecommendationPopup/AIRecommendationPopup.css */
+
+.ai-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.ai-popup-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    width: 1000px;
+    max-width: 95%;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.ai-popup-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.ai-popup-title h2 {
+    margin: 0;
+    font-size: 28px;
+    color: #333;
+    font-weight: 600;
+}
+
+.ai-popup-title button {
+    background: transparent;
+    font-size: 28px;
+    color: #666;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.ai-popup-title button:hover {
+    color: #333;
+    background-color: tomato;
+}
+
+.ai-popup-content {
+    display: flex;
+    flex-direction: row;    
+    gap: 20px;              
+    overflow-x: auto;      
+    padding-bottom: 20px;  
+}
+
+
+.menuItem-item {
+    flex: 0 0 28%;      
+    min-width: 200px;       
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menuItem-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.menuItem-item-img-container {
+    position: relative;
+    width: 100%;
+    height: 180px;           
+}
+
+.menuItem-item-image {
+    width: 100%;
+    height: 100%;           
+    object-fit: cover;       
+    border-radius: 15px 15px 0 0;
+}
+
+.add {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.add:hover {
+    transform: scale(1.1);
+}
+
+.menuItem-item-counter {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    padding: 4px 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.menuItem-item-counter img {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.menuItem-item-counter img:hover {
+    transform: scale(1.1);
+}
+
+.menuItem-item-counter p {
+    margin: 0 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.menuItem-item-info {
+    padding: 15px;
+}
+
+.menuItem-item-name-rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.menuItem-item-name-rating p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.menuItem-item-desc {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    height: 42px;       
+    overflow: hidden;      
+    text-overflow: ellipsis;  
+    display: -webkit-box;
+    -webkit-line-clamp: 2;   
+    -webkit-box-orient: vertical;
+}
+
+.menuItem-item-price {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #e63946;
+}
+
+.ai-popup-content::-webkit-scrollbar {
+    height: 8px;
+}
+
+.ai-popup-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.ai-popup-content::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.ai-popup-content::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}

@@ -19,10 +19,18 @@
     display: inline-block;
     font-size: 16px;
     border-radius: 20px;
+    max-height: fit-content;
 }
 .logoutButton:hover{
     background-color: rgb(252, 96, 96);
     color: white;
+}
+
+.login-conditon{
+    display: flex;
+    border: black none 1px;
+    justify-content: center;
+    align-items:center;
 }
 
 .username{
@@ -32,6 +40,8 @@
     border-radius: 20px;
     color:none;
     font-size: 16px;
+    align-items: center;
+    display: flex;
 }
 .username:hover{
     background-color: black;
@@ -83,13 +93,14 @@
     transform: translate(-50%, -50%);
     padding: 10px 10px;
     width:fit-content;
-    margin-left: max(5vw,25px);
-    margin-top: 50px;
+    /*margin-left: max(5vw,25px);*/
+    /*margin-top: 50px;*/
     color: #6d6d6d;
     font-size: 16px;
     z-index: 1000;
-    border: black solid 1px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     background-color: white;
+    border-radius: 10px;
 }
 .edit-menuitem-container form{
     gap: 20px;

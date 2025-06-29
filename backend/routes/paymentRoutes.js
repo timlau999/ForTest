@@ -1,4 +1,4 @@
-// ForTest/backend/routes/paymentRoutes.js
+// restaurant_b02/backend/routes/paymentRoutes.js
 import express from 'express';
 import { getPaymentMethods } from '../controllers/paymentController.js';
 

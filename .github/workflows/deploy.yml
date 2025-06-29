@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  AWS_DEPLOY_PATH: /var/www/html/ForTest  # 明确指定项目根目录
+  AWS_DEPLOY_PATH: /var/www/html/restaurant_b02
 
 jobs:
   test:
@@ -15,7 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Frontend 测试
       - name: Frontend - Install & Test
         working-directory: ./frontend
         run: |
@@ -26,7 +25,6 @@ jobs:
             echo "No frontend tests configured"
           fi
 
-      # Backend 测试
       - name: Backend - Install & Test
         working-directory: ./backend
         run: |
@@ -37,7 +35,6 @@ jobs:
             echo "No backend tests configured"
           fi
 
-      # Admin 测试
       - name: Admin - Install & Test
         working-directory: ./admin
         run: |
@@ -54,19 +51,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 设置 Node.js 环境
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      # 构建 Docker 镜像
       - name: Build Docker images
         run: |
           docker build -t backend ./backend
           docker build -t frontend ./frontend
           docker build -t admin ./admin
 
-      # 登录到 AWS EC2 并部署
       - name: Deploy to AWS
         uses: appleboy/ssh-action@v1
         with:
@@ -75,9 +69,9 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           port: ${{ secrets.AWS_PORT || 22 }}
           script: |
-            echo "=== 开始全栈部署 ==="
+            echo "=== Starting Full-Stack Deployment ==="
             cd ${{ env.AWS_DEPLOY_PATH }}
             git reset --hard origin/main
             docker-compose -f ${{ env.AWS_DEPLOY_PATH }}/docker-compose.yml down
             docker-compose -f ${{ env.AWS_DEPLOY_PATH }}/docker-compose.yml up -d
-            echo "=== 部署完成 ==="
+            echo "=== Deployment Completed ==="

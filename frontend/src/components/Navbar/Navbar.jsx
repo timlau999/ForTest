@@ -1,4 +1,4 @@
-// ForTest/frontend/src/components/Navbar/Navbar.jsx
+// restaurant_b02/frontend/src/components/Navbar/Navbar.jsx
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
@@ -52,7 +52,7 @@ const Navbar = ({ setShowLogin, isLoggedIn, setIsLoggedIn, UserAvatar, backendUr
                     />
                 ) : (
                     
-                        <button className='signInButton' onClick={() => setShowLogin(true)}>sign in</button>
+                        <button className='signInButton' onClick={() => setShowLogin(true)}>Login</button>
                     
                 )}
             </div>

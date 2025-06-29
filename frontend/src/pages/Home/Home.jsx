@@ -1,4 +1,4 @@
-// ForTest/frontend/src/pages/Home/Home.jsx
+// restaurant_b02/frontend/src/pages/Home/Home.jsx
 import React, { useState } from 'react';
 import Menu from '../../components/ExploreMenu/Menu';
 import { MenuItemDisplay } from '../../components/MenuItemDisplay/MenuItemDisplay';

@@ -120,6 +120,9 @@ const Add = ({ url }) => {
   return (
     <div className="add">
       <form onSubmit={onSubmitHandler} className="flex-col">
+        
+        <div className="all-input-groups">
+
         <div className="add-img-upload flex-col">
           <p>Upload image</p>
           <label htmlFor="image">
@@ -136,6 +139,8 @@ const Add = ({ url }) => {
             //required
           />
         </div>
+
+        <div className="input-group">
         <div className="add-product-name flex-col">
           <p>Product name</p>
           <input
@@ -158,6 +163,9 @@ const Add = ({ url }) => {
             required
           ></textarea>
         </div>
+        </div>
+        
+        
         <div className="add-category-price">
           <div className="add-price flex-col">
             <p>Calories</p>
@@ -198,6 +206,9 @@ const Add = ({ url }) => {
             />
           </div>
         </div>
+
+        </div>
+
         <div className="add-ingredients flex-col">
           <p>Potential Allergens</p>
           <div className="ingredients-container"> 

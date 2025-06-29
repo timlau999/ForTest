@@ -18,6 +18,11 @@ const Staff = sequelize.define('Staff', {
       model: User,
       key: 'userId'
     }
+  },
+  status: {
+    type: DataTypes.ENUM('active', 'inactive'),
+    allowNull: false,
+    defaultValue: 'active'
   }
 }, {
   tableName: 'staff', 

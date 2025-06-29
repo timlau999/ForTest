@@ -8,6 +8,7 @@ import { BsXCircle } from "react-icons/bs";
 import { BsArrowClockwise } from "react-icons/bs";
 import { BsCaretDown } from "react-icons/bs";
 import axios from "axios";
+import { BsPersonFill } from "react-icons/bs";
 
 const Navbar = ({url}) => {
   const navigate=useNavigate();
@@ -84,9 +85,9 @@ const Navbar = ({url}) => {
       
       {token && (admin || staff) ? (
         <div className="login-conditon">
-          <label className="username" onClick={()=> {setOpenEditAc(!openEditAc);
-            fetchUserInfoData();
-          }}>User: {username}  ID: {userId} <BsCaretDown /></label>
+          <div className="username" onClick={()=> {setOpenEditAc(!openEditAc);
+            fetchUserInfoData();}}>
+            <BsPersonFill /> {username}  ID: {userId} <BsCaretDown /></div>
           <button className="logoutButton" onClick={logout}>Logout</button>
         </div>
       ) : (

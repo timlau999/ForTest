@@ -1,4 +1,4 @@
-// ForTest/backend/controllers/pointsController.js
+// restaurant_b02/backend/controllers/pointsController.js
 import CustomerPoints from '../models/customerPointsModel.js';
 import Customer from '../models/customerModel.js';
 

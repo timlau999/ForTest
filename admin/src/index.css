@@ -30,3 +30,9 @@ hr{
 .cursor{
     cursor: pointer;
 }
+
+@media (max-width:750px) {
+    .app-content{
+    display: inline;
+}
+}

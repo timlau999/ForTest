@@ -10,7 +10,7 @@ const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth' // 平滑滾動
+      behavior: 'smooth' 
     });
   };
 
@@ -32,7 +32,7 @@ const Footer = () => {
             <h2>COMPANY</h2>
             <ul>
              <li 
-                onClick={scrollToTop} // 修改：綁定滾動函數
+                onClick={scrollToTop} 
                 style={{ cursor: 'pointer' }}
                 className="home-link"
               >

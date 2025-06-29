@@ -1,4 +1,4 @@
-// ForTest/frontend/src/components/UserInfoPopup/UserInfoPopup.jsx
+// restaurant_b02/frontend/src/components/UserInfoPopup/UserInfoPopup.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './UserInfoPopup.css';

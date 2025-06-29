@@ -1,4 +1,4 @@
-// ForTest/backend/models/medicalConditionModel.js
+// restaurant_b02/backend/models/medicalConditionModel.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 

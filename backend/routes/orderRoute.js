@@ -1,4 +1,4 @@
-// ForTest/backend/routes/orderRoutes.js
+// restaurant_b02/backend/routes/orderRoutes.js
 import express from 'express';
 import { placeOrder, getOrdersByCustomerId, getAllOrders, updateOrderStatus, addReview, getReviewsByCustomerId} from '../controllers/orderController.js';
 

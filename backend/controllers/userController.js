@@ -1,4 +1,4 @@
-// ForTest/backend/controllers/userController.js
+// restaurant_b02/backend/controllers/userController.js
 import User from '../models/userModel.js';
 import Permission from '../models/permissionModel.js';
 import Admin from '../models/adminModel.js';
@@ -349,4 +349,30 @@ const updateuserinfoA = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer, getAllAdmin, getAllStaff, getuserinfoA, updateuserinfoA };
+const updateUserStatus = async (req, res) => {
+    try {
+        const { userId, status } = req.body;
+        console.log(userId, status);
+        const customer = await Customer.findOne({ where: { userId } });
+        const staff = await Staff.findOne({ where: { userId } });
+        console.log();
+        console.log();
+        if (customer) {
+            customer.status = status;
+            await customer.save();
+            res.json({ success: true, message: 'User status updated successfully' });
+            }else{
+                if (staff) {
+                staff.status = status;
+                await staff.save();
+                res.json({ success: true, message: 'User status updated successfully' });
+                }else{
+                    return res.json({ success: false, message: 'User are not staff or customer' });
+                }}
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error updating user status' });
+    }
+};
+
+export { registerUser, loginUser, getProfileData, getCustomerId, updateProfileData, getUserInfoData, updateUserInfoData, getAllCustomer, getAllAdmin, getAllStaff, getuserinfoA, updateuserinfoA, updateUserStatus };

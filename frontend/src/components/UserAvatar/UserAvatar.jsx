@@ -1,4 +1,4 @@
-// ForTest/frontend/src/components/UserAvatar/UserAvatar.jsx
+// restaurant_b02/frontend/src/components/UserAvatar/UserAvatar.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserAvatar.css'; 

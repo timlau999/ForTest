@@ -1,4 +1,4 @@
-// ForTest/backend/models/customerProfileModel.js
+// restaurant_b02/backend/models/customerProfileModel.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 

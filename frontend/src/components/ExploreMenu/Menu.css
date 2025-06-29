@@ -51,10 +51,9 @@
     gap:30px;
     margin:20px 0px;
     overflow-x: scroll;
-     scroll-behavior: smooth; /* 確保平滑滾動 */
+     scroll-behavior: smooth; 
      
 }
-/* 隱藏箭頭當沒有內容可滾動時 */
 .menu-navigation-container:has(.explore-menu-list:not(:overflowing)) .nav-arrow {
   display: none;
 }
@@ -87,7 +86,6 @@
     border:4px solid tomato;
     padding: 2px;;
 }
-/* 響應式調整 */
 @media (max-width: 768px) {
   .nav-arrow {
     width: 30px;

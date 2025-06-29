@@ -1,4 +1,4 @@
-// ForTest/frontend/src/components/AIRecommendationPopup/AIRecommendationPopup.jsx
+// restaurant_b02/frontend/src/components/AIRecommendationPopup/AIRecommendationPopup.jsx
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useContext } from 'react';

@@ -1,4 +1,4 @@
-// ForTest/frontend/src/components/Header/Header.jsx
+// restaurant_b02/frontend/src/components/Header/Header.jsx
 import React, { useState } from 'react';
 import './Header.css';
 import AIRecommendationPopup from '../AIRecommendationPopup/AIRecommendationPopup'; 

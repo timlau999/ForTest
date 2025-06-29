@@ -218,18 +218,15 @@ const editMenuItemIngredients = async (req, res) => {
 const getReviewsA = async (req, res) => {
     try {
         const { userId } = req.body;
-        console.log('Received userId:', userId);
         const response = await Customer.findOne({
             where: { userId: userId }
         });
         const responseB = await Review.findAll({
             where: { CustomerId: response.customerId },
         });
-        console.log('Reviews fetched successfully:', responseB);
         if (!responseB) {
             return res.json({ success: false, message: 'No reviews found' });
         }
-        console.log('Reviews fetched successfully:', responseB);
         res.json({ success: true, data: responseB });
     } catch (error) {
         console.error('Error fetching reviews:', error);
