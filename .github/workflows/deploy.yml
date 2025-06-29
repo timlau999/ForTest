@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  AWS_DEPLOY_PATH: /var/www/html  # 统一部署根目录
+  AWS_DEPLOY_PATH: /var/www/html/ForTest  # 明确指定项目根目录
 
 jobs:
   test:
@@ -78,6 +78,6 @@ jobs:
             echo "=== 开始全栈部署 ==="
             cd ${{ env.AWS_DEPLOY_PATH }}
             git reset --hard origin/main
-            docker-compose down
-            docker-compose up -d
+            docker-compose -f ${{ env.AWS_DEPLOY_PATH }}/docker-compose.yml down
+            docker-compose -f ${{ env.AWS_DEPLOY_PATH }}/docker-compose.yml up -d
             echo "=== 部署完成 ==="
