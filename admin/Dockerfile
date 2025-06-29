@@ -19,5 +19,5 @@ RUN npm run build
 # 暴露端口
 EXPOSE 5174
 
-# 启动项目
-CMD ["npm", "run", "preview"]
+# 启动项目，指定端口
+CMD ["npm", "run", "preview", "--", "--port", "5174"]

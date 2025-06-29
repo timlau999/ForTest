@@ -13,11 +13,11 @@ services:
       - DB_NAME=fyp-db
       - DB_USER=admin1
       - DB_PASSWORD=FYPdb2025
-      - DB_HOST=mysql
+      - DB_HOST=hhh-fyp2025.mysql.database.azure.com
       - DB_PORT=3306
       - DB_DIALECT=mysql
-    depends_on:
-      - mysql
+    env_file:
+      - ./backend/.env
   frontend:
     build:
       context: ./frontend
@@ -34,17 +34,3 @@ services:
       - "5174:5174"
     environment:
       - REACT_APP_BACKEND_URL=http://backend:4000
-  mysql:
-    image: mysql:8.0
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_DATABASE=fyp-db
-      - MYSQL_USER=admin1
-      - MYSQL_PASSWORD=FYPdb2025
-      - MYSQL_ROOT_PASSWORD=rootpassword
-    volumes:
-      - mysql-data:/var/lib/mysql
-
-volumes:
-  mysql-data:
