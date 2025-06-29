@@ -25,7 +25,6 @@ jobs:
           else
             echo "No frontend tests configured"
           fi
-        continue-on-error: true  # 如果测试失败，继续执行后续步骤
 
       # Backend 测试
       - name: Backend - Install & Test
@@ -37,7 +36,6 @@ jobs:
           else
             echo "No backend tests configured"
           fi
-        continue-on-error: true  # 如果测试失败，继续执行后续步骤
 
       # Admin 测试
       - name: Admin - Install & Test
@@ -49,7 +47,6 @@ jobs:
           else
             echo "No admin tests configured"
           fi
-        continue-on-error: true  # 如果测试失败，继续执行后续步骤
 
   deploy:
     needs: test
@@ -68,9 +65,8 @@ jobs:
           docker build -t backend ./backend
           docker build -t frontend ./frontend
           docker build -t admin ./admin
-        continue-on-error: false  # 如果镜像构建失败，停止部署
 
-      # SSH 部署到 AWS
+      # 登录到 AWS EC2 并部署
       - name: Deploy to AWS
         uses: appleboy/ssh-action@v1
         with:
@@ -79,11 +75,9 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           port: ${{ secrets.AWS_PORT || 22 }}
           script: |
-            set -e  # 如果命令执行失败，停止脚本执行
             echo "=== 开始全栈部署 ==="
             cd ${{ env.AWS_DEPLOY_PATH }}
             git reset --hard origin/main
             docker-compose down
             docker-compose up -d
             echo "=== 部署完成 ==="
-        continue-on-error: false  # 如果部署失败，停止工作流
